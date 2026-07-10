@@ -7,6 +7,9 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "ngx-request-lock": ["./dist/ngx-request-lock"]
+    },
     "skipLibCheck": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
@@ -26,6 +29,12 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/ngx-request-lock/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/ngx-request-lock/tsconfig.spec.json"
     }
   ]
 }
