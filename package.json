@@ -9,7 +9,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "format-project": "npx prettier --write ."
+    "format-project": "npx prettier --write .",
+    "build:lib": "ng build ngx-request-lock",
+    "build:lib:watch": "ng build ngx-request-lock --watch"
   },
   "private": true,
   "packageManager": "npm@11.17.0",
