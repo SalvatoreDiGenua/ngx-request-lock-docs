@@ -107,6 +107,63 @@
       "note": "<code class=\"font-mono text-sm\">RequestLockService.isPending(id)</code> returns a new <code class=\"font-mono text-sm\">computed</code> on every call. Store the returned signal in a field if you read it repeatedly in the same component."
     }
   },
+  "installation": {
+    "intro": "This page walks through the minimum wiring needed to get <code class=\"font-mono text-sm\">ngx-request-lock</code> running in an Angular application: install the package, register the provider, attach the lock id to your HTTP request, and place the directive on the button that triggered it.",
+    "requirements": {
+      "title": "Requirements",
+      "list": "<li>Angular <strong>v22</strong> or newer. The library declares <code class=\"font-mono text-sm\">@angular/common</code> and <code class=\"font-mono text-sm\">@angular/core</code> as peer dependencies at <code class=\"font-mono text-sm\">^22.0.0</code>.</li><li>Standalone APIs, functional HTTP interceptors, and signals must be available &mdash; they are the default in v22.</li><li>The directive generates its <code class=\"font-mono text-sm\">requestId</code> with <code class=\"font-mono text-sm\">crypto.randomUUID()</code>, which requires a secure context (HTTPS or <code class=\"font-mono text-sm\">localhost</code>) in the browser.</li>"
+    },
+    "install": {
+      "title": "Install",
+      "text": "Install the package from npm. There are no runtime dependencies other than <code class=\"font-mono text-sm\">tslib</code>.",
+      "peerNote": "The library ships as an Angular Package Format build. It is tree-shakable and marked <code class=\"font-mono text-sm\">sideEffects: false</code>."
+    },
+    "provider": {
+      "title": "Register the provider",
+      "text": "<code class=\"font-mono text-sm\">provideRequestLock()</code> is an environment provider factory that registers the functional interceptor for you. Add it to the <code class=\"font-mono text-sm\">providers</code> array of your <code class=\"font-mono text-sm\">ApplicationConfig</code>.",
+      "warning": "<strong>Do not call <code class=\"font-mono text-sm\">provideHttpClient()</code> separately alongside <code class=\"font-mono text-sm\">provideRequestLock()</code>.</strong> The factory already calls <code class=\"font-mono text-sm\">provideHttpClient(withInterceptors([requestLockInterceptor]))</code> internally. A second <code class=\"font-mono text-sm\">provideHttpClient(...)</code> in the same providers array overrides it, and the interceptor stops running."
+    },
+    "manualProvider": {
+      "title": "Manual registration",
+      "text": "If your app already configures <code class=\"font-mono text-sm\">provideHttpClient</code> with other interceptors, skip <code class=\"font-mono text-sm\">provideRequestLock()</code> and register <code class=\"font-mono text-sm\">requestLockInterceptor</code> directly.",
+      "note": "The interceptor is a plain <code class=\"font-mono text-sm\">HttpInterceptorFn</code>. Its order relative to other interceptors is the order you pass to <code class=\"font-mono text-sm\">withInterceptors(...)</code>."
+    },
+    "context": {
+      "title": "Attach the lock id to the request",
+      "text": "The interceptor is inert by default: it only reacts to requests whose <code class=\"font-mono text-sm\">HttpContext</code> carries a value under <code class=\"font-mono text-sm\">REQUEST_LOCK_ID</code>. Use <code class=\"font-mono text-sm\">createRequestLockContext(id)</code> to build that context.",
+      "bullets": "<li><code class=\"font-mono text-sm\">REQUEST_LOCK_ID</code> is an <code class=\"font-mono text-sm\">HttpContextToken&lt;string | null&gt;</code> with a default of <code class=\"font-mono text-sm\">null</code>.</li><li><code class=\"font-mono text-sm\">createRequestLockContext(id)</code> returns a fresh <code class=\"font-mono text-sm\">HttpContext</code> with the token set to <code class=\"font-mono text-sm\">id</code>. If <code class=\"font-mono text-sm\">id</code> is falsy the context is returned empty and the request is ignored by the interceptor.</li><li>Requests without this context pass through untouched &mdash; the library never modifies HTTP requests it was not asked to track.</li>"
+    },
+    "directive": {
+      "title": "Add the directive to the UI",
+      "text": "<code class=\"font-mono text-sm\">RequestLockDirective</code> is a standalone directive with selector <code class=\"font-mono text-sm\">[ngxRequestLock]</code> and <code class=\"font-mono text-sm\">exportAs: 'requestLock'</code>. Import it in the consuming component's <code class=\"font-mono text-sm\">imports</code> array and place it on the element that owns the click.",
+      "bullets": "<li>Each directive instance generates a stable <code class=\"font-mono text-sm\">requestId: string</code> once, using <code class=\"font-mono text-sm\">crypto.randomUUID()</code>.</li><li>Export the instance with <code class=\"font-mono text-sm\">#lock=\"requestLock\"</code> and read <code class=\"font-mono text-sm\">lock.requestId</code> from the click handler.</li><li>The directive locates the button to disable via <code class=\"font-mono text-sm\">elementRef.closest('button')</code>, falling back to the first descendant <code class=\"font-mono text-sm\">&lt;button&gt;</code>. Place the directive on the button itself or on a wrapper that contains one.</li>"
+    },
+    "lifecycle": {
+      "title": "How the UI unlocks",
+      "text": "The unlock is driven by three moving parts working together. You never call an <code class=\"font-mono text-sm\">unblock()</code> method yourself.",
+      "steps": "<li>On click, the directive sets its internal <code class=\"font-mono text-sm\">isBlocked = true</code> and adds the <code class=\"font-mono text-sm\">disabled</code> attribute to the resolved button.</li><li><code class=\"font-mono text-sm\">requestLockInterceptor</code> reads the id from the request's <code class=\"font-mono text-sm\">HttpContext</code> and calls <code class=\"font-mono text-sm\">RequestLockService.start(id)</code>. The response stream is piped through <code class=\"font-mono text-sm\">finalize(() =&gt; service.end(id))</code>, so success, error, and unsubscription all decrement the counter.</li><li><code class=\"font-mono text-sm\">RequestLockService</code> holds a <code class=\"font-mono text-sm\">signal&lt;Record&lt;string, number&gt;&gt;</code> reference-counting pending requests per id, exposed as a boolean <code class=\"font-mono text-sm\">Signal</code> through <code class=\"font-mono text-sm\">isPending(id)</code>.</li><li>Inside the directive, an <code class=\"font-mono text-sm\">effect</code> observes <code class=\"font-mono text-sm\">isPending(requestId)</code>. When it first becomes <code class=\"font-mono text-sm\">true</code> and then flips back to <code class=\"font-mono text-sm\">false</code>, the directive removes the <code class=\"font-mono text-sm\">disabled</code> attribute and cleans up the effect.</li>"
+    },
+    "safety": {
+      "title": "Safety timeouts",
+      "text": "Two timeouts guarantee the button cannot remain permanently disabled even if no request is ever fired or the request never settles:",
+      "bullets": "<li><strong>500&nbsp;ms</strong> &mdash; if no pending state has been observed by this point, the click did not produce a tracked request and the directive unblocks. This covers clicks that do not fire HTTP at all.</li><li><strong>10&nbsp;s</strong> &mdash; an unconditional ceiling. If a request is still pending after ten seconds, the button is unblocked anyway.</li>"
+    },
+    "fullExample": {
+      "title": "Full example",
+      "text": "The two files below are the complete wiring: a bootstrap config that installs the provider, and a component that uses the directive with an HTTP call.",
+      "configTitle": "app.config.ts",
+      "componentTitle": "ping.component.ts"
+    },
+    "next": {
+      "title": "Next steps",
+      "examplesTitle": "Usage examples",
+      "examplesDesc": "Save, delete, form submit, and a custom loading directive.",
+      "architectureTitle": "Architecture",
+      "architectureDesc": "How the four pieces connect and why they stay decoupled.",
+      "apiTitle": "API reference",
+      "apiDesc": "Every public export, signature, and default."
+    }
+  },
   "examples": {
     "intro": "Every example below wires <code class=\"font-mono text-sm\">RequestLockDirective</code> to a real HTTP call. The button stays blocked while the request tagged with its <code class=\"font-mono text-sm\">requestId</code> is pending, and is re-enabled automatically when the request settles — success or error. No <code class=\"font-mono text-sm\">loading</code> boolean, no manual reset in error handlers.",
     "tipConfig": "All snippets assume <code class=\"font-mono text-sm\">provideRequestLock()</code> is registered in <code class=\"font-mono text-sm\">app.config.ts</code>. See the Installation page.",
