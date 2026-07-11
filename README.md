@@ -1,59 +1,94 @@
-# ClickGuardDocs
+# ngx-request-lock docs
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.0.6.
+Documentation site for the **ngx-request-lock** Angular library.
 
-## Development server
+This project explains how the library works, how to install it, and how to use it in a real Angular application. The docs are organized as route-based pages and are written to reflect the actual public API and internal structure of the library.
 
-To start a local development server, run:
+## What this project contains
+
+- Overview and project introduction.
+- Installation and setup instructions.
+- Architecture notes for the library internals.
+- Usage examples and integration patterns.
+- Documentation pages built with Angular standalone components and routing.
+- A bilingual docs experience where content is managed through translation keys and JSON files.
+
+## Library focus
+
+`ngx-request-lock` helps coordinate UI locking around HTTP requests. It uses an Angular `HttpContext` token to attach a request tracking id, a functional HTTP interceptor to track request lifecycle, and a service to keep track of pending requests. [file:506][file:508]
+
+The public surface is exposed through the library entry point, and the docs should always stay aligned with the real exported API. [file:236]
+
+## Project structure
+
+The docs are organized around routeable pages, typically covering:
+
+- Home.
+- Problem statement.
+- Architecture.
+- Installation and setup.
+- Usage examples.
+- API reference.
+
+Shared UI should stay small and reusable, with components for navigation, code examples, callouts, and content sections.
+
+## Getting started
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the docs locally:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Then open `http://localhost:4200/`.
 
-## Code scaffolding
+## Build
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+Create a production build with:
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+The build output is generated in `dist/`.
 
-## Running unit tests
+## Tests
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Run unit tests with:
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+## Documentation guidelines
 
-For end-to-end (e2e) testing, run:
+When editing or adding docs pages:
 
-```bash
-ng e2e
-```
+- Use Angular standalone components.
+- Prefer clear route-based page structure.
+- Keep examples tied to the actual library code.
+- Do not invent APIs or behavior that do not exist in the repository.
+- Use Tailwind CSS for layout and styling when available.
+- Keep setup, usage, and architecture separate for readability.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Development notes
 
-## Additional Resources
+The docs should describe the real behavior of the library:
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- A request context token carries the tracking id. [file:505]
+- The interceptor reads the context and starts or ends tracking around the request lifecycle. [file:506]
+- The service stores pending request counts and exposes computed pending state. [file:508]
+
+## Contributing
+
+When updating the docs, keep the content consistent across all translated pages and update translation files together with the corresponding UI components.
+
+## License
+
+Add the project license here if and when it is defined.
