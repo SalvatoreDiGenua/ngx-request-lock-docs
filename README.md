@@ -1,27 +1,29 @@
-# ngx-request-lock docs
+# ngx-request-lock docs 📘
 
 Documentation site for the **ngx-request-lock** Angular library.
 
-This project explains how the library works, how to install it, and how to use it in a real Angular application. The docs are organized as route-based pages and are written to reflect the actual public API and internal structure of the library.
+This project explains how the library works, how to install it, and how to use it in a real Angular application. The docs are structured as route-based pages and mirror the actual public API and architecture of the library.
 
-## What this project contains
+## What this project contains ✨
 
 - Overview and project introduction.
 - Installation and setup instructions.
 - Architecture notes for the library internals.
 - Usage examples and integration patterns.
-- Documentation pages built with Angular standalone components and routing.
-- A bilingual docs experience where content is managed through translation keys and JSON files.
+- Route-based documentation pages built with Angular standalone components.
+- A bilingual docs experience managed through translation keys and JSON files.
 
-## Library focus
+## About the library 🧩
 
-`ngx-request-lock` helps coordinate UI locking around HTTP requests. It uses an Angular `HttpContext` token to attach a request tracking id, a functional HTTP interceptor to track request lifecycle, and a service to keep track of pending requests. [file:506][file:508]
+`ngx-request-lock` helps coordinate UI locking around HTTP requests.
 
-The public surface is exposed through the library entry point, and the docs should always stay aligned with the real exported API. [file:236]
+It is designed for Angular applications that need to prevent repeated actions while a request is still pending. The library tracks requests through an `HttpContext` token, a functional HTTP interceptor, and a signal-based service that exposes pending state to the UI. [file:505][file:506][file:508]
 
-## Project structure
+In practice, this means you can attach a tracking id to a request, detect whether that request is still in progress, and use that state to disable buttons, show loading indicators, or prevent duplicate submissions. [file:505][file:506][file:508]
 
-The docs are organized around routeable pages, typically covering:
+## Project structure 🗂️
+
+The docs are organized around clear topics:
 
 - Home.
 - Problem statement.
@@ -30,9 +32,9 @@ The docs are organized around routeable pages, typically covering:
 - Usage examples.
 - API reference.
 
-Shared UI should stay small and reusable, with components for navigation, code examples, callouts, and content sections.
+Shared UI stays small and reusable, with components for navigation, code examples, callouts, and content sections.
 
-## Getting started
+## Getting started 🚀
 
 Install dependencies:
 
@@ -48,7 +50,7 @@ ng serve
 
 Then open `http://localhost:4200/`.
 
-## Build
+## Build 🛠️
 
 Create a production build with:
 
@@ -58,7 +60,7 @@ ng build
 
 The build output is generated in `dist/`.
 
-## Tests
+## Tests ✅
 
 Run unit tests with:
 
@@ -66,7 +68,7 @@ Run unit tests with:
 ng test
 ```
 
-## Documentation guidelines
+## Documentation guidelines 📝
 
 When editing or adding docs pages:
 
@@ -77,18 +79,14 @@ When editing or adding docs pages:
 - Use Tailwind CSS for layout and styling when available.
 - Keep setup, usage, and architecture separate for readability.
 
-## Development notes
+## Library flow 🔍
 
-The docs should describe the real behavior of the library:
+The library works with three main pieces:
 
-- A request context token carries the tracking id. [file:505]
-- The interceptor reads the context and starts or ends tracking around the request lifecycle. [file:506]
-- The service stores pending request counts and exposes computed pending state. [file:508]
+- A request tracking token stored in `HttpContext`. [file:505]
+- A functional interceptor that starts and stops tracking around the request lifecycle. [file:506]
+- A root service that stores pending request counts and exposes computed pending state. [file:508]
 
-## Contributing
-
-When updating the docs, keep the content consistent across all translated pages and update translation files together with the corresponding UI components.
-
-## License
+## License 📄
 
 Add the project license here if and when it is defined.
