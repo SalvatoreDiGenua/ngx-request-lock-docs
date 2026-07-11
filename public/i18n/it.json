@@ -17,10 +17,13 @@
     "title": "ngx-request-lock",
     "subtitle": "Blocco della UI legato al ciclo di vita HTTP",
     "languageSwitch": "Cambia lingua",
-    "skipToContent": "Vai al contenuto"
+    "skipToContent": "Vai al contenuto",
+    "openNav": "Apri navigazione",
+    "closeNav": "Chiudi navigazione",
+    "navAriaLabel": "Documentazione"
   },
   "footer": {
-    "builtWith": "Realizzato con Angular e Tailwind CSS.",
+    "builtWith": "Realizzato con Angular e Tailwind CSS",
     "sourceCode": "Codice sorgente"
   },
   "common": {

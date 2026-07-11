@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NAV_GROUPS } from '../nav-items';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -8,8 +8,8 @@ import { TranslocoPipe } from '@jsverse/transloco';
   imports: [RouterLink, RouterLinkActive, TranslocoPipe],
   template: `
     <nav
-      aria-label="Documentation"
-      class="sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto py-6 pr-4"
+      [attr.aria-label]="ariaLabel()"
+      class="max-h-[calc(100vh-4rem)] overflow-y-auto py-6 pr-4 md:sticky md:top-16"
     >
       @for (group of groups; track group.labelKey) {
         <div class="mb-6">
@@ -26,6 +26,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
                   routerLinkActive="bg-sky-100 text-sky-900 font-semibold dark:bg-sky-900/50 dark:text-sky-100"
                   [routerLinkActiveOptions]="{ exact: item.route === '/' }"
                   class="block rounded px-3 py-1.5 text-sm font-medium text-slate-800 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white dark:focus-visible:ring-sky-400 dark:focus-visible:ring-offset-slate-950"
+                  (click)="navigate.emit()"
                 >
                   {{ item.labelKey | transloco }}
                 </a>
@@ -38,5 +39,8 @@ import { TranslocoPipe } from '@jsverse/transloco';
   `,
 })
 export class DocsSidebarComponent {
+  public readonly ariaLabel = input<string>('Documentation');
+  public readonly navigate = output<void>();
+
   protected readonly groups = NAV_GROUPS;
 }

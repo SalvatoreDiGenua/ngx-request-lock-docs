@@ -17,10 +17,13 @@
     "title": "ngx-request-lock",
     "subtitle": "UI locking bound to HTTP request lifecycle",
     "languageSwitch": "Switch language",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "openNav": "Open navigation",
+    "closeNav": "Close navigation",
+    "navAriaLabel": "Documentation"
   },
   "footer": {
-    "builtWith": "Built with Angular and Tailwind CSS.",
+    "builtWith": "Built with Angular and Tailwind CSS",
     "sourceCode": "Source code"
   },
   "common": {
