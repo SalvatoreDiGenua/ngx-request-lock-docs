@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { DocsShellComponent } from './core/layout/docs-shell/docs-shell';
 
 @Component({
   selector: 'ngx-root',
-  imports: [RouterOutlet],
+  imports: [DocsShellComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

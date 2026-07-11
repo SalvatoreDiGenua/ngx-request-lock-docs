@@ -1,0 +1,136 @@
+{
+  "nav": {
+    "home": "Home",
+    "problem": "Problem Statement",
+    "architecture": "Architecture",
+    "whyAngular": "Why Angular-native",
+    "installation": "Installation and Setup",
+    "examples": "Usage Examples",
+    "advantages": "Advantages",
+    "limitations": "Limitations and Design Choices",
+    "api": "API Reference",
+    "faq": "FAQ",
+    "sectionGuide": "Guide",
+    "sectionReference": "Reference"
+  },
+  "header": {
+    "title": "ngx-request-lock",
+    "subtitle": "UI locking bound to HTTP request lifecycle",
+    "languageSwitch": "Switch language",
+    "skipToContent": "Skip to content"
+  },
+  "footer": {
+    "builtWith": "Built with Angular and Tailwind CSS.",
+    "sourceCode": "Source code"
+  },
+  "common": {
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyAriaLabel": "Copy code to clipboard",
+    "placeholder": "Content coming soon."
+  },
+  "callout": {
+    "info": "Info",
+    "note": "Note",
+    "tip": "Tip",
+    "warning": "Warning"
+  },
+  "api": {
+    "name": "Name",
+    "kind": "Kind",
+    "signature": "Signature",
+    "description": "Description"
+  },
+  "home": {
+    "cards": {
+      "problem": {
+        "title": "The problem",
+        "description": "Why UI locking bound to HTTP matters."
+      },
+      "architecture": {
+        "title": "Architecture",
+        "description": "How directive, context, interceptor and service connect."
+      },
+      "installation": {
+        "title": "Installation",
+        "description": "Add the provider and start using it."
+      },
+      "examples": {
+        "title": "Examples",
+        "description": "Minimal, realistic usage patterns."
+      }
+    },
+    "hero": {
+      "intro": "An Angular library that binds a UI action to the lifecycle of its HTTP request. Buttons stay disabled while the request is pending and re-enable when it completes, with no manual <code class=\"font-mono text-sm\">loading</code> flags."
+    },
+    "install": {
+      "title": "Install",
+      "note": "Requires Angular v22 or newer. Uses standalone APIs, functional HTTP interceptors and signals."
+    },
+    "startHere": {
+      "title": "Start here"
+    }
+  },
+  "problem": {
+    "intro": "A common category of front-end bugs comes from the gap between a UI action and the HTTP request it triggers. The user clicks; the request is in flight; the button is still enabled; the user clicks again. Two identical requests reach the server. The application state diverges.",
+    "symptoms": {
+      "title": "Symptoms",
+      "list": "<li>Duplicate POST/PUT/DELETE requests from repeated clicks.</li><li>Duplicate form submissions racing to update the same record.</li><li>Ad hoc <code class=\"font-mono text-sm\">loading</code> booleans spread across every component that talks to the network.</li><li>Loading flags that stay <code class=\"font-mono text-sm\">true</code> forever when an error path forgets to reset them.</li><li>Disabled-state logic drifting out of sync with the actual request lifecycle.</li>"
+    },
+    "naive": {
+      "title": "The naive approach",
+      "text": "The typical fix is a component-level boolean toggled around each request. It works, but it is repetitive, error-prone on error paths, and does not survive concurrent calls with the same intent."
+    },
+    "withLibrary": {
+      "title": "With ngx-request-lock",
+      "text": "The directive owns the lock. The request carries a lock id in its <code class=\"font-mono text-sm\">HttpContext</code>. A functional interceptor updates a shared signal-backed service; the directive reads that signal and re-enables the button when the request settles. No component-level booleans, no manual reset in error handlers."
+    },
+    "scope": {
+      "title": "What this library is not",
+      "list": "<li>It does not cancel or debounce requests.</li><li>It does not replace HTTP-level idempotency on the server.</li><li>It does not implement a global spinner or toast system.</li>"
+    }
+  },
+  "architecture": {
+    "intro": "The library is composed of four small pieces that communicate through Angular's own primitives: an <code class=\"font-mono text-sm\">HttpContextToken</code>, a functional <code class=\"font-mono text-sm\">HttpInterceptorFn</code>, a signal-backed service, and a directive. No external state container, no observable orchestration in user code.",
+    "buildingBlocks": {
+      "title": "Building blocks",
+      "list": "<li><code class=\"font-mono text-sm\">REQUEST_LOCK_ID</code> — an <code class=\"font-mono text-sm\">HttpContextToken&lt;string | null&gt;</code> that tags a request with a lock identifier.</li><li><code class=\"font-mono text-sm\">createRequestLockContext(id)</code> — builds the <code class=\"font-mono text-sm\">HttpContext</code> to attach to the request.</li><li><code class=\"font-mono text-sm\">requestLockInterceptor</code> — a functional interceptor that reads the id from the context and drives the service.</li><li><code class=\"font-mono text-sm\">RequestLockService</code> — a singleton service holding a reference-counted map of pending requests, exposed as a <code class=\"font-mono text-sm\">Signal&lt;boolean&gt;</code> per id via <code class=\"font-mono text-sm\">isPending(id)</code>.</li><li><code class=\"font-mono text-sm\">RequestLockDirective</code> (<code class=\"font-mono text-sm\">[ngxRequestLock]</code>) — generates a UUID as <code class=\"font-mono text-sm\">requestId</code>, disables the host button on click, and unblocks when the matching signal settles.</li><li><code class=\"font-mono text-sm\">provideRequestLock()</code> — registers <code class=\"font-mono text-sm\">provideHttpClient(withInterceptors([requestLockInterceptor]))</code> in one call.</li>"
+    },
+    "dataFlow": {
+      "title": "Data flow",
+      "steps": "<li>The user clicks the host element. The directive stores <code class=\"font-mono text-sm\">isBlocked = true</code> and sets the <code class=\"font-mono text-sm\">disabled</code> attribute on the nearest <code class=\"font-mono text-sm\">&lt;button&gt;</code>.</li><li>The consumer sends an HTTP request whose <code class=\"font-mono text-sm\">HttpContext</code> carries the directive's <code class=\"font-mono text-sm\">requestId</code> via <code class=\"font-mono text-sm\">createRequestLockContext(id)</code>.</li><li><code class=\"font-mono text-sm\">requestLockInterceptor</code> reads <code class=\"font-mono text-sm\">REQUEST_LOCK_ID</code> from the context. If present, it calls <code class=\"font-mono text-sm\">RequestLockService.start(id)</code> and pipes the response through <code class=\"font-mono text-sm\">finalize(() =&gt; end(id))</code>.</li><li>The service updates its internal <code class=\"font-mono text-sm\">signal&lt;Record&lt;string, number&gt;&gt;</code>. An effect inside the directive observes <code class=\"font-mono text-sm\">isPending(id)</code> and calls <code class=\"font-mono text-sm\">unblock()</code> when the signal transitions from <code class=\"font-mono text-sm\">true</code> back to <code class=\"font-mono text-sm\">false</code>.</li><li>The button is re-enabled. Two safety timeouts also unblock: at 500ms if no pending state was ever observed, and at 10s unconditionally.</li>"
+    },
+    "httpContextNote": "<strong>HttpContext is local.</strong> <code class=\"font-mono text-sm\">HttpContext</code> is Angular client-side metadata attached to a request instance. It is not serialized to headers, body, or query string, and never reaches the server.",
+    "refCount": {
+      "title": "Reference-counted state",
+      "text": "<code class=\"font-mono text-sm\">RequestLockService</code> increments a counter per id on <code class=\"font-mono text-sm\">start</code> and decrements on <code class=\"font-mono text-sm\">end</code>. Multiple concurrent requests can share the same lock id and only the last <code class=\"font-mono text-sm\">end</code> flips <code class=\"font-mono text-sm\">isPending(id)</code> back to <code class=\"font-mono text-sm\">false</code>.",
+      "note": "<code class=\"font-mono text-sm\">RequestLockService.isPending(id)</code> returns a new <code class=\"font-mono text-sm\">computed</code> on every call. Store the returned signal in a field if you read it repeatedly in the same component."
+    }
+  },
+  "examples": {
+    "intro": "Every example below wires <code class=\"font-mono text-sm\">RequestLockDirective</code> to a real HTTP call. The button stays blocked while the request tagged with its <code class=\"font-mono text-sm\">requestId</code> is pending, and is re-enabled automatically when the request settles — success or error. No <code class=\"font-mono text-sm\">loading</code> boolean, no manual reset in error handlers.",
+    "tipConfig": "All snippets assume <code class=\"font-mono text-sm\">provideRequestLock()</code> is registered in <code class=\"font-mono text-sm\">app.config.ts</code>. See the Installation page.",
+    "basic": {
+      "title": "Basic use case",
+      "text": "The minimum viable wiring: a button, the directive, a template reference exported as <code class=\"font-mono text-sm\">requestLock</code>, and one HTTP request whose <code class=\"font-mono text-sm\">HttpContext</code> carries the lock id via <code class=\"font-mono text-sm\">createRequestLockContext(id)</code>.",
+      "bullets": "<li><code class=\"font-mono text-sm\">#lock=\"requestLock\"</code> exposes the directive instance to the template.</li><li><code class=\"font-mono text-sm\">lock.requestId</code> is a stable UUID generated once per directive instance.</li><li>The button is disabled from the click until the interceptor sees the request settle.</li>"
+    },
+    "crud": {
+      "title": "Save, delete, form examples",
+      "text": "The pattern is identical for every non-idempotent action. The only thing that changes is the HTTP verb and the payload; the directive, the exported reference and the context helper stay the same."
+    },
+    "formNote": "The submit button in the form example combines <code class=\"font-mono text-sm\">ngxRequestLock</code> with <code class=\"font-mono text-sm\">[disabled]=\"form.invalid\"</code>. The directive re-applies its own <code class=\"font-mono text-sm\">disabled</code> only while the request is pending; when it re-enables the button, form validity takes over again.",
+    "custom": {
+      "title": "Custom directive: loading animation",
+      "text": "The library keeps the visual side deliberately empty: <code class=\"font-mono text-sm\">RequestLockDirective</code> only toggles the native <code class=\"font-mono text-sm\">disabled</code> attribute on the nearest button. To show a spinner or a custom animation, extend the directive in your own app and override the <code class=\"font-mono text-sm\">setBlockStatus</code> extension point.",
+      "info": "This directive lives in the docs app under <code class=\"font-mono text-sm\">src/app/pages/examples/loading-request-lock.directive.ts</code>. It is deliberately separate from the library so <code class=\"font-mono text-sm\">ngx-request-lock</code> stays styling-agnostic.",
+      "usageText": "Consume it exactly like the base directive; only the selector and the exported name change.",
+      "warning": "The base directive is not <code class=\"font-mono text-sm\">final</code>, but its constructor injections and the <code class=\"font-mono text-sm\">@HostListener('click')</code> live on the parent class. Do not shadow <code class=\"font-mono text-sm\">onClick</code> and do not re-declare the click host binding in the subclass — override only <code class=\"font-mono text-sm\">setBlockStatus</code>."
+    },
+    "why": {
+      "title": "Why this matters in consumer projects",
+      "intro": "The same three characters — <code class=\"font-mono text-sm\">ngxRequestLock</code>, <code class=\"font-mono text-sm\">#lock</code>, <code class=\"font-mono text-sm\">createRequestLockContext</code> — cover every action-triggered HTTP call in an application. That uniformity is the whole point:",
+      "bullets": "<li><strong>No per-component boilerplate.</strong> No <code class=\"font-mono text-sm\">loading</code> boolean, no <code class=\"font-mono text-sm\">finalize</code> in user code, no manual reset in error handlers.</li><li><strong>Correctness on error paths.</strong> The button is re-enabled through the interceptor's <code class=\"font-mono text-sm\">finalize</code>, so a thrown error, a 5xx response, or a cancelled subscription all leave the UI consistent.</li><li><strong>Concurrent requests share a lock.</strong> The service reference-counts pending requests per id, so a component that fires several requests under the same <code class=\"font-mono text-sm\">requestId</code> only unblocks when all of them settle.</li><li><strong>Styling stays in the app.</strong> The library ships zero CSS; the custom directive above shows the exact seam where visual behavior belongs.</li><li><strong>Angular-native surface.</strong> <code class=\"font-mono text-sm\">HttpContext</code>, functional interceptors, signals — no external state container, no RxJS orchestration in user code.</li>"
+    }
+  }
+}

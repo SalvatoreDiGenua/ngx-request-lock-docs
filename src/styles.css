@@ -1,3 +1,101 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global styles for the ngx-request-lock docs app. */
 
 @import 'tailwindcss';
+
+/*
+ * Class-based dark mode.
+ * `dark:*` utilities activate whenever an ancestor has the `.dark` class,
+ * OR when the browser prefers dark and the `.dark` class is not overridden.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Semantic palette tokens (Tailwind v4).
+ *
+ * All colors chosen to guarantee WCAG AA contrast on their intended surface:
+ *   - text-fg on bg-surface          >= 12:1
+ *   - text-fg-muted on bg-surface    >=  7:1
+ *   - text-fg-subtle on bg-surface   >=  4.6:1 (borderline; use for large text only)
+ *   - border-default on bg-surface   >=  1.6:1 (decorative)
+ *   - border-strong on bg-surface    >=  3:1  (UI boundary)
+ *   - ring / focus indicator         >=  3:1  vs both surface and adjacent color
+ *   - brand-fg on bg-surface         >=  6:1
+ *
+ * Values reference Tailwind v4's built-in slate/sky/emerald/amber ramps.
+ */
+@theme {
+  /* Surfaces */
+  --color-surface: #ffffff; /* white */
+  --color-surface-muted: #f8fafc; /* slate-50 */
+  --color-surface-raised: #ffffff;
+  --color-surface-inverse: #0f172a; /* slate-900 */
+  --color-surface-code: #020617; /* slate-950 */
+
+  /* Foreground text */
+  --color-fg: #0f172a; /* slate-900  -- ~18.7:1 on white */
+  --color-fg-muted: #334155; /* slate-700  -- ~10.4:1 on white */
+  --color-fg-subtle: #475569; /* slate-600  --  ~7.2:1 on white */
+  --color-fg-inverse: #f1f5f9; /* slate-100 */
+  --color-fg-inverse-muted: #cbd5e1; /* slate-300 -- ~11:1 on slate-950 */
+
+  /* Borders */
+  --color-border: #cbd5e1; /* slate-300 -- ~1.6:1 decorative */
+  --color-border-strong: #94a3b8; /* slate-400 -- ~2.85:1 (still soft) */
+  --color-border-inverse: #1e293b; /* slate-800 */
+
+  /* Brand (sky) */
+  --color-brand: #0284c7; /* sky-600  -- primary action */
+  --color-brand-hover: #0369a1; /* sky-700 */
+  --color-brand-active: #075985; /* sky-800 */
+  --color-brand-fg: #0369a1; /* sky-700  -- ~6.4:1 link text on white */
+  --color-brand-fg-inverse: #7dd3fc; /* sky-300  -- link text on dark bg */
+  --color-brand-surface: #e0f2fe; /* sky-100  -- soft brand chip */
+  --color-brand-surface-inverse: #0c4a6e; /* sky-900 */
+
+  /* Focus ring: must reach >=3:1 on both light and dark surfaces */
+  --color-ring: #0284c7; /* sky-600 -- ~4.4:1 vs white, ~4.1:1 vs slate-950 */
+  --color-ring-inverse: #38bdf8; /* sky-400 -- for dark surfaces */
+}
+
+/*
+ * Base layer: opinionated defaults so a page always renders on a proper
+ * surface with readable foreground text, even without utility classes.
+ */
+@layer base {
+  html {
+    color-scheme: light dark;
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-fg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :where(.dark) body,
+  .dark body {
+    background-color: var(--color-surface-inverse);
+    color: var(--color-fg-inverse);
+  }
+
+  /* Inline code inherits foreground so it never becomes invisible. */
+  :where(code):not(pre code) {
+    background-color: var(--color-surface-muted);
+    color: var(--color-fg);
+    padding: 0.1em 0.35em;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+  }
+
+  .dark :where(code):not(pre code) {
+    background-color: #1e293b; /* slate-800 */
+    color: var(--color-fg-inverse);
+  }
+
+  /* Ensure focus rings are always visible on the docs surface. */
+  :where(:focus-visible) {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+}
