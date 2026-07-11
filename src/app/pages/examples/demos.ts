@@ -81,8 +81,7 @@ export class BasicDemo {
       .subscribe({
         next: (post) =>
           this.status.set({ kind: 'ok', text: `Loaded post #${post.id}` }),
-        error: () =>
-          this.status.set({ kind: 'error', text: 'Request failed' }),
+        error: () => this.status.set({ kind: 'error', text: 'Request failed' }),
       });
   }
 }
@@ -163,8 +162,7 @@ export class DeleteDemo {
       .delete(`${API}/posts/1`, { context: createRequestLockContext(id) })
       .subscribe({
         next: () => this.status.set({ kind: 'ok', text: 'Deleted' }),
-        error: () =>
-          this.status.set({ kind: 'error', text: 'Delete failed' }),
+        error: () => this.status.set({ kind: 'error', text: 'Delete failed' }),
       });
   }
 }
@@ -253,8 +251,7 @@ export class FormDemo {
             kind: 'ok',
             text: `Signed up (id ${user.id})`,
           }),
-        error: () =>
-          this.status.set({ kind: 'error', text: 'Sign up failed' }),
+        error: () => this.status.set({ kind: 'error', text: 'Sign up failed' }),
       });
   }
 }

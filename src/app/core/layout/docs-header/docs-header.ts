@@ -45,10 +45,7 @@ import { LanguageService } from '../../i18n/language.service';
                 stroke-width="2"
                 class="h-5 w-5"
               >
-                <path
-                  stroke-linecap="round"
-                  d="M3 6h14M3 10h14M3 14h14"
-                />
+                <path stroke-linecap="round" d="M3 6h14M3 10h14M3 14h14" />
               </svg>
             }
           </button>
