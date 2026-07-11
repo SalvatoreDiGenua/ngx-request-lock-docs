@@ -282,7 +282,7 @@ export class Ping {
         {{ t('installation.next.title') }}
       </ngx-section-heading>
 
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
         <ngx-link-card
           [title]="t('installation.next.examplesTitle')"
           [description]="t('installation.next.examplesDesc')"
@@ -292,11 +292,6 @@ export class Ping {
           [title]="t('installation.next.architectureTitle')"
           [description]="t('installation.next.architectureDesc')"
           route="/architecture"
-        />
-        <ngx-link-card
-          [title]="t('installation.next.apiTitle')"
-          [description]="t('installation.next.apiDesc')"
-          route="/api"
         />
       </div>
     </article>

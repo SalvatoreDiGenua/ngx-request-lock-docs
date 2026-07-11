@@ -17,18 +17,8 @@ export const NAV_GROUPS: readonly NavGroup[] = [
       { labelKey: 'nav.home', route: '/' },
       { labelKey: 'nav.problem', route: '/problem' },
       { labelKey: 'nav.architecture', route: '/architecture' },
-      { labelKey: 'nav.whyAngular', route: '/why-angular-native' },
       { labelKey: 'nav.installation', route: '/installation' },
       { labelKey: 'nav.examples', route: '/examples' },
-    ],
-  },
-  {
-    labelKey: 'nav.sectionReference',
-    items: [
-      { labelKey: 'nav.advantages', route: '/advantages' },
-      { labelKey: 'nav.limitations', route: '/limitations' },
-      { labelKey: 'nav.api', route: '/api' },
-      { labelKey: 'nav.faq', route: '/faq' },
     ],
   },
 ];
