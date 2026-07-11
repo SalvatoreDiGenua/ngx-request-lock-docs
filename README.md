@@ -86,7 +86,3 @@ The library works with three main pieces:
 - A request tracking token stored in `HttpContext`. [file:505]
 - A functional interceptor that starts and stops tracking around the request lifecycle. [file:506]
 - A root service that stores pending request counts and exposes computed pending state. [file:508]
-
-## License 📄
-
-Add the project license here if and when it is defined.

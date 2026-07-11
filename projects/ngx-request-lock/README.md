@@ -97,7 +97,3 @@ Use the Angular CLI and the standard library workflow for local development.
 ```bash
 ng test
 ```
-
-## License
-
-Add the project license here if and when it is defined.
