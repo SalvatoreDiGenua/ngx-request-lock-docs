@@ -170,6 +170,8 @@
   "examples": {
     "intro": "Ogni esempio qui sotto collega <code class=\"font-mono text-sm\">RequestLockDirective</code> a una reale chiamata HTTP. Il pulsante resta bloccato mentre la richiesta marcata con il suo <code class=\"font-mono text-sm\">requestId</code> è in corso, e viene riabilitato automaticamente quando la richiesta si conclude — con successo o errore. Nessun booleano <code class=\"font-mono text-sm\">loading</code>, nessun reset manuale nei gestori d'errore.",
     "tipConfig": "Tutti gli snippet danno per scontato che <code class=\"font-mono text-sm\">provideRequestLock()</code> sia registrato in <code class=\"font-mono text-sm\">app.config.ts</code>. Vedi la pagina Installazione.",
+    "liveDemo": "Demo interattiva",
+    "liveDemoAriaLabel": "Demo interattiva",
     "basic": {
       "title": "Caso d'uso base",
       "text": "Il minimo indispensabile: un pulsante, la direttiva, una variabile di template esportata come <code class=\"font-mono text-sm\">requestLock</code>, e una richiesta HTTP il cui <code class=\"font-mono text-sm\">HttpContext</code> trasporta l'id del lock tramite <code class=\"font-mono text-sm\">createRequestLockContext(id)</code>.",
@@ -180,6 +182,13 @@
       "text": "Il pattern è identico per ogni azione non idempotente. Cambiano solo il verbo HTTP e il payload; la direttiva, il riferimento esportato e l'helper di context restano invariati."
     },
     "formNote": "Il pulsante di submit dell'esempio con form combina <code class=\"font-mono text-sm\">ngxRequestLock</code> con <code class=\"font-mono text-sm\">[disabled]=\"form.invalid\"</code>. La direttiva riapplica il proprio <code class=\"font-mono text-sm\">disabled</code> solo mentre la richiesta è in corso; una volta riabilitato il pulsante, la validità del form riprende il controllo.",
+    "pending": {
+      "title": "Variante: mostrare lo stato in corso",
+      "text": "La direttiva disabilita il pulsante mentre la richiesta è in corso, ma non dice nulla sull'etichetta o sull'icona. Un'esigenza comune è sostituire <em>Save</em> con <em>Saving&hellip;</em> e mostrare uno spinner. La libreria espone già il signal reattivo che serve &mdash; nessuna estensione della direttiva necessaria. Basta leggere <code class=\"font-mono text-sm\">RequestLockService.isPending(lock.requestId)</code> e pilotare il template con un <code class=\"font-mono text-sm\">computed()</code>.",
+      "bullets": "<li><code class=\"font-mono text-sm\">viewChild.required(RequestLockDirective)</code> permette di accedere all'istanza della direttiva dalla classe del componente.</li><li><code class=\"font-mono text-sm\">computed(() =&gt; service.isPending(lock().requestId)())</code> trasforma il signal condiviso del service in un semplice booleano usabile nel template.</li><li>Usa <code class=\"font-mono text-sm\">&#64;if (isPending())</code> nel template per scambiare l'etichetta e mostrare uno spinner &mdash; nessun campo <code class=\"font-mono text-sm\">loading</code>, nessun <code class=\"font-mono text-sm\">finalize</code> nel codice utente.</li><li>Imposta <code class=\"font-mono text-sm\">[attr.aria-busy]</code> durante lo stato in corso così che le tecnologie assistive annuncino la transizione.</li>"
+      ,
+      "tip": "Questo pattern è ortogonale al comportamento <em>disabled</em> della direttiva: il pulsante resta comunque bloccato a livello DOM, e il signal in corso guida solo lo stato visivo/testuale. I due funzionano insieme senza conflitti."
+    },
     "custom": {
       "title": "Direttiva personalizzata: animazione di caricamento",
       "text": "La libreria lascia deliberatamente vuoto il lato visivo: <code class=\"font-mono text-sm\">RequestLockDirective</code> commuta soltanto l'attributo nativo <code class=\"font-mono text-sm\">disabled</code> sul pulsante più vicino. Per mostrare uno spinner o un'animazione personalizzata, estendi la direttiva nella tua app e sovrascrivi il punto di estensione <code class=\"font-mono text-sm\">setBlockStatus</code>.",

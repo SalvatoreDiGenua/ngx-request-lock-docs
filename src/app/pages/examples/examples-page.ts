@@ -3,6 +3,13 @@ import { TranslocoDirective, translateSignal } from '@jsverse/transloco';
 import { CalloutComponent } from '../../shared/ui/callout/callout';
 import { CodeExampleComponent } from '../../shared/ui/code-example/code-example';
 import { SectionHeadingComponent } from '../../shared/ui/section-heading/section-heading';
+import {
+  BasicDemo,
+  DeleteDemo,
+  FormDemo,
+  PendingStateDemo,
+  SaveDemo,
+} from './demos';
 
 const BASIC_CODE = `import { Component, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -119,6 +126,51 @@ export class SignupForm {
   }
 }`;
 
+const PENDING_STATE_CODE = `import { Component, computed, inject, signal, viewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import {
+  RequestLockDirective,
+  RequestLockService,
+  createRequestLockContext,
+} from 'ngx-request-lock';
+
+@Component({
+  selector: 'ngx-pending-save',
+  imports: [RequestLockDirective],
+  template: \`
+    <button
+      ngxRequestLock
+      #lock="requestLock"
+      type="button"
+      [attr.aria-busy]="isPending() ? 'true' : null"
+      (click)="save(lock.requestId)"
+    >
+      @if (isPending()) {
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Saving&hellip;</span>
+      } @else {
+        <span>Save</span>
+      }
+    </button>
+  \`,
+})
+export class PendingSave {
+  private readonly http = inject(HttpClient);
+  private readonly lockService = inject(RequestLockService);
+  private readonly lock = viewChild.required(RequestLockDirective);
+
+  // Reactive pending flag derived from the shared service.
+  protected readonly isPending = computed(() =>
+    this.lockService.isPending(this.lock().requestId)(),
+  );
+
+  protected save(id: string): void {
+    this.http
+      .post('/api/users', {}, { context: createRequestLockContext(id) })
+      .subscribe();
+  }
+}`;
+
 const CUSTOM_DIRECTIVE_CODE = `import { Directive, Renderer2, inject } from '@angular/core';
 import { RequestLockDirective } from 'ngx-request-lock';
 
@@ -221,6 +273,11 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
     CalloutComponent,
     CodeExampleComponent,
     SectionHeadingComponent,
+    BasicDemo,
+    SaveDemo,
+    DeleteDemo,
+    FormDemo,
+    PendingStateDemo,
   ],
   template: `
     <article *transloco="let t" class="max-w-none">
@@ -248,6 +305,18 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
 
       <ngx-code-example [code]="basicCode" language="typescript" />
 
+      <section
+        class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        [attr.aria-label]="t('examples.liveDemoAriaLabel')"
+      >
+        <p
+          class="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400"
+        >
+          {{ t('examples.liveDemo') }}
+        </p>
+        <ngx-basic-demo />
+      </section>
+
       <ul
         class="list-disc space-y-2 pl-6 text-slate-700 dark:text-slate-300"
         [innerHTML]="t('examples.basic.bullets')"
@@ -267,11 +336,35 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
         title="Save (POST)"
       />
 
+      <section
+        class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        [attr.aria-label]="t('examples.liveDemoAriaLabel')"
+      >
+        <p
+          class="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400"
+        >
+          {{ t('examples.liveDemo') }}
+        </p>
+        <ngx-save-demo />
+      </section>
+
       <ngx-code-example
         [code]="deleteCode"
         language="typescript"
         title="Delete (DELETE)"
       />
+
+      <section
+        class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        [attr.aria-label]="t('examples.liveDemoAriaLabel')"
+      >
+        <p
+          class="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400"
+        >
+          {{ t('examples.liveDemo') }}
+        </p>
+        <ngx-delete-demo />
+      </section>
 
       <ngx-code-example
         [code]="formCode"
@@ -279,8 +372,56 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
         title="Reactive form submit"
       />
 
+      <section
+        class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        [attr.aria-label]="t('examples.liveDemoAriaLabel')"
+      >
+        <p
+          class="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400"
+        >
+          {{ t('examples.liveDemo') }}
+        </p>
+        <ngx-form-demo />
+      </section>
+
       <ngx-callout variant="note">
         <p [innerHTML]="t('examples.formNote')"></p>
+      </ngx-callout>
+
+      <ngx-section-heading anchor="pending-state">
+        {{ t('examples.pending.title') }}
+      </ngx-section-heading>
+
+      <p
+        class="text-slate-700 dark:text-slate-300"
+        [innerHTML]="t('examples.pending.text')"
+      ></p>
+
+      <section
+        class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        [attr.aria-label]="t('examples.liveDemoAriaLabel')"
+      >
+        <p
+          class="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400"
+        >
+          {{ t('examples.liveDemo') }}
+        </p>
+        <ngx-pending-state-demo />
+      </section>
+
+      <ngx-code-example
+        [code]="pendingStateCode"
+        language="typescript"
+        title="Signal-driven pending state"
+      />
+
+      <ul
+        class="list-disc space-y-2 pl-6 text-slate-700 dark:text-slate-300"
+        [innerHTML]="t('examples.pending.bullets')"
+      ></ul>
+
+      <ngx-callout variant="tip">
+        <p [innerHTML]="t('examples.pending.tip')"></p>
       </ngx-callout>
 
       <ngx-section-heading anchor="custom-directive">
@@ -344,6 +485,7 @@ export default class ExamplesPage {
   protected readonly saveCode = SAVE_CODE;
   protected readonly deleteCode = DELETE_CODE;
   protected readonly formCode = FORM_CODE;
+  protected readonly pendingStateCode = PENDING_STATE_CODE;
   protected readonly customDirectiveCode = CUSTOM_DIRECTIVE_CODE;
   protected readonly customUsageCode = CUSTOM_USAGE_CODE;
   protected readonly customStyleCode = CUSTOM_STYLE_CODE;

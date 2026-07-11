@@ -4,9 +4,9 @@ import {
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
 import { provideTransloco } from '@jsverse/transloco';
 import { provideTranslocoPersistLang } from '@jsverse/transloco-persist-lang';
+import { provideRequestLock } from 'ngx-request-lock';
 
 import { routes } from './app.routes';
 import { TranslocoHttpLoader } from './core/i18n/transloco-loader';
@@ -21,7 +21,9 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',
       }),
     ),
-    provideHttpClient(),
+    // Registers HttpClient with the ngx-request-lock functional interceptor.
+    // Do NOT add a separate provideHttpClient() call - it would override this.
+    provideRequestLock(),
     provideTransloco({
       config: {
         availableLangs: ['en', 'it'],

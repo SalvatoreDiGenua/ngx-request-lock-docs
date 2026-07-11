@@ -170,6 +170,8 @@
   "examples": {
     "intro": "Every example below wires <code class=\"font-mono text-sm\">RequestLockDirective</code> to a real HTTP call. The button stays blocked while the request tagged with its <code class=\"font-mono text-sm\">requestId</code> is pending, and is re-enabled automatically when the request settles — success or error. No <code class=\"font-mono text-sm\">loading</code> boolean, no manual reset in error handlers.",
     "tipConfig": "All snippets assume <code class=\"font-mono text-sm\">provideRequestLock()</code> is registered in <code class=\"font-mono text-sm\">app.config.ts</code>. See the Installation page.",
+    "liveDemo": "Live demo",
+    "liveDemoAriaLabel": "Live interactive demo",
     "basic": {
       "title": "Basic use case",
       "text": "The minimum viable wiring: a button, the directive, a template reference exported as <code class=\"font-mono text-sm\">requestLock</code>, and one HTTP request whose <code class=\"font-mono text-sm\">HttpContext</code> carries the lock id via <code class=\"font-mono text-sm\">createRequestLockContext(id)</code>.",
@@ -180,6 +182,13 @@
       "text": "The pattern is identical for every non-idempotent action. The only thing that changes is the HTTP verb and the payload; the directive, the exported reference and the context helper stay the same."
     },
     "formNote": "The submit button in the form example combines <code class=\"font-mono text-sm\">ngxRequestLock</code> with <code class=\"font-mono text-sm\">[disabled]=\"form.invalid\"</code>. The directive re-applies its own <code class=\"font-mono text-sm\">disabled</code> only while the request is pending; when it re-enables the button, form validity takes over again.",
+    "pending": {
+      "title": "Variant: showing a pending state",
+      "text": "The directive disables the button while the request is in flight, but it says nothing about the button label or its icon. A common consumer need is to swap <em>Save</em> for <em>Saving&hellip;</em> and show a spinner. The library already exposes the reactive signal you need &mdash; no directive extension required. Read <code class=\"font-mono text-sm\">RequestLockService.isPending(lock.requestId)</code> and drive the template with a <code class=\"font-mono text-sm\">computed()</code>.",
+      "bullets": "<li><code class=\"font-mono text-sm\">viewChild.required(RequestLockDirective)</code> gives access to the directive instance from the component class.</li><li><code class=\"font-mono text-sm\">computed(() =&gt; service.isPending(lock().requestId)())</code> turns the shared service signal into a plain, template-friendly boolean.</li><li>Use <code class=\"font-mono text-sm\">&#64;if (isPending())</code> in the template to swap the label and render a spinner &mdash; no <code class=\"font-mono text-sm\">loading</code> field, no <code class=\"font-mono text-sm\">finalize</code> in user code.</li><li>Set <code class=\"font-mono text-sm\">[attr.aria-busy]</code> during the pending state so assistive tech announces the transition.</li>"
+      ,
+      "tip": "This pattern is orthogonal to the <em>disabled</em> behavior of the directive: the button is still blocked at the DOM level, and the pending signal only drives the visual/textual state. The two work together without conflicts."
+    },
     "custom": {
       "title": "Custom directive: loading animation",
       "text": "The library keeps the visual side deliberately empty: <code class=\"font-mono text-sm\">RequestLockDirective</code> only toggles the native <code class=\"font-mono text-sm\">disabled</code> attribute on the nearest button. To show a spinner or a custom animation, extend the directive in your own app and override the <code class=\"font-mono text-sm\">setBlockStatus</code> extension point.",
