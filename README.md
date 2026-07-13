@@ -4,35 +4,40 @@ Documentation site for the **ngx-request-lock** Angular library.
 
 This project explains how the library works, how to install it, and how to use it in a real Angular application. The docs are structured as route-based pages and mirror the actual public API and architecture of the library.
 
-## What this project contains ✨
-
-- Overview and project introduction.
-- Installation and setup instructions.
-- Architecture notes for the library internals.
-- Usage examples and integration patterns.
-- Route-based documentation pages built with Angular standalone components.
-- A bilingual docs experience managed through translation keys and JSON files.
-
 ## About the library 🧩
 
-`ngx-request-lock` helps coordinate UI locking around HTTP requests.
+`ngx-request-lock` binds a UI flow to the lifecycle of its HTTP requests. A shared `requestId` coordinates every element and every request in the flow (buttons, forms, panels) and re-enables them together when the whole flow settles, with no manual `loading` flags.
 
-It is designed for Angular applications that need to prevent repeated actions while a request is still pending. The library tracks requests through an `HttpContext` token, a functional HTTP interceptor, and a signal-based service that exposes pending state to the UI. [file:505][file:506][file:508]
+The library exposes:
 
-In practice, this means you can attach a tracking id to a request, detect whether that request is still in progress, and use that state to disable buttons, show loading indicators, or prevent duplicate submissions. [file:505][file:506][file:508]
+- `REQUEST_LOCK_ID`, an `HttpContextToken<string | null>` that tags a request with a lock identifier.
+- `createRequestLockContext(id)`, a helper that builds the `HttpContext` to attach to the request.
+- `requestLockInterceptor`, a functional HTTP interceptor that drives the service.
+- `RequestLockService`, a root-provided service holding a reference-counted map of pending requests, exposed as a `Signal<boolean>` per id via `isPending(id)`.
+- `RequestLockDirective` (selector `[ngxRequestLock]`), which toggles the nearest button's `disabled` attribute based on the shared signal.
+- `provideRequestLock()`, an environment provider that wires everything up in one call.
+
+## What this docs project contains ✨
+
+- Overview and problem statement.
+- Architecture notes covering token, interceptor, service, and directive.
+- Installation and setup instructions.
+- Directive usage examples: basic, save, delete, form submit, per-button pending state, custom loading directive.
+- Flow lock examples: shared `requestId` across multiple elements and multiple requests.
+- Bilingual content (English and Italian) driven by JSON translation files.
+- Route-based pages built with Angular standalone components.
 
 ## Project structure 🗂️
 
-The docs are organized around clear topics:
-
-- Home.
-- Problem statement.
-- Architecture.
-- Installation and setup.
-- Usage examples.
-- API reference.
-
-Shared UI stays small and reusable, with components for navigation, code examples, callouts, and content sections.
+```
+├── projects/ngx-request-lock/   # The published library source
+├── src/                         # The docs Angular app
+│   └── app/
+│       ├── core/                # Layout, i18n, navigation
+│       ├── pages/               # Route-based docs pages
+│       └── shared/ui/           # Reusable blocks (callout, code-block, api-table, ...)
+└── public/i18n/                 # en.json and it.json translation files
+```
 
 ## Getting started 🚀
 
@@ -52,17 +57,21 @@ Then open `http://localhost:4200/`.
 
 ## Build 🛠️
 
-Create a production build with:
+Build the docs app:
 
 ```bash
 ng build
 ```
 
-The build output is generated in `dist/`.
+Build the library:
+
+```bash
+ng build ngx-request-lock
+```
+
+Build output is generated in `dist/`.
 
 ## Tests ✅
-
-Run unit tests with:
 
 ```bash
 ng test
@@ -73,16 +82,21 @@ ng test
 When editing or adding docs pages:
 
 - Use Angular standalone components.
-- Prefer clear route-based page structure.
-- Keep examples tied to the actual library code.
-- Do not invent APIs or behavior that do not exist in the repository.
-- Use Tailwind CSS for layout and styling when available.
+- Keep the route-based page structure.
+- Keep every example tied to the actual library code. Do not invent APIs or behavior.
+- Use Tailwind CSS for layout and styling.
 - Keep setup, usage, and architecture separate for readability.
+- Keep prose in ASCII punctuation. Avoid em dashes, curly quotes, and ellipsis characters.
+- Keep both languages (en, it) in sync inside `public/i18n/`.
 
-## Library flow 🔍
+## Requirements 🧰
 
-The library works with three main pieces:
+- Angular **v22** or newer.
+- Standalone APIs, functional HTTP interceptors, and signals.
+- A secure browser context (HTTPS or `localhost`) for `crypto.randomUUID()`.
 
-- A request tracking token stored in `HttpContext`. [file:505]
-- A functional interceptor that starts and stops tracking around the request lifecycle. [file:506]
-- A root service that stores pending request counts and exposes computed pending state. [file:508]
+## Links 🔗
+
+- Library source: `projects/ngx-request-lock/`
+- Live docs: served from the docs app in `src/`
+- Package on npm: `ngx-request-lock`

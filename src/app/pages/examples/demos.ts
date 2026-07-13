@@ -297,7 +297,7 @@ export class FormDemo {
               d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
             ></path>
           </svg>
-          <span>Saving&hellip;</span>
+          <span>Saving...</span>
         } @else {
           <span>Save</span>
         }
@@ -386,7 +386,7 @@ export class PendingStateDemo {
 
       <p class="text-xs text-slate-600 dark:text-slate-400">
         Last loaded title:
-        <code class="font-mono">{{ lastTitle() || '—' }}</code>
+        <code class="font-mono">{{ lastTitle() || '-' }}</code>
       </p>
     </div>
   `,
@@ -493,7 +493,7 @@ export class FlowLockDemo {
 
       <p class="mt-3 text-xs text-slate-600 dark:text-slate-400">
         Last loaded post id:
-        <code class="font-mono">{{ postId() ?? '—' }}</code>
+        <code class="font-mono">{{ postId() ?? '-' }}</code>
       </p>
 
       @if (isPending()) {

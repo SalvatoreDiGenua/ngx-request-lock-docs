@@ -148,7 +148,7 @@ import {
     >
       @if (isPending()) {
         <span class="spinner" aria-hidden="true"></span>
-        <span>Saving&hellip;</span>
+        <span>Saving...</span>
       } @else {
         <span>Save</span>
       }
