@@ -56,7 +56,7 @@ import {
   selector: 'ngx-save-button',
   imports: [RequestLockDirective],
   template: \`
-    <button ngxRequestLock #lock="requestLock" (click)="save(lock.requestId)">
+    <button ngxRequestLock #lock="requestLock" (click)="save(lock.requestId())">
       Save
     </button>
   \`,
@@ -99,7 +99,7 @@ import {
       ngxRequestLock
       #lock="requestLock"
       type="button"
-      (click)="ping(lock.requestId)"
+      (click)="ping(lock.requestId())"
     >
       Ping
     </button>

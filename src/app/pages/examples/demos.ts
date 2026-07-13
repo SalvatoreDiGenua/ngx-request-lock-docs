@@ -6,7 +6,7 @@
  * used for docs and testing). Each demo follows the same three-piece pattern:
  *
  *   1. `ngxRequestLock #lock="requestLock"` on the button.
- *   2. `lock.requestId` passed to `createRequestLockContext(id)` on click.
+ *   2. `lock.requestId()` passed to `createRequestLockContext(id)` on click.
  *   3. `HttpClient` with `{ context }` on a real endpoint.
  *
  * The library takes care of disabling the button while the interceptor sees
@@ -59,7 +59,7 @@ const BTN_DANGER =
         #lock="requestLock"
         type="button"
         [class]="btn"
-        (click)="ping(lock.requestId)"
+        (click)="ping(lock.requestId())"
       >
         Ping
       </button>
@@ -100,7 +100,7 @@ export class BasicDemo {
         #lock="requestLock"
         type="button"
         [class]="btn"
-        (click)="save(lock.requestId)"
+        (click)="save(lock.requestId())"
       >
         Save
       </button>
@@ -143,7 +143,7 @@ export class SaveDemo {
         #lock="requestLock"
         type="button"
         [class]="btn"
-        (click)="remove(lock.requestId)"
+        (click)="remove(lock.requestId())"
       >
         Delete
       </button>
@@ -178,7 +178,7 @@ export class DeleteDemo {
     <form
       class="space-y-3"
       [formGroup]="form"
-      (ngSubmit)="submit(lock.requestId)"
+      (ngSubmit)="submit(lock.requestId())"
     >
       <div class="flex flex-col gap-1">
         <label
@@ -259,7 +259,7 @@ export class FormDemo {
 /* --------------------------------------------------------------------------
  * 5. Pending-state variant ("Saving..." + spinner)
  * ------------------------------------------------------------------------
- * Angular-native: reads `RequestLockService.isPending(lock.requestId)` as a
+ * Angular-native: reads `RequestLockService.isPending(lock.requestId())` as a
  * signal via `viewChild(RequestLockDirective)`, then flips the label and
  * shows an inline SVG spinner. No directive extension needed; no
  * @HostBinding / @HostListener; no per-component `loading` boolean.
@@ -276,7 +276,7 @@ export class FormDemo {
         type="button"
         [class]="btn"
         [attr.aria-busy]="isPending() ? 'true' : null"
-        (click)="save(lock.requestId)"
+        (click)="save(lock.requestId())"
       >
         @if (isPending()) {
           <svg
@@ -322,7 +322,7 @@ export class PendingStateDemo {
    * `computed` keeps the id lookup reactive if the directive re-mounts.
    */
   protected readonly isPending = computed(() =>
-    this.lockService.isPending(this.lock().requestId)(),
+    this.lockService.isPending(this.lock().requestId())(),
   );
 
   protected save(id: string): void {

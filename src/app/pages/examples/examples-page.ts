@@ -22,7 +22,7 @@ import {
   selector: 'ngx-basic-example',
   imports: [RequestLockDirective],
   template: \`
-    <button ngxRequestLock #lock="requestLock" (click)="ping(lock.requestId)">
+    <button ngxRequestLock #lock="requestLock" (click)="ping(lock.requestId())">
       Ping
     </button>
   \`,
@@ -41,7 +41,7 @@ const SAVE_CODE = `@Component({
   selector: 'ngx-save-user',
   imports: [RequestLockDirective],
   template: \`
-    <button ngxRequestLock #lock="requestLock" (click)="save(lock.requestId)">
+    <button ngxRequestLock #lock="requestLock" (click)="save(lock.requestId())">
       Save
     </button>
   \`,
@@ -70,7 +70,7 @@ const DELETE_CODE = `@Component({
       ngxRequestLock
       #lock="requestLock"
       class="text-red-600"
-      (click)="remove(lock.requestId)"
+      (click)="remove(lock.requestId())"
     >
       Delete
     </button>
@@ -93,7 +93,7 @@ const FORM_CODE = `@Component({
   selector: 'ngx-signup-form',
   imports: [ReactiveFormsModule, RequestLockDirective],
   template: \`
-    <form [formGroup]="form" (ngSubmit)="submit(lock.requestId)">
+    <form [formGroup]="form" (ngSubmit)="submit(lock.requestId())">
       <input formControlName="email" type="email" />
       <input formControlName="password" type="password" />
 
@@ -143,7 +143,7 @@ import {
       #lock="requestLock"
       type="button"
       [attr.aria-busy]="isPending() ? 'true' : null"
-      (click)="save(lock.requestId)"
+      (click)="save(lock.requestId())"
     >
       @if (isPending()) {
         <span class="spinner" aria-hidden="true"></span>
@@ -227,7 +227,7 @@ const CUSTOM_USAGE_CODE = `@Component({
     <button
       ngxLoadingRequestLock
       #lock="loadingRequestLock"
-      (click)="save(lock.requestId)"
+      (click)="save(lock.requestId())"
     >
       <span>Save</span>
     </button>

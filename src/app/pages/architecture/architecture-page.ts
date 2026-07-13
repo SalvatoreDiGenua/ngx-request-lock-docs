@@ -10,7 +10,7 @@ const DIAGRAM = `  (user click)
 ┌──────────────────────┐         ┌───────────────────────┐
 │ RequestLockDirective │         │  RequestLockService   │
 │  #lock="requestLock" │ ◀────── │  isPending(id): Signal│
-│  lock.requestId ─────┼─┐       │  start(id) / end(id)  │
+│  lock.requestId() ───┼─┐       │  start(id) / end(id)  │
 └──────────────────────┘ │       └─────────▲─────────────┘
                          │                 │
                          ▼                 │ start / end

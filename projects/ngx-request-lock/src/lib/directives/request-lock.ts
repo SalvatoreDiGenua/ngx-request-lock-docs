@@ -1,14 +1,12 @@
 import {
   AfterViewInit,
   Directive,
-  EffectRef,
   ElementRef,
   HostListener,
-  Injector,
   Renderer2,
   effect,
   inject,
-  runInInjectionContext,
+  input,
 } from '@angular/core';
 import { RequestLockService } from '../core/services/request-lock-service';
 
@@ -20,20 +18,39 @@ const MAX_TIMEOUT_MS = 10_000;
   exportAs: 'requestLock',
 })
 export class RequestLockDirective implements AfterViewInit {
-  public readonly requestId = crypto.randomUUID();
+  public readonly requestId = input<string, string>(crypto.randomUUID(), {
+    transform: (valueInput: string | null) => valueInput || crypto.randomUUID(),
+  });
 
   private readonly elementRef: ElementRef<HTMLElement> = inject(
     ElementRef<HTMLElement>,
   );
   private readonly renderer = inject(Renderer2);
-  private readonly injector = inject(Injector);
   private readonly trackingService = inject(RequestLockService);
 
   protected isBlocked = false;
   protected button: HTMLButtonElement | null = null;
 
-  private activeEffect: EffectRef | null = null;
   private timeouts: ReturnType<typeof setTimeout>[] = [];
+
+  private hasSeenPending = false;
+  protected isClicked = false;
+
+  constructor() {
+    effect(() => {
+      const pending = this.trackingService.isPending(
+        this.requestId() as string,
+      )();
+
+      this.hasSeenPending ||= pending;
+
+      if (pending) {
+        this.lock();
+      } else {
+        this.unlock();
+      }
+    });
+  }
 
   public ngAfterViewInit(): void {
     this.button =
@@ -45,26 +62,13 @@ export class RequestLockDirective implements AfterViewInit {
 
   @HostListener('click', [])
   public onClick(): void {
-    this.cleanup();
-    this.isBlocked = true;
-    this.setBlockStatus();
+    this.isClicked = true;
+    this.lock();
 
-    let hasSeenPending = false;
-
+    this.cleanupTimeouts();
     this.timeouts.push(
-      setTimeout(() => !hasSeenPending && this.unblock(), MIN_TIMEOUT_MS),
-      setTimeout(() => this.unblock(), MAX_TIMEOUT_MS),
-    );
-
-    this.activeEffect = runInInjectionContext(this.injector, () =>
-      effect(() => {
-        const pending = this.trackingService.isPending(this.requestId)();
-        hasSeenPending ||= pending;
-
-        if (!pending && hasSeenPending) {
-          this.unblock();
-        }
-      }),
+      setTimeout(() => !this.hasSeenPending && this.lock(), MIN_TIMEOUT_MS),
+      setTimeout(() => this.lock(), MAX_TIMEOUT_MS),
     );
   }
 
@@ -80,15 +84,19 @@ export class RequestLockDirective implements AfterViewInit {
     }
   }
 
-  private unblock(): void {
-    this.isBlocked = false;
+  private lock(): void {
+    this.isBlocked = true;
     this.setBlockStatus();
-    this.cleanup();
   }
 
-  private cleanup(): void {
-    this.activeEffect?.destroy();
-    this.activeEffect = null;
+  private unlock(): void {
+    this.isBlocked = false;
+    this.isClicked = false;
+    this.setBlockStatus();
+    this.cleanupTimeouts();
+  }
+
+  private cleanupTimeouts(): void {
     this.timeouts.forEach(clearTimeout);
     this.timeouts = [];
   }

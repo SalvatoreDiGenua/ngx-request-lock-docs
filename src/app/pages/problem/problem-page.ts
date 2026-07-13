@@ -26,7 +26,7 @@ const LIBRARY_CODE = `@Component({
   selector: 'ngx-save-user',
   imports: [RequestLockDirective],
   template: \`
-    <button ngxRequestLock #lock="requestLock" (click)="save(lock.requestId)">
+    <button ngxRequestLock #lock="requestLock" (click)="save(lock.requestId())">
       Save
     </button>
   \`,
