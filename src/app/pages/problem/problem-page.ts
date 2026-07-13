@@ -26,18 +26,46 @@ const LIBRARY_CODE = `@Component({
   selector: 'ngx-save-user',
   imports: [RequestLockDirective],
   template: \`
-    <button ngxRequestLock #lock="requestLock" (click)="save(lock.requestId())">
+    <!--
+      One shared \`requestId\` coordinates the whole flow:
+      both buttons and the follow-up GET are locked together
+      and only re-enable when everything settles.
+    -->
+    <button
+      ngxRequestLock
+      [requestId]="flowId()"
+      (click)="save()"
+    >
       Save
+    </button>
+
+    <button
+      ngxRequestLock
+      [requestId]="flowId()"
+      (click)="refresh()"
+    >
+      Refresh
     </button>
   \`,
 })
 export class SaveUser {
   private readonly http = inject(HttpClient);
+  protected readonly flowId = signal(crypto.randomUUID());
 
-  protected save(id: string): void {
+  protected save(): void {
+    const id = this.flowId();
     this.http
       .post('/api/users', this.form.value, {
         context: createRequestLockContext(id),
+      })
+      // Automatic follow-up: same id, same lock.
+      .subscribe(() => this.refresh());
+  }
+
+  protected refresh(): void {
+    this.http
+      .get('/api/users', {
+        context: createRequestLockContext(this.flowId()),
       })
       .subscribe();
   }

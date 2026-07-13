@@ -16,7 +16,12 @@
 
 import { Component, computed, inject, signal, viewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import {
   RequestLockDirective,
   RequestLockService,
@@ -175,11 +180,7 @@ export class DeleteDemo {
   selector: 'ngx-form-demo',
   imports: [RequestLockDirective, ReactiveFormsModule, DemoStatusPillComponent],
   template: `
-    <form
-      class="space-y-3"
-      [formGroup]="form"
-      (ngSubmit)="submit(lock.requestId())"
-    >
+    <form class="space-y-3" [formGroup]="form">
       <div class="flex flex-col gap-1">
         <label
           for="signup-email"
@@ -216,9 +217,9 @@ export class DeleteDemo {
         <button
           ngxRequestLock
           #lock="requestLock"
-          type="submit"
           [class]="btn"
           [disabled]="form.invalid"
+          (click)="submit(lock.requestId())"
         >
           Sign up
         </button>
@@ -237,6 +238,8 @@ export class FormDemo {
   });
 
   protected submit(id: string): void {
+    console.log('submit', id);
+
     if (this.form.invalid) {
       return;
     }
@@ -337,6 +340,239 @@ export class PendingStateDemo {
         next: (created) =>
           this.status.set({ kind: 'ok', text: `Saved (id ${created.id})` }),
         error: () => this.status.set({ kind: 'error', text: 'Save failed' }),
+      });
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * 6. Flow lock: one shared requestId coordinates a whole flow
+ * ------------------------------------------------------------------------
+ * A single `requestId()` (owned by the component) is bound to every element
+ * that participates in the same user flow: the primary action (POST), a
+ * related action (Reset), and even the automatic follow-up refresh (GET).
+ * All requests tagged with that id share one reference-counted lock, so the
+ * entire panel stays disabled until the mutation *and* the refresh settle.
+ */
+
+@Component({
+  selector: 'ngx-flow-lock-demo',
+  imports: [RequestLockDirective, DemoStatusPillComponent],
+  template: `
+    <div class="space-y-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <!--
+          Two buttons, one shared requestId. Both directives observe the
+          same pending signal, so clicking either one - or the automatic
+          GET refresh that follows - keeps both locked until the flow
+          settles.
+        -->
+        <button
+          ngxRequestLock
+          [requestId]="flowId()"
+          type="button"
+          [class]="btn"
+          (click)="save()"
+        >
+          Save
+        </button>
+
+        <button
+          ngxRequestLock
+          [requestId]="flowId()"
+          type="button"
+          [class]="btnSecondary"
+          (click)="reset()"
+        >
+          Reset
+        </button>
+
+        <ngx-demo-status-pill [status]="status()" />
+      </div>
+
+      <p class="text-xs text-slate-600 dark:text-slate-400">
+        Last loaded title:
+        <code class="font-mono">{{ lastTitle() || '—' }}</code>
+      </p>
+    </div>
+  `,
+})
+export class FlowLockDemo {
+  protected readonly btn = BTN;
+  protected readonly btnSecondary =
+    'inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm ' +
+    'hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2 ' +
+    'focus-visible:ring-offset-white dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700 ' +
+    'dark:focus-visible:ring-offset-slate-900 disabled:cursor-not-allowed disabled:opacity-60';
+
+  protected readonly status = signal<DemoStatus>(IDLE);
+  protected readonly lastTitle = signal<string>('');
+
+  // One id owns the whole flow: the mutation, the refresh, and the reset.
+  protected readonly flowId = signal(crypto.randomUUID());
+
+  private readonly http = inject(HttpClient);
+
+  protected save(): void {
+    const id = this.flowId();
+    this.status.set(IDLE);
+
+    this.http
+      .post<{ id: number }>(
+        `${API}/posts`,
+        { title: 'ngx-request-lock', body: 'flow-lock demo', userId: 1 },
+        { context: createRequestLockContext(id) },
+      )
+      .subscribe({
+        next: (created) => {
+          this.status.set({ kind: 'ok', text: `Saved (id ${created.id})` });
+          // Automatic follow-up refresh: same id, so the lock does not
+          // release until the GET also settles.
+          this.refresh(id);
+        },
+        error: () => this.status.set({ kind: 'error', text: 'Save failed' }),
+      });
+  }
+
+  protected reset(): void {
+    this.lastTitle.set('');
+    this.status.set(IDLE);
+    // A different HTTP call under the same id: still part of the flow,
+    // still shares the same lock.
+    this.refresh(this.flowId());
+  }
+
+  private refresh(id: string): void {
+    this.http
+      .get<{ title: string }>(`${API}/posts/1`, {
+        context: createRequestLockContext(id),
+      })
+      .subscribe({
+        next: (post) => this.lastTitle.set(post.title),
+        error: () => this.status.set({ kind: 'error', text: 'Refresh failed' }),
+      });
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * 7. Visual in-flight variant (panel-level)
+ * ------------------------------------------------------------------------
+ * The shared `requestId` is not just useful for locking buttons: any part of
+ * the UI can react to `RequestLockService.isPending(id)` and render its own
+ * in-flight state. Here the whole panel dims, sets `aria-busy`, and shows an
+ * overlay while any request tagged with the flow id is pending.
+ */
+
+@Component({
+  selector: 'ngx-in-flight-variant-demo',
+  imports: [RequestLockDirective, DemoStatusPillComponent],
+  template: `
+    <div
+      class="relative rounded-md border border-slate-200 p-4 transition-opacity dark:border-slate-700"
+      [class.opacity-60]="isPending()"
+      [class.pointer-events-none]="isPending()"
+      [attr.aria-busy]="isPending() ? 'true' : null"
+    >
+      <div class="flex flex-wrap items-center gap-2">
+        <button
+          ngxRequestLock
+          [requestId]="flowId()"
+          type="button"
+          [class]="btn"
+          (click)="load()"
+        >
+          Load post
+        </button>
+
+        <button
+          ngxRequestLock
+          [requestId]="flowId()"
+          type="button"
+          [class]="btnDanger"
+          (click)="destroy()"
+        >
+          Delete
+        </button>
+
+        <ngx-demo-status-pill [status]="status()" />
+      </div>
+
+      <p class="mt-3 text-xs text-slate-600 dark:text-slate-400">
+        Last loaded post id:
+        <code class="font-mono">{{ postId() ?? '—' }}</code>
+      </p>
+
+      @if (isPending()) {
+        <div
+          class="pointer-events-none absolute inset-0 flex items-center justify-center rounded-md bg-white/60 backdrop-blur-[1px] dark:bg-slate-900/50"
+          aria-hidden="true"
+        >
+          <svg
+            class="h-6 w-6 animate-spin text-sky-600 dark:text-sky-400"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+            ></path>
+          </svg>
+        </div>
+      }
+    </div>
+  `,
+})
+export class InFlightVariantDemo {
+  protected readonly btn = BTN;
+  protected readonly btnDanger = BTN_DANGER;
+
+  protected readonly status = signal<DemoStatus>(IDLE);
+  protected readonly postId = signal<number | null>(null);
+  protected readonly flowId = signal(crypto.randomUUID());
+
+  private readonly http = inject(HttpClient);
+  private readonly lockService = inject(RequestLockService);
+
+  // Panel-level in-flight signal: any request tagged with `flowId` counts.
+  protected readonly isPending = computed(() =>
+    this.lockService.isPending(this.flowId())(),
+  );
+
+  protected load(): void {
+    const id = this.flowId();
+    this.status.set(IDLE);
+    this.http
+      .get<{ id: number }>(`${API}/posts/2`, {
+        context: createRequestLockContext(id),
+      })
+      .subscribe({
+        next: (post) => {
+          this.postId.set(post.id);
+          this.status.set({ kind: 'ok', text: `Loaded #${post.id}` });
+        },
+        error: () => this.status.set({ kind: 'error', text: 'Load failed' }),
+      });
+  }
+
+  protected destroy(): void {
+    const id = this.flowId();
+    this.status.set(IDLE);
+    this.http
+      .delete(`${API}/posts/2`, { context: createRequestLockContext(id) })
+      .subscribe({
+        next: () => {
+          this.postId.set(null);
+          this.status.set({ kind: 'ok', text: 'Deleted' });
+        },
+        error: () => this.status.set({ kind: 'error', text: 'Delete failed' }),
       });
   }
 }

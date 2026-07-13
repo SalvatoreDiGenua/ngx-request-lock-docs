@@ -4,27 +4,25 @@ import { CalloutComponent } from '../../shared/ui/callout/callout';
 import { CodeBlockComponent } from '../../shared/ui/code-block/code-block';
 import { SectionHeadingComponent } from '../../shared/ui/section-heading/section-heading';
 
-const DIAGRAM = `  (user click)
-       │
-       ▼
-┌──────────────────────┐         ┌───────────────────────┐
-│ RequestLockDirective │         │  RequestLockService   │
-│  #lock="requestLock" │ ◀────── │  isPending(id): Signal│
-│  lock.requestId() ───┼─┐       │  start(id) / end(id)  │
-└──────────────────────┘ │       └─────────▲─────────────┘
-                         │                 │
-                         ▼                 │ start / end
-                  HttpContext              │
-             REQUEST_LOCK_ID = id          │
-                         │                 │
-                         ▼                 │
-                 HttpClient.request        │
-                         │                 │
-                         ▼                 │
-              requestLockInterceptor ──────┘
-                         │
-                         ▼
-                       server`;
+const DIAGRAM = `  (user action, one flow)
+             │
+             ▼
+┌────────────────────────────────┐         ┌───────────────────────┐
+│ N × RequestLockDirective       │         │  RequestLockService   │
+│   [requestId]="flowId()"       │ ◀────── │  isPending(id): Signal│
+│   (buttons, forms, panels...)  │         │  start(id) / end(id)  │
+└──────────────┬─────────────────┘         └─────────▲─────────────┘
+               │                                     │
+               ▼                                     │ start / end
+     M × HttpClient requests                         │
+     each with HttpContext:                          │
+       REQUEST_LOCK_ID = flowId                      │
+               │                                     │
+               ▼                                     │
+       requestLockInterceptor ───────────────────────┘
+               │
+               ▼
+             server(s)`;
 
 @Component({
   selector: 'ngx-architecture-page',

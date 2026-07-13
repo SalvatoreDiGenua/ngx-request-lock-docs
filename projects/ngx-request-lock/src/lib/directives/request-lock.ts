@@ -68,7 +68,7 @@ export class RequestLockDirective implements AfterViewInit {
     this.cleanupTimeouts();
     this.timeouts.push(
       setTimeout(() => !this.hasSeenPending && this.lock(), MIN_TIMEOUT_MS),
-      setTimeout(() => this.lock(), MAX_TIMEOUT_MS),
+      setTimeout(() => this.unlock(), MAX_TIMEOUT_MS),
     );
   }
 
@@ -77,10 +77,10 @@ export class RequestLockDirective implements AfterViewInit {
       return;
     }
 
-    this.renderer.removeAttribute(this.button, 'disabled');
-
     if (this.isBlocked) {
       this.renderer.setAttribute(this.button, 'disabled', 'true');
+    } else {
+      this.renderer.removeAttribute(this.button, 'disabled');
     }
   }
 
