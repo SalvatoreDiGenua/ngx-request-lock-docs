@@ -24,9 +24,16 @@ export const routes: Routes = [
     title: 'Installation and Setup | ngx-request-lock',
   },
   {
-    path: 'examples',
-    loadComponent: () => import('./pages/examples/examples-page'),
-    title: 'Usage Examples | ngx-request-lock',
+    path: 'directive-usage',
+    loadComponent: () =>
+      import('./pages/directive-usage/directive-usage-page'),
+    title: 'Directive Usage | ngx-request-lock',
   },
+  {
+    path: 'flow-lock',
+    loadComponent: () => import('./pages/flow-lock/flow-lock-page'),
+    title: 'Flow Lock Examples | ngx-request-lock',
+  },
+  { path: 'examples', redirectTo: 'directive-usage', pathMatch: 'full' },
   { path: '**', redirectTo: '' },
 ];

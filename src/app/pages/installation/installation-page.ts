@@ -284,9 +284,14 @@ export class Ping {
 
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
         <ngx-link-card
-          [title]="t('installation.next.examplesTitle')"
-          [description]="t('installation.next.examplesDesc')"
-          route="/examples"
+          [title]="t('installation.next.directiveUsageTitle')"
+          [description]="t('installation.next.directiveUsageDesc')"
+          route="/directive-usage"
+        />
+        <ngx-link-card
+          [title]="t('installation.next.flowLockTitle')"
+          [description]="t('installation.next.flowLockDesc')"
+          route="/flow-lock"
         />
         <ngx-link-card
           [title]="t('installation.next.architectureTitle')"

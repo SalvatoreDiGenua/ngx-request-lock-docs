@@ -63,9 +63,14 @@ import { LinkCardComponent } from '../../shared/ui/link-card/link-card';
             route="/installation"
           />
           <ngx-link-card
-            [title]="t('home.cards.examples.title')"
-            [description]="t('home.cards.examples.description')"
-            route="/examples"
+            [title]="t('home.cards.directiveUsage.title')"
+            [description]="t('home.cards.directiveUsage.description')"
+            route="/directive-usage"
+          />
+          <ngx-link-card
+            [title]="t('home.cards.flowLock.title')"
+            [description]="t('home.cards.flowLock.description')"
+            route="/flow-lock"
           />
         </div>
       </section>

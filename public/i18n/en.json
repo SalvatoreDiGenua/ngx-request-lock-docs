@@ -5,13 +5,14 @@
     "architecture": "Architecture",
     "whyAngular": "Why Angular-native",
     "installation": "Installation and Setup",
-    "examples": "Usage Examples",
+    "directiveUsage": "Directive Usage",
+    "flowLock": "Flow Lock Examples",
     "advantages": "Advantages",
     "limitations": "Limitations and Design Choices",
     "api": "API Reference",
     "faq": "FAQ",
     "sectionGuide": "Guide",
-    "sectionReference": "Reference"
+    "sectionUsage": "Usage"
   },
   "header": {
     "title": "ngx-request-lock",
@@ -58,9 +59,13 @@
         "title": "Installation",
         "description": "Add the provider and start using it."
       },
-      "examples": {
-        "title": "Examples",
-        "description": "Minimal, realistic usage patterns."
+      "directiveUsage": {
+        "title": "Directive Usage",
+        "description": "Per-element directive patterns: basic, CRUD, pending state, custom directive."
+      },
+      "flowLock": {
+        "title": "Flow Lock Examples",
+        "description": "Shared requestId coordinating whole flows and visual in-flight state."
       }
     },
     "hero": {
@@ -159,22 +164,26 @@
     },
     "next": {
       "title": "Next steps",
-      "examplesTitle": "Usage examples",
-      "examplesDesc": "Save, delete, form submit, and a custom loading directive.",
+      "directiveUsageTitle": "Directive usage",
+      "directiveUsageDesc": "Save, delete, form submit, pending state, and a custom loading directive.",
+      "flowLockTitle": "Flow lock examples",
+      "flowLockDesc": "Shared requestId across a whole flow and visual in-flight state.",
       "architectureTitle": "Architecture",
       "architectureDesc": "How the four pieces connect and why they stay decoupled.",
       "apiTitle": "API reference",
       "apiDesc": "Every public export, signature, and default."
     }
   },
-  "examples": {
-    "intro": "Every example below wires <code class=\"font-mono text-sm\">RequestLockDirective</code> to a real HTTP call. Elements bound to a <code class=\"font-mono text-sm\">requestId</code> stay locked while any request tagged with that id is pending, and are re-enabled automatically when everything settles — success or error. The same id can coordinate one click or an entire flow: the mutation, the follow-up refresh, and any related actions all share one lock. No <code class=\"font-mono text-sm\">loading</code> boolean, no manual reset in error handlers.",
+  "shared": {
     "tipConfig": "All snippets assume <code class=\"font-mono text-sm\">provideRequestLock()</code> is registered in <code class=\"font-mono text-sm\">app.config.ts</code>. See the Installation page.",
     "liveDemo": "Live demo",
-    "liveDemoAriaLabel": "Live interactive demo",
+    "liveDemoAriaLabel": "Live interactive demo"
+  },
+  "directiveUsage": {
+    "intro": "This page shows how <code class=\"font-mono text-sm\">RequestLockDirective</code> locks a single interactive element bound to a single HTTP request. Each directive instance generates its own <code class=\"font-mono text-sm\">requestId</code>, tags the request via <code class=\"font-mono text-sm\">createRequestLockContext(id)</code>, and re-enables the element automatically when the interceptor sees the request settle — success or error. For flows that span multiple elements and multiple requests, see <a class=\"underline\" href=\"/flow-lock\">Flow Lock Examples</a>.",
     "basic": {
       "title": "Basic use case",
-      "text": "The minimum viable wiring: one interactive element, the directive, a template reference exported as <code class=\"font-mono text-sm\">requestLock</code>, and one HTTP request whose <code class=\"font-mono text-sm\">HttpContext</code> carries the lock id via <code class=\"font-mono text-sm\">createRequestLockContext(id)</code>. This is the single-interaction case; the flow-lock section below shows how the same primitive scales to a whole page.",
+      "text": "The minimum viable wiring: one interactive element, the directive, a template reference exported as <code class=\"font-mono text-sm\">requestLock</code>, and one HTTP request whose <code class=\"font-mono text-sm\">HttpContext</code> carries the lock id via <code class=\"font-mono text-sm\">createRequestLockContext(id)</code>. This is the single-interaction case.",
       "bullets": "<li><code class=\"font-mono text-sm\">#lock=\"requestLock\"</code> exposes the directive instance to the template.</li><li><code class=\"font-mono text-sm\">lock.requestId()</code> is a stable UUID generated once per directive instance.</li><li>The element stays disabled from the interaction until the interceptor sees the request settle.</li>"
     },
     "crud": {
@@ -182,22 +191,6 @@
       "text": "The pattern is identical for every non-idempotent action. The only thing that changes is the HTTP verb and the payload; the directive, the exported reference and the context helper stay the same."
     },
     "formNote": "The submit button in the form example combines <code class=\"font-mono text-sm\">ngxRequestLock</code> with <code class=\"font-mono text-sm\">[disabled]=\"form.invalid\"</code>. The directive re-applies its own <code class=\"font-mono text-sm\">disabled</code> only while the request is pending; when it re-enables the button, form validity takes over again.",
-    "flowLock": {
-      "title": "Flow lock: shared requestId across a page",
-      "text": "A <code class=\"font-mono text-sm\">requestId</code> is not tied to a single button. Bind the same id to every element that participates in the same user flow — a primary action, a related secondary action, a follow-up refresh — and they all lock and unlock together. The reference-counted service guarantees the lock only releases when <em>every</em> request in the flow has settled. Below, one shared id coordinates two buttons and an automatic POST-then-GET refresh.",
-      "tip": "Own the id in the component (typically a <code class=\"font-mono text-sm\">signal(crypto.randomUUID())</code>) and bind it into every <code class=\"font-mono text-sm\">[requestId]</code> and every <code class=\"font-mono text-sm\">createRequestLockContext(...)</code> call. Regenerate it only when you actually want a fresh flow.",
-      "bullets": "<li>Multiple <code class=\"font-mono text-sm\">ngxRequestLock</code> instances bound to the same id share one reference-counted lock.</li><li>A follow-up HTTP call that reuses the id extends the lock — the whole flow stays disabled until the follow-up also settles.</li><li>An error on any request in the flow still releases the lock through the interceptor's <code class=\"font-mono text-sm\">finalize</code>. There is no manual reset to forget.</li><li>Any component that needs a coarser lock (an entire form, a whole page) can bind the shared id to the wrappers it cares about.</li>"
-    },
-    "formRefresh": {
-      "title": "Form: POST followed by an automatic GET refresh",
-      "text": "A common flow: submit a form, then reload the data. Both requests share one <code class=\"font-mono text-sm\">requestId</code>, and both the submit and the refresh button remain locked until <em>both</em> calls have settled. No <code class=\"font-mono text-sm\">loading</code> boolean, no manual coordination between the two subscriptions."
-    },
-    "inFlight": {
-      "title": "Variant: visual in-flight state",
-      "text": "The shared <code class=\"font-mono text-sm\">requestId</code> is also enough to render a coarser visual in-flight state — a dimmed panel, an overlay, an <code class=\"font-mono text-sm\">aria-busy</code> region — without extending the directive or introducing a loading flag. The wrapper reads <code class=\"font-mono text-sm\">RequestLockService.isPending(flowId)</code> and reacts, while the directives keep locking their individual buttons.",
-      "bullets": "<li>The wrapper is a plain element: no <code class=\"font-mono text-sm\">ngxRequestLock</code> needed. It only consumes the pending signal.</li><li>Class bindings (<code class=\"font-mono text-sm\">[class.opacity-60]</code>, <code class=\"font-mono text-sm\">[class.pointer-events-none]</code>) render the visual state; <code class=\"font-mono text-sm\">[attr.aria-busy]</code> announces it to assistive tech.</li><li>The pending signal is the same one the directives observe, so the overlay and the disabled buttons are always in sync.</li><li>This complements the per-button pending pattern below: the directive handles per-control blocking, the wrapper handles the whole-flow chrome.</li>",
-      "note": "The directive itself does not style anything and does not render markup on non-button hosts. The visual variant is a consumer-side pattern that composes with the directive; it is not a separate API."
-    },
     "pending": {
       "title": "Variant: per-button pending state",
       "text": "The directive disables the button while the request is in flight, but it says nothing about the button label or its icon. A common consumer need is to swap <em>Save</em> for <em>Saving&hellip;</em> and show a spinner. The library already exposes the reactive signal you need &mdash; no directive extension required. Read <code class=\"font-mono text-sm\">RequestLockService.isPending(lock.requestId())</code> and drive the template with a <code class=\"font-mono text-sm\">computed()</code>.",
@@ -211,10 +204,34 @@
       "usageText": "Consume it exactly like the base directive; only the selector and the exported name change.",
       "warning": "The base directive is not <code class=\"font-mono text-sm\">final</code>, but its constructor injections and the <code class=\"font-mono text-sm\">@HostListener('click')</code> live on the parent class. Do not shadow <code class=\"font-mono text-sm\">onClick</code> and do not re-declare the click host binding in the subclass — override only <code class=\"font-mono text-sm\">setBlockStatus</code>."
     },
+    "next": {
+      "title": "Next",
+      "flowLockTitle": "Flow Lock Examples",
+      "flowLockDesc": "Coordinate multiple elements and multiple requests with one shared requestId."
+    }
+  },
+  "flowLock": {
+    "intro": "A <code class=\"font-mono text-sm\">requestId</code> is not tied to a single button. Bind the same id to every element that participates in the same user flow, and to every follow-up HTTP call, and they all lock and unlock together. The reference-counted service in <code class=\"font-mono text-sm\">RequestLockService</code> guarantees the lock only releases when <em>every</em> request in the flow has settled. For the single-element case, see <a class=\"underline\" href=\"/directive-usage\">Directive Usage</a>.",
+    "sharedFlow": {
+      "title": "Flow lock: shared requestId across a page",
+      "text": "Bind the same id to a primary action, a related secondary action, and any follow-up refresh, and they all lock and unlock together. Below, one shared id coordinates two buttons and an automatic POST-then-GET refresh.",
+      "tip": "Own the id in the component (typically a <code class=\"font-mono text-sm\">signal(crypto.randomUUID())</code>) and bind it into every <code class=\"font-mono text-sm\">[requestId]</code> and every <code class=\"font-mono text-sm\">createRequestLockContext(...)</code> call. Regenerate it only when you actually want a fresh flow.",
+      "bullets": "<li>Multiple <code class=\"font-mono text-sm\">ngxRequestLock</code> instances bound to the same id share one reference-counted lock.</li><li>A follow-up HTTP call that reuses the id extends the lock — the whole flow stays disabled until the follow-up also settles.</li><li>An error on any request in the flow still releases the lock through the interceptor's <code class=\"font-mono text-sm\">finalize</code>. There is no manual reset to forget.</li><li>Any component that needs a coarser lock (an entire form, a whole page) can bind the shared id to the wrappers it cares about.</li>"
+    },
+    "formRefresh": {
+      "title": "Form: POST followed by an automatic GET refresh",
+      "text": "A common flow: submit a form, then reload the data. Both requests share one <code class=\"font-mono text-sm\">requestId</code>, and both the submit and the refresh button remain locked until <em>both</em> calls have settled. No <code class=\"font-mono text-sm\">loading</code> boolean, no manual coordination between the two subscriptions."
+    },
+    "inFlight": {
+      "title": "Variant: visual in-flight state",
+      "text": "The shared <code class=\"font-mono text-sm\">requestId</code> is also enough to render a coarser visual in-flight state — a dimmed panel, an overlay, an <code class=\"font-mono text-sm\">aria-busy</code> region — without extending the directive or introducing a loading flag. The wrapper reads <code class=\"font-mono text-sm\">RequestLockService.isPending(flowId)</code> and reacts, while the directives keep locking their individual buttons.",
+      "bullets": "<li>The wrapper is a plain element: no <code class=\"font-mono text-sm\">ngxRequestLock</code> needed. It only consumes the pending signal.</li><li>Class bindings (<code class=\"font-mono text-sm\">[class.opacity-60]</code>, <code class=\"font-mono text-sm\">[class.pointer-events-none]</code>) render the visual state; <code class=\"font-mono text-sm\">[attr.aria-busy]</code> announces it to assistive tech.</li><li>The pending signal is the same one the directives observe, so the overlay and the disabled buttons are always in sync.</li><li>This complements the per-button pending pattern on the Directive Usage page: the directive handles per-control blocking, the wrapper handles the whole-flow chrome.</li>",
+      "note": "The directive itself does not style anything and does not render markup on non-button hosts. The visual variant is a consumer-side pattern that composes with the directive; it is not a separate API."
+    },
     "why": {
       "title": "Why this matters in consumer projects",
       "intro": "The same three primitives — <code class=\"font-mono text-sm\">ngxRequestLock</code>, a shared <code class=\"font-mono text-sm\">requestId</code>, <code class=\"font-mono text-sm\">createRequestLockContext</code> — cover every action-triggered HTTP call in an application, from a single button to a multi-request page flow. That uniformity is the whole point:",
-      "bullets": "<li><strong>One primitive, any granularity.</strong> The same <code class=\"font-mono text-sm\">requestId</code> can lock one button, a group of related controls, or a whole panel — you decide by choosing where to bind it.</li><li><strong>No per-component boilerplate.</strong> No <code class=\"font-mono text-sm\">loading</code> boolean, no <code class=\"font-mono text-sm\">finalize</code> in user code, no manual reset in error handlers.</li><li><strong>Correctness on error paths.</strong> The UI is re-enabled through the interceptor's <code class=\"font-mono text-sm\">finalize</code>, so a thrown error, a 5xx response, or a cancelled subscription all leave the UI consistent.</li><li><strong>Whole-flow lock for free.</strong> The service reference-counts pending requests per id, so a mutation + its automatic refresh + any related fetch under the same <code class=\"font-mono text-sm\">requestId</code> only unlock together when the entire flow settles.</li><li><strong>Styling stays in the app.</strong> The library ships zero CSS; the in-flight variant and the custom directive above show the exact seams where visual behavior belongs.</li><li><strong>Angular-native surface.</strong> <code class=\"font-mono text-sm\">HttpContext</code>, functional interceptors, signals — no external state container, no RxJS orchestration in user code.</li>"
+      "bullets": "<li><strong>One primitive, any granularity.</strong> The same <code class=\"font-mono text-sm\">requestId</code> can lock one button, a group of related controls, or a whole panel — you decide by choosing where to bind it.</li><li><strong>No per-component boilerplate.</strong> No <code class=\"font-mono text-sm\">loading</code> boolean, no <code class=\"font-mono text-sm\">finalize</code> in user code, no manual reset in error handlers.</li><li><strong>Correctness on error paths.</strong> The UI is re-enabled through the interceptor's <code class=\"font-mono text-sm\">finalize</code>, so a thrown error, a 5xx response, or a cancelled subscription all leave the UI consistent.</li><li><strong>Whole-flow lock for free.</strong> The service reference-counts pending requests per id, so a mutation + its automatic refresh + any related fetch under the same <code class=\"font-mono text-sm\">requestId</code> only unlock together when the entire flow settles.</li><li><strong>Styling stays in the app.</strong> The library ships zero CSS; the in-flight variant and the custom directive show the exact seams where visual behavior belongs.</li><li><strong>Angular-native surface.</strong> <code class=\"font-mono text-sm\">HttpContext</code>, functional interceptors, signals — no external state container, no RxJS orchestration in user code.</li>"
     }
   }
 }
