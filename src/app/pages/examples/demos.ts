@@ -16,12 +16,7 @@
 
 import { Component, computed, inject, signal, viewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {
-  FormBuilder,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   RequestLockDirective,
   RequestLockService,
