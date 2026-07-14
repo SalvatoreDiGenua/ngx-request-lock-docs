@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TranslocoDirective, translateSignal } from '@jsverse/transloco';
 import { CalloutComponent } from '../../shared/ui/callout/callout';
-import { CodeBlockComponent } from '../../shared/ui/code-block/code-block';
+import { DiagramBlockComponent } from '../../shared/ui/diagram-block/diagram-block';
 import { SectionHeadingComponent } from '../../shared/ui/section-heading/section-heading';
 
 const DIAGRAM = `  (user action, one flow)
@@ -29,7 +29,7 @@ const DIAGRAM = `  (user action, one flow)
   imports: [
     TranslocoDirective,
     CalloutComponent,
-    CodeBlockComponent,
+    DiagramBlockComponent,
     SectionHeadingComponent,
   ],
   template: `
@@ -56,7 +56,11 @@ const DIAGRAM = `  (user action, one flow)
         {{ t('architecture.dataFlow.title') }}
       </ngx-section-heading>
 
-      <ngx-code-block [code]="diagram" language="text" />
+      <ngx-diagram-block
+        [content]="diagram"
+        [title]="t('architecture.dataFlow.title')"
+        [ariaLabel]="t('architecture.dataFlow.diagramAriaLabel')"
+      />
 
       <ol
         class="list-decimal space-y-2 pl-6 text-slate-700 dark:text-slate-300"
