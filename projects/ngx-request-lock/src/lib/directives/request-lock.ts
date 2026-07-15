@@ -67,7 +67,7 @@ export class RequestLockDirective implements AfterViewInit {
 
     this.cleanupTimeouts();
     this.timeouts.push(
-      setTimeout(() => !this.hasSeenPending && this.lock(), MIN_TIMEOUT_MS),
+      setTimeout(() => !this.hasSeenPending && this.unlock(), MIN_TIMEOUT_MS),
       setTimeout(() => this.unlock(), MAX_TIMEOUT_MS),
     );
   }
