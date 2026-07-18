@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   effect,
   inject,
   input,
@@ -29,6 +30,12 @@ import { highlightToHtml, normalizeLanguage } from './shiki-highlighter';
  * caller-provided `code` string, which is treated as static content in
  * this docs app; Shiki does not evaluate it, only tokenizes it.
  *
+ * Line numbers: Shiki wraps each highlighted line in a `<span class="line">`
+ * by default, so numbering is added purely with CSS counters (no Shiki
+ * transformer needed). For the SSR / no-JS fallback, the raw code is split
+ * into lines in the template and each one gets the same `.line` class so
+ * the numbering CSS applies uniformly in both cases.
+ *
  * The `code` and `language` public API is preserved. This component is
  * intended for code snippets only. For non-code visuals such as ASCII
  * flow diagrams, use `ngx-diagram-block` instead.
@@ -51,6 +58,32 @@ import { highlightToHtml, normalizeLanguage } from './shiki-highlighter';
         font-size: 0.875rem;
         line-height: 1.625;
         background-color: transparent !important;
+      }
+
+      /*
+       * Line numbers, applied identically to Shiki's highlighted output
+       * (each line already wrapped in <span class="line">) and to the
+       * SSR fallback (lines split manually in the template).
+       */
+      :host ::ng-deep .line-numbers code {
+        counter-reset: line;
+        display: block;
+      }
+      :host ::ng-deep .line-numbers .line {
+        display: inline-block;
+        width: 100%;
+      }
+      :host ::ng-deep .line-numbers .line::before {
+        counter-increment: line;
+        content: counter(line);
+        display: inline-block;
+        box-sizing: content-box;
+        width: 2rem;
+        margin-right: 1rem;
+        padding-right: 0.5rem;
+        text-align: right;
+        color: rgb(148 163 184 / 0.5); /* slate-400/50 */
+        user-select: none;
       }
     `,
   ],
@@ -79,11 +112,18 @@ import { highlightToHtml, normalizeLanguage } from './shiki-highlighter';
       }
 
       @if (highlightedHtml(); as html) {
-        <div [innerHTML]="html"></div>
+        <div [class.line-numbers]="lineNumbers()" [innerHTML]="html"></div>
       } @else {
         <pre
           class="overflow-x-auto px-4 py-4 text-sm leading-relaxed"
-        ><code>{{ code() }}</code></pre>
+          [class.line-numbers]="lineNumbers()"
+        >
+          <code>
+            @for (line of codeLines(); track $index) {
+              <span class="line">{{ line }}</span>
+            }
+          </code>
+        </pre>
       }
     </figure>
   `,
@@ -91,9 +131,11 @@ import { highlightToHtml, normalizeLanguage } from './shiki-highlighter';
 export class CodeBlockComponent {
   public readonly code = input.required<string>();
   public readonly language = input<string | null>(null);
+  public readonly lineNumbers = input<boolean>(true);
 
   protected readonly copied = signal(false);
   protected readonly highlightedHtml = signal<SafeHtml | null>(null);
+  protected readonly codeLines = computed(() => this.code().split('\n'));
 
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
