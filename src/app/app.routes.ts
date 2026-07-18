@@ -25,8 +25,7 @@ export const routes: Routes = [
   },
   {
     path: 'directive-usage',
-    loadComponent: () =>
-      import('./pages/directive-usage/directive-usage-page'),
+    loadComponent: () => import('./pages/directive-usage/directive-usage-page'),
     title: 'Directive Usage | ngx-request-lock',
   },
   {

@@ -40,7 +40,7 @@ import { Component, input } from '@angular/core';
       >
         <pre
           class="whitespace-pre font-mono text-sm leading-6 text-slate-800 dark:text-slate-200"
-        >{{ content() }}</pre>
+          >{{ content() }}</pre>
       </div>
 
       @if (caption(); as c) {

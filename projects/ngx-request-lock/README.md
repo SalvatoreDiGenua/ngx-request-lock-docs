@@ -48,7 +48,9 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { requestLockInterceptor } from 'ngx-request-lock';
 
 providers: [
-  provideHttpClient(withInterceptors([requestLockInterceptor /*, ...others */])),
+  provideHttpClient(
+    withInterceptors([requestLockInterceptor /*, ...others */]),
+  ),
 ];
 ```
 
@@ -98,7 +100,9 @@ Bind the same `requestId` to every directive and every request that participates
   imports: [RequestLockDirective],
   template: `
     <button ngxRequestLock [requestId]="flowId()" (click)="save()">Save</button>
-    <button ngxRequestLock [requestId]="flowId()" (click)="reset()">Reset</button>
+    <button ngxRequestLock [requestId]="flowId()" (click)="reset()">
+      Reset
+    </button>
   `,
 })
 export class Editor {
@@ -136,14 +140,14 @@ Use it to swap a button label, render a spinner, dim a panel, or set `[attr.aria
 
 ## Public API 📚
 
-| Export                        | Kind                                | Purpose                                                          |
-| ----------------------------- | ----------------------------------- | ---------------------------------------------------------------- |
-| `REQUEST_LOCK_ID`             | `HttpContextToken<string \| null>`  | Tags a request with a lock identifier. Default is `null`.        |
-| `createRequestLockContext(id)`| `(id: string) => HttpContext`       | Builds the `HttpContext` for a tracked request.                  |
-| `requestLockInterceptor`      | `HttpInterceptorFn`                 | Reads the id from the context and drives the service.            |
-| `RequestLockService`          | Root-provided service               | Reference-counted pending state, `isPending(id): Signal<boolean>`. |
-| `RequestLockDirective`        | Standalone directive                | Selector `[ngxRequestLock]`, exportAs `requestLock`.              |
-| `provideRequestLock()`        | `() => EnvironmentProviders`        | Registers `provideHttpClient(withInterceptors([...]))` in one call. |
+| Export                         | Kind                               | Purpose                                                             |
+| ------------------------------ | ---------------------------------- | ------------------------------------------------------------------- |
+| `REQUEST_LOCK_ID`              | `HttpContextToken<string \| null>` | Tags a request with a lock identifier. Default is `null`.           |
+| `createRequestLockContext(id)` | `(id: string) => HttpContext`      | Builds the `HttpContext` for a tracked request.                     |
+| `requestLockInterceptor`       | `HttpInterceptorFn`                | Reads the id from the context and drives the service.               |
+| `RequestLockService`           | Root-provided service              | Reference-counted pending state, `isPending(id): Signal<boolean>`.  |
+| `RequestLockDirective`         | Standalone directive               | Selector `[ngxRequestLock]`, exportAs `requestLock`.                |
+| `provideRequestLock()`         | `() => EnvironmentProviders`       | Registers `provideHttpClient(withInterceptors([...]))` in one call. |
 
 ## What this library is not ⛔
 
