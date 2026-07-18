@@ -11,7 +11,7 @@ module.exports = defineConfig([
         'error',
         {
           type: 'attribute',
-          prefix: 'lib',
+          prefix: 'ngx',
           style: 'camelCase',
         },
       ],
@@ -19,7 +19,7 @@ module.exports = defineConfig([
         'error',
         {
           type: 'element',
-          prefix: 'lib',
+          prefix: 'ngx',
           style: 'kebab-case',
         },
       ],
