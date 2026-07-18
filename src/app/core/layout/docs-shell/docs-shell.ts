@@ -19,7 +19,7 @@ import { DocsFooterComponent } from '../docs-footer/docs-footer';
   },
   template: `
     <a
-      href="#main-content"
+      href="/"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-sky-700 focus:px-3 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-300 focus:ring-offset-2 focus:ring-offset-white dark:focus:bg-sky-500 dark:focus:text-slate-950 dark:focus:ring-sky-200 dark:focus:ring-offset-slate-950"
     >
       {{ 'header.skipToContent' | transloco }}
