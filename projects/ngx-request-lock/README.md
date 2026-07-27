@@ -41,8 +41,8 @@ A common category of front-end bugs comes from the gap between a UI flow and the
 
 ## Compatibility
 
-| `ngx-request-lock` | Angular |
-| ------------------ | ------- |
+| `ngx-request-lock` | Angular   |
+| ------------------ | --------- |
 | `1.x`              | `^22.0.0` |
 
 ## Installation
@@ -199,4 +199,4 @@ Use it to swap a button label, render a spinner, dim a panel, or set `[attr.aria
 
 ## License
 
-[MIT](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/blob/main/LICENSE) (c) 2026 Salvatore Di Genua.
+[MIT](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/blob/main/LICENSE) (c) 2026.
