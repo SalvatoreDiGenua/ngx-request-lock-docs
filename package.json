@@ -24,7 +24,6 @@
     "build:lib": "ng build ngx-request-lock",
     "build:lib:watch": "ng build ngx-request-lock --watch"
   },
-  "private": true,
   "packageManager": "npm@11.17.0",
   "dependencies": {
     "@angular/common": "^22.0.0",
