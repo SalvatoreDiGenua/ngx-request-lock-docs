@@ -1,21 +1,23 @@
-/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
-/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "paths": {
+      "ngx-request-lock": [
+        "./dist/ngx-request-lock",
+        "./projects/ngx-request-lock/src/public-api.ts"
+      ]
+    },
+    "moduleResolution": "bundler",
+    "target": "ES2022",
+    "module": "preserve",
+    "importHelpers": true,
+    "experimentalDecorators": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "paths": {
-      "ngx-request-lock": ["./dist/ngx-request-lock"]
-    },
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "ES2022",
-    "module": "preserve"
+    "noFallthroughCasesInSwitch": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -24,17 +26,9 @@
   },
   "files": [],
   "references": [
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.spec.json"
-    },
-    {
-      "path": "./projects/ngx-request-lock/tsconfig.lib.json"
-    },
-    {
-      "path": "./projects/ngx-request-lock/tsconfig.spec.json"
-    }
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.spec.json" },
+    { "path": "./projects/ngx-request-lock/tsconfig.lib.json" },
+    { "path": "./projects/ngx-request-lock/tsconfig.spec.json" }
   ]
 }
