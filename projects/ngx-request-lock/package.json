@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/issues"
   },
-  "homepage": "https://github.com/SalvatoreDiGenua/ngx-request-lock-docs#readme",
+  "homepage": "https://ngx-request-lock-docs.netlify.app",
   "peerDependencies": {
     "@angular/common": "^22.0.0",
     "@angular/core": "^22.0.0"

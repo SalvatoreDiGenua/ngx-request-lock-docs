@@ -10,7 +10,7 @@
   "bugs": {
     "url": "https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/issues"
   },
-  "homepage": "https://github.com/SalvatoreDiGenua/ngx-request-lock-docs#readme",
+  "homepage": "https://ngx-request-lock-docs.netlify.app",
   "author": "Salvatore Di Genua",
   "scripts": {
     "ng": "ng",
