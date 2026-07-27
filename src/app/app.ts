@@ -4,7 +4,6 @@ import { DocsShellComponent } from './core/layout/docs-shell/docs-shell';
 @Component({
   selector: 'ngx-root',
   imports: [DocsShellComponent],
-  templateUrl: './app.html',
-  styleUrl: './app.scss',
+  template: `<ngx-docs-shell />`,
 })
 export class App {}

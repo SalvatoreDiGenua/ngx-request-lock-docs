@@ -24,6 +24,7 @@ import {
 } from 'ngx-request-lock';
 import { DemoStatusPillComponent } from './demo-status-pill';
 import { DemoStatus } from './demos-types';
+import { LoadingRequestLockDirective } from './loading-request-lock.directive';
 
 const API = 'https://jsonplaceholder.typicode.com';
 
@@ -233,8 +234,6 @@ export class FormDemo {
   });
 
   protected submit(id: string): void {
-    console.log('submit', id);
-
     if (this.form.invalid) {
       return;
     }
@@ -260,7 +259,7 @@ export class FormDemo {
  * Angular-native: reads `RequestLockService.isPending(lock.requestId())` as a
  * signal via `viewChild(RequestLockDirective)`, then flips the label and
  * shows an inline SVG spinner. No directive extension needed; no
- * @HostBinding / @HostListener; no per-component `loading` boolean.
+ * host-decorator hacks; no per-component `loading` boolean.
  */
 
 @Component({
@@ -568,6 +567,88 @@ export class InFlightVariantDemo {
           this.status.set({ kind: 'ok', text: 'Deleted' });
         },
         error: () => this.status.set({ kind: 'error', text: 'Delete failed' }),
+      });
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * 8. Custom directive: LoadingRequestLockDirective in action
+ * ------------------------------------------------------------------------
+ * Live demonstration of the extension point documented in the "Custom
+ * directive" section. The directive is defined in this same folder
+ * (`loading-request-lock.directive.ts`) and only exists in the docs app;
+ * it never ships with the library. It overrides `setBlockStatus()` to
+ * add a spinner and `aria-busy` instead of toggling `[disabled]`.
+ */
+
+@Component({
+  selector: 'ngx-loading-custom-demo',
+  imports: [LoadingRequestLockDirective, DemoStatusPillComponent],
+  styles: [
+    `
+      /*
+       * Consumer styles for the custom directive. These match the CSS
+       * shown in the docs snippet so the live demo renders the same
+       * behavior a consumer would see.
+       */
+      .ngx-lock-loading {
+        position: relative;
+        cursor: not-allowed;
+        opacity: 0.75;
+        pointer-events: none;
+      }
+
+      .ngx-lock-spinner {
+        display: inline-block;
+        width: 0.9em;
+        height: 0.9em;
+        margin-left: 0.5em;
+        border-radius: 9999px;
+        border: 2px solid currentColor;
+        border-top-color: transparent;
+        animation: ngx-lock-spin 0.6s linear infinite;
+        vertical-align: -0.15em;
+      }
+
+      @keyframes ngx-lock-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    `,
+  ],
+  template: `
+    <div class="flex flex-wrap items-center">
+      <button
+        ngxLoadingRequestLock
+        #lock="loadingRequestLock"
+        type="button"
+        [class]="btn"
+        (click)="save(lock.requestId())"
+      >
+        <span>Save</span>
+      </button>
+      <ngx-demo-status-pill [status]="status()" />
+    </div>
+  `,
+})
+export class LoadingCustomDemo {
+  protected readonly btn = BTN;
+  protected readonly status = signal<DemoStatus>(IDLE);
+  private readonly http = inject(HttpClient);
+
+  protected save(id: string): void {
+    this.status.set(IDLE);
+    this.http
+      .post<{ id: number }>(
+        `${API}/posts`,
+        { title: 'ngx-request-lock', body: 'custom-directive demo', userId: 1 },
+        { context: createRequestLockContext(id) },
+      )
+      .subscribe({
+        next: (created) =>
+          this.status.set({ kind: 'ok', text: `Saved (id ${created.id})` }),
+        error: () => this.status.set({ kind: 'error', text: 'Save failed' }),
       });
   }
 }

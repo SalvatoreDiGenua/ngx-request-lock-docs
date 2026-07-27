@@ -3,14 +3,9 @@
     "home": "Home",
     "problem": "Problema",
     "architecture": "Architettura",
-    "whyAngular": "Perché Angular-native",
     "installation": "Installazione e setup",
     "directiveUsage": "Uso della direttiva",
     "flowLock": "Esempi di flow lock",
-    "advantages": "Vantaggi",
-    "limitations": "Limiti e scelte di design",
-    "api": "Riferimento API",
-    "faq": "FAQ",
     "sectionGuide": "Guida",
     "sectionUsage": "Utilizzo"
   },
@@ -21,7 +16,8 @@
     "skipToContent": "Vai al contenuto",
     "openNav": "Apri navigazione",
     "closeNav": "Chiudi navigazione",
-    "navAriaLabel": "Documentazione"
+    "navAriaLabel": "Documentazione",
+    "navAriaLabelMobile": "Documentazione (mobile)"
   },
   "footer": {
     "builtWith": "Realizzato con Angular e Tailwind CSS",
@@ -38,12 +34,6 @@
     "note": "Nota",
     "tip": "Suggerimento",
     "warning": "Attenzione"
-  },
-  "api": {
-    "name": "Nome",
-    "kind": "Tipo",
-    "signature": "Firma",
-    "description": "Descrizione"
   },
   "home": {
     "cards": {
@@ -166,13 +156,11 @@
     "next": {
       "title": "Passi successivi",
       "directiveUsageTitle": "Uso della direttiva",
-      "directiveUsageDesc": "Save, delete, submit di form, stato in corso e una direttiva di loading personalizzata.",
+      "directiveUsageDesc": "Salvataggio, eliminazione, submit di form, stato in corso e una direttiva di loading personalizzata.",
       "flowLockTitle": "Esempi di flow lock",
       "flowLockDesc": "requestId condiviso sull'intero flusso e stato visivo in corso.",
       "architectureTitle": "Architettura",
-      "architectureDesc": "Come si collegano i quattro pezzi e perché restano disaccoppiati.",
-      "apiTitle": "Riferimento API",
-      "apiDesc": "Ogni export pubblico, firma e default."
+      "architectureDesc": "Come si collegano i quattro pezzi e perché restano disaccoppiati."
     }
   },
   "shared": {
@@ -203,7 +191,7 @@
       "text": "La libreria lascia deliberatamente vuoto il lato visivo: <code class=\"font-mono text-sm\">RequestLockDirective</code> commuta soltanto l'attributo nativo <code class=\"font-mono text-sm\">disabled</code> sul pulsante più vicino. Per mostrare uno spinner o un'animazione personalizzata, estendi la direttiva nella tua app e sovrascrivi il punto di estensione <code class=\"font-mono text-sm\">setBlockStatus</code>.",
       "info": "Questa direttiva vive nell'app di documentazione in <code class=\"font-mono text-sm\">src/app/pages/examples/loading-request-lock.directive.ts</code>. È volutamente separata dalla libreria affinché <code class=\"font-mono text-sm\">ngx-request-lock</code> resti neutrale sullo stile.",
       "usageText": "Si consuma esattamente come la direttiva base; cambiano solo il selector e il nome esportato.",
-      "warning": "La direttiva base non è <code class=\"font-mono text-sm\">final</code>, ma le sue iniezioni e il <code class=\"font-mono text-sm\">@HostListener('click')</code> vivono sulla classe padre. Non nascondere <code class=\"font-mono text-sm\">onClick</code> e non ridefinire il binding host del click nella sottoclasse. Sovrascrivi solo <code class=\"font-mono text-sm\">setBlockStatus</code>."
+      "warning": "La direttiva base non è <code class=\"font-mono text-sm\">final</code>, ma le sue iniezioni e il binding host del click (dichiarato nell'oggetto <code class=\"font-mono text-sm\">host</code> del decoratore <code class=\"font-mono text-sm\">&#64;Directive</code>) vivono sulla classe padre. Non nascondere <code class=\"font-mono text-sm\">onClick</code> e non ridefinire il binding host del click nella sottoclasse. Sovrascrivi solo <code class=\"font-mono text-sm\">setBlockStatus</code>."
     },
     "next": {
       "title": "Prossimo",

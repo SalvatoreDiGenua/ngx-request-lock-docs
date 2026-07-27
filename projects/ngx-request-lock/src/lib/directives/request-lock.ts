@@ -2,7 +2,6 @@ import {
   AfterViewInit,
   Directive,
   ElementRef,
-  HostListener,
   Renderer2,
   effect,
   inject,
@@ -16,10 +15,13 @@ const MAX_TIMEOUT_MS = 10_000;
 @Directive({
   selector: '[ngxRequestLock]',
   exportAs: 'requestLock',
+  host: {
+    '(click)': 'onClick()',
+  },
 })
 export class RequestLockDirective implements AfterViewInit {
-  public readonly requestId = input<string, string>(crypto.randomUUID(), {
-    transform: (valueInput: string | null) => valueInput || crypto.randomUUID(),
+  public readonly requestId = input<string, string | null>('', {
+    transform: (value: string | null) => value || crypto.randomUUID(),
   });
 
   private readonly elementRef: ElementRef<HTMLElement> = inject(
@@ -60,7 +62,6 @@ export class RequestLockDirective implements AfterViewInit {
       this.elementRef.nativeElement.querySelector('button');
   }
 
-  @HostListener('click', [])
   public onClick(): void {
     this.isClicked = true;
     this.lock();

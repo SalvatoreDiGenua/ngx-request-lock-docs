@@ -8,6 +8,7 @@ import {
   BasicDemo,
   DeleteDemo,
   FormDemo,
+  LoadingCustomDemo,
   PendingStateDemo,
   SaveDemo,
 } from '../examples/demos';
@@ -280,6 +281,7 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
     DeleteDemo,
     FormDemo,
     PendingStateDemo,
+    LoadingCustomDemo,
   ],
   template: `
     <article *transloco="let t" class="max-w-none">
@@ -460,6 +462,18 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
         language="css"
         title="Consumer styles"
       />
+
+      <section
+        class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        [attr.aria-label]="t('shared.liveDemoAriaLabel')"
+      >
+        <p
+          class="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400"
+        >
+          {{ t('shared.liveDemo') }}
+        </p>
+        <ngx-loading-custom-demo />
+      </section>
 
       <ngx-callout variant="warning">
         <p [innerHTML]="t('directiveUsage.custom.warning')"></p>

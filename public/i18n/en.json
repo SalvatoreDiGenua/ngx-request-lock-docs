@@ -3,14 +3,9 @@
     "home": "Home",
     "problem": "Problem Statement",
     "architecture": "Architecture",
-    "whyAngular": "Why Angular-native",
     "installation": "Installation and Setup",
     "directiveUsage": "Directive Usage",
     "flowLock": "Flow Lock Examples",
-    "advantages": "Advantages",
-    "limitations": "Limitations and Design Choices",
-    "api": "API Reference",
-    "faq": "FAQ",
     "sectionGuide": "Guide",
     "sectionUsage": "Usage"
   },
@@ -21,7 +16,8 @@
     "skipToContent": "Skip to content",
     "openNav": "Open navigation",
     "closeNav": "Close navigation",
-    "navAriaLabel": "Documentation"
+    "navAriaLabel": "Documentation",
+    "navAriaLabelMobile": "Documentation (mobile)"
   },
   "footer": {
     "builtWith": "Built with Angular and Tailwind CSS",
@@ -38,12 +34,6 @@
     "note": "Note",
     "tip": "Tip",
     "warning": "Warning"
-  },
-  "api": {
-    "name": "Name",
-    "kind": "Kind",
-    "signature": "Signature",
-    "description": "Description"
   },
   "home": {
     "cards": {
@@ -170,9 +160,7 @@
       "flowLockTitle": "Flow lock examples",
       "flowLockDesc": "Shared requestId across a whole flow and visual in-flight state.",
       "architectureTitle": "Architecture",
-      "architectureDesc": "How the four pieces connect and why they stay decoupled.",
-      "apiTitle": "API reference",
-      "apiDesc": "Every public export, signature, and default."
+      "architectureDesc": "How the four pieces connect and why they stay decoupled."
     }
   },
   "shared": {
@@ -203,7 +191,7 @@
       "text": "The library keeps the visual side deliberately empty: <code class=\"font-mono text-sm\">RequestLockDirective</code> only toggles the native <code class=\"font-mono text-sm\">disabled</code> attribute on the nearest button. To show a spinner or a custom animation, extend the directive in your own app and override the <code class=\"font-mono text-sm\">setBlockStatus</code> extension point.",
       "info": "This directive lives in the docs app under <code class=\"font-mono text-sm\">src/app/pages/examples/loading-request-lock.directive.ts</code>. It is deliberately separate from the library so <code class=\"font-mono text-sm\">ngx-request-lock</code> stays styling-agnostic.",
       "usageText": "Consume it exactly like the base directive; only the selector and the exported name change.",
-      "warning": "The base directive is not <code class=\"font-mono text-sm\">final</code>, but its constructor injections and the <code class=\"font-mono text-sm\">@HostListener('click')</code> live on the parent class. Do not shadow <code class=\"font-mono text-sm\">onClick</code> and do not re-declare the click host binding in the subclass. Override only <code class=\"font-mono text-sm\">setBlockStatus</code>."
+      "warning": "The base directive is not <code class=\"font-mono text-sm\">final</code>, but its constructor injections and the click host binding (declared in the <code class=\"font-mono text-sm\">host</code> object of the <code class=\"font-mono text-sm\">&#64;Directive</code> decorator) live on the parent class. Do not shadow <code class=\"font-mono text-sm\">onClick</code> and do not re-declare the click host binding in the subclass. Override only <code class=\"font-mono text-sm\">setBlockStatus</code>."
     },
     "next": {
       "title": "Next",
