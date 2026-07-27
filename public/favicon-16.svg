@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ngx-request-lock favicon, pixel-hinted for 16x16.
+
+  At this size any curve or arrow becomes noise. The design collapses to:
+    - a rounded dark plate (14x14 inside 16x16 grid, 1px inset)
+    - a 2px-thick sky shackle drawn as a U rotated 180 degrees
+    - a 6x5 slate-100 lock body
+    - a single dark pixel as the keyhole
+  All coordinates align to whole pixels so no anti-aliasing blurs the shape.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges">
+  <title>ngx-request-lock</title>
+
+  <!-- Dark plate with subtle rounding (1px radius reads as a square with
+       softened corners at 16px). -->
+  <rect x="1" y="1" width="14" height="14" rx="2" ry="2" fill="#0f172a"/>
+
+  <!-- Shackle. Drawn as three 2px-thick rectangles forming a U shape.
+       Sky-400 stays vivid against the dark plate. -->
+  <g fill="#38bdf8">
+    <!-- Top bar -->
+    <rect x="5" y="3" width="6" height="2"/>
+    <!-- Left leg -->
+    <rect x="5" y="5" width="2" height="3"/>
+    <!-- Right leg -->
+    <rect x="9" y="5" width="2" height="3"/>
+  </g>
+
+  <!-- Lock body. 8x5 rectangle centered under the shackle, slate-100. -->
+  <rect x="4" y="8" width="8" height="5" fill="#f1f5f9"/>
+
+  <!-- Keyhole: single 2x2 pixel block, dark plate color, centered. -->
+  <rect x="7" y="10" width="2" height="2" fill="#0f172a"/>
+</svg>

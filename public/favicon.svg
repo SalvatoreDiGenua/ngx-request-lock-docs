@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ngx-request-lock favicon (master).
+
+  Concept: a modern padlock whose shackle is drawn as a request cycle arc.
+  Two arrow caps break the shackle to suggest "request in flight, lock closes
+  when the flow settles". Palette matches the docs' brand tokens:
+    background : slate-900 (#0f172a)
+    body       : slate-100 (#f1f5f9)
+    shackle    : sky-400   (#38bdf8)
+    keyhole    : slate-900 (#0f172a, cut through body)
+
+  Optimized to remain legible at 32px. For 16px, use `favicon-16.svg` which
+  is pixel-hinted separately.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="512" height="512" shape-rendering="geometricPrecision">
+  <title>ngx-request-lock</title>
+
+  <!-- Rounded dark plate. Sits inside the 64x64 grid with 2px inset so the
+       corners survive on rounded browser tab chrome. -->
+  <rect x="2" y="2" width="60" height="60" rx="12" ry="12" fill="#0f172a"/>
+
+  <!-- Shackle: an arc that intentionally reads as a request/return cycle.
+       Two arrow caps sit at the openings of the arc, suggesting inbound and
+       outbound HTTP. Stroke width 5 keeps the arc visible when the plate
+       downscales to 32px. -->
+  <g fill="none" stroke="#38bdf8" stroke-width="5" stroke-linecap="round">
+    <!-- Left half of the shackle (opens downward-left, arrow cap points down = inbound) -->
+    <path d="M 20 30 V 24 A 12 12 0 0 1 44 24 V 30"/>
+    <!-- Arrow caps: small chevrons at the ends of each shackle leg. -->
+    <path d="M 17 27 L 20 30 L 23 27"/>
+    <path d="M 41 27 L 44 30 L 47 27"/>
+  </g>
+
+  <!-- Lock body. Rounded rectangle with strong contrast on the dark plate. -->
+  <rect x="14" y="30" width="36" height="24" rx="4" ry="4" fill="#f1f5f9"/>
+
+  <!-- Keyhole: circle + tapered slot, cut through the body so the dark plate
+       shows through. Small enough to still read as a keyhole at 32px, and
+       tuned to sit visually centered under the shackle. -->
+  <g fill="#0f172a">
+    <circle cx="32" cy="40" r="3"/>
+    <path d="M 30.5 41.5 L 33.5 41.5 L 33 48 L 31 48 Z"/>
+  </g>
+</svg>

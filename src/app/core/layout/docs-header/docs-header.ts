@@ -52,17 +52,64 @@ import { LanguageService } from '../../i18n/language.service';
 
           <a
             routerLink="/"
-            class="flex flex-col rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-sky-400 dark:focus-visible:ring-offset-slate-950"
+            class="flex items-center gap-3 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-sky-400 dark:focus-visible:ring-offset-slate-950"
           >
-            <span
-              class="font-mono text-sm font-semibold text-slate-900 dark:text-slate-50"
+            <!--
+              Brand mark. Geometry mirrors public/favicon.svg exactly.
+              aria-hidden because the anchor already has an accessible
+              name from the title text below.
+            -->
+            <svg
+              viewBox="0 0 64 64"
+              class="h-6 w-6 shrink-0 sm:h-7 sm:w-7"
+              aria-hidden="true"
+              focusable="false"
             >
-              {{ 'header.title' | transloco }}
-            </span>
-            <span
-              class="hidden text-xs text-slate-700 sm:block dark:text-slate-300"
-            >
-              {{ 'header.subtitle' | transloco }}
+              <rect
+                x="2"
+                y="2"
+                width="60"
+                height="60"
+                rx="12"
+                ry="12"
+                fill="#0f172a"
+              />
+              <g
+                fill="none"
+                stroke="#38bdf8"
+                stroke-width="5"
+                stroke-linecap="round"
+              >
+                <path d="M 20 30 V 24 A 12 12 0 0 1 44 24 V 30" />
+                <path d="M 17 27 L 20 30 L 23 27" />
+                <path d="M 41 27 L 44 30 L 47 27" />
+              </g>
+              <rect
+                x="14"
+                y="30"
+                width="36"
+                height="24"
+                rx="4"
+                ry="4"
+                fill="#f1f5f9"
+              />
+              <g fill="#0f172a">
+                <circle cx="32" cy="40" r="3" />
+                <path d="M 30.5 41.5 L 33.5 41.5 L 33 48 L 31 48 Z" />
+              </g>
+            </svg>
+
+            <span class="flex flex-col">
+              <span
+                class="font-mono text-sm font-semibold text-slate-900 dark:text-slate-50"
+              >
+                {{ 'header.title' | transloco }}
+              </span>
+              <span
+                class="hidden text-xs text-slate-700 sm:block dark:text-slate-300"
+              >
+                {{ 'header.subtitle' | transloco }}
+              </span>
             </span>
           </a>
         </div>

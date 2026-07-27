@@ -1,6 +1,17 @@
 {
   "name": "ngx-request-lock-docs",
   "version": "2.5.8",
+  "description": "Documentation site for the ngx-request-lock Angular library.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SalvatoreDiGenua/ngx-request-lock-docs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/issues"
+  },
+  "homepage": "https://github.com/SalvatoreDiGenua/ngx-request-lock-docs#readme",
+  "author": "Salvatore Di Genua",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open",

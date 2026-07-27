@@ -1,32 +1,59 @@
-# ngx-request-lock 🔒
+# ngx-request-lock
 
-`ngx-request-lock` is an Angular library that binds a UI flow to the lifecycle of its HTTP requests.
+UI locking bound to the lifecycle of your HTTP requests, for Angular.
 
-A shared `requestId` coordinates every element and every request in the flow (buttons, forms, panels) and re-enables them together when the whole flow settles. No manual `loading` flags. No `finalize` in user code. No manual reset on error paths.
+[![npm version](https://img.shields.io/npm/v/ngx-request-lock.svg)](https://www.npmjs.com/package/ngx-request-lock)
+[![npm downloads](https://img.shields.io/npm/dm/ngx-request-lock.svg)](https://www.npmjs.com/package/ngx-request-lock)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/ngx-request-lock.svg?label=minzip)](https://bundlephobia.com/package/ngx-request-lock)
+[![license](https://img.shields.io/npm/l/ngx-request-lock.svg)](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/blob/main/LICENSE)
+[![Angular](https://img.shields.io/badge/Angular-%5E22.0.0-dd0031.svg)](https://angular.dev)
 
-## Features ✨
+`ngx-request-lock` binds a UI flow to the lifecycle of its HTTP requests. A shared `requestId` coordinates every element and every request in the flow (buttons, forms, panels) and re-enables them together when the whole flow settles. No manual `loading` flags. No `finalize` in user code. No manual reset on error paths.
 
-- Standalone directive `[ngxRequestLock]` that toggles the nearest button's `disabled` attribute.
-- Functional HTTP interceptor driven by request metadata (`HttpContext`).
-- Signal-based `RequestLockService` with reference-counted pending state.
-- Whole-flow locking: any number of directives and requests can share one `requestId`.
-- Zero CSS shipped: the library stays styling-agnostic.
-- Angular Package Format build, tree-shakable, `sideEffects: false`.
+## Table of contents
 
-## Requirements 🧰
+- [Why this library](#why-this-library)
+- [Requirements](#requirements)
+- [Compatibility](#compatibility)
+- [Installation](#installation)
+- [Setup](#setup)
+- [Usage](#usage)
+  - [Basic: one button, one request](#basic-one-button-one-request)
+  - [Shared flow: many elements, many requests](#shared-flow-many-elements-many-requests)
+  - [Pending state: swap label, show spinner](#pending-state-swap-label-show-spinner)
+- [Public API](#public-api)
+- [What this library is not](#what-this-library-is-not)
+- [Links](#links)
+- [License](#license)
+
+## Why this library
+
+A common category of front-end bugs comes from the gap between a UI flow and the HTTP requests it triggers. The user starts an action, the request is in flight, the UI is still enabled, the user clicks again, or clicks a related button, or edits the form that is about to be refreshed. Duplicate requests reach the server. State diverges.
+
+`ngx-request-lock` treats the `requestId` as the unit of coordination. Any number of interactive elements and any number of HTTP requests can share the same id and count as one reference-counted flow. The interceptor drives the lock through Angular primitives (`HttpContext`, `HttpInterceptorFn`, signals). No external state container. No RxJS orchestration in user code.
+
+## Requirements
 
 - Angular **v22** or newer.
 - Peer dependencies: `@angular/common ^22.0.0`, `@angular/core ^22.0.0`.
 - Standalone APIs, functional HTTP interceptors, and signals (default in v22).
 - Secure context (HTTPS or `localhost`) for `crypto.randomUUID()`.
 
-## Installation 📦
+## Compatibility
+
+| `ngx-request-lock` | Angular |
+| ------------------ | ------- |
+| `1.x`              | `^22.0.0` |
+
+## Installation
 
 ```bash
 npm install ngx-request-lock
 ```
 
-## Setup 🚀
+The library ships as Angular Package Format, is tree-shakable, and is marked `sideEffects: false`. The only runtime dependency is `tslib`.
+
+## Setup
 
 Register the provider in your application config:
 
@@ -54,7 +81,9 @@ providers: [
 ];
 ```
 
-## Usage 💡
+## Usage
+
+### Basic: one button, one request
 
 Place the directive on the interactive element and tag the request with the same id:
 
@@ -91,7 +120,7 @@ The button is disabled from the click until the request settles (success or erro
 - **500 ms** if no pending state has been observed by then.
 - **10 s** unconditionally.
 
-### Shared flow across multiple elements 🔗
+### Shared flow: many elements, many requests
 
 Bind the same `requestId` to every directive and every request that participates in the same flow:
 
@@ -125,20 +154,25 @@ export class Editor {
 
 Every request that carries the same id contributes to one reference-counted lock. Both buttons stay disabled until every request in the flow has settled.
 
-### Reading pending state 📡
+### Pending state: swap label, show spinner
 
 `RequestLockService.isPending(id)` returns a `Signal<boolean>` you can consume anywhere:
 
 ```ts
-import { RequestLockService } from 'ngx-request-lock';
+import { computed, inject, viewChild } from '@angular/core';
+import { RequestLockDirective, RequestLockService } from 'ngx-request-lock';
 
-const service = inject(RequestLockService);
-const isPending = service.isPending('items-flow');
+private readonly service = inject(RequestLockService);
+private readonly lock = viewChild.required(RequestLockDirective);
+
+protected readonly isPending = computed(() =>
+  this.service.isPending(this.lock().requestId())(),
+);
 ```
 
 Use it to swap a button label, render a spinner, dim a panel, or set `[attr.aria-busy]` on a wrapper. `isPending(id)` returns a new `computed` on every call, so store it in a field if you read it repeatedly.
 
-## Public API 📚
+## Public API
 
 | Export                         | Kind                               | Purpose                                                             |
 | ------------------------------ | ---------------------------------- | ------------------------------------------------------------------- |
@@ -149,30 +183,20 @@ Use it to swap a button label, render a spinner, dim a panel, or set `[attr.aria
 | `RequestLockDirective`         | Standalone directive               | Selector `[ngxRequestLock]`, exportAs `requestLock`.                |
 | `provideRequestLock()`         | `() => EnvironmentProviders`       | Registers `provideHttpClient(withInterceptors([...]))` in one call. |
 
-## What this library is not ⛔
+## What this library is not
 
 - It does not cancel or debounce requests.
 - It does not replace HTTP-level idempotency on the server.
 - It does not implement a global spinner or toast system.
 - It does not ship any CSS.
 
-## Building 🛠️
+## Links
 
-From the workspace root:
+- **Repository**: [github.com/SalvatoreDiGenua/ngx-request-lock-docs](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs)
+- **Issues**: [github.com/SalvatoreDiGenua/ngx-request-lock-docs/issues](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/issues)
+- **Changelog**: [CHANGELOG.md](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/blob/main/CHANGELOG.md)
+- **Documentation site**: coming soon
 
-```bash
-ng build ngx-request-lock
-```
+## License
 
-The build artifacts are written to `dist/ngx-request-lock`.
-
-## Publishing 📤
-
-```bash
-cd dist/ngx-request-lock
-npm publish
-```
-
-## Documentation 📖
-
-Full guide, architecture notes, and interactive examples are available in the docs app at the workspace root.
+[MIT](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/blob/main/LICENSE) (c) 2026 Salvatore Di Genua.

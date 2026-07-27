@@ -1,6 +1,33 @@
 {
   "name": "ngx-request-lock",
   "version": "1.0.0",
+  "description": "Angular library that binds a UI flow to the lifecycle of its HTTP requests. A shared requestId coordinates every element and every request in the flow, with no manual loading flags.",
+  "keywords": [
+    "angular",
+    "ngx",
+    "http",
+    "interceptor",
+    "signals",
+    "request-lock",
+    "loading",
+    "disabled",
+    "directive",
+    "http-context",
+    "reference-counting",
+    "ui-state",
+    "standalone"
+  ],
+  "author": "Salvatore Di Genua",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SalvatoreDiGenua/ngx-request-lock-docs.git",
+    "directory": "projects/ngx-request-lock"
+  },
+  "bugs": {
+    "url": "https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/issues"
+  },
+  "homepage": "https://github.com/SalvatoreDiGenua/ngx-request-lock-docs#readme",
   "peerDependencies": {
     "@angular/common": "^22.0.0",
     "@angular/core": "^22.0.0"
