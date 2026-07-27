@@ -1,6 +1,6 @@
 {
   "name": "ngx-request-lock",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Angular library that binds a UI flow to the lifecycle of its HTTP requests. A shared requestId coordinates every element and every request in the flow, with no manual loading flags.",
   "keywords": [
     "angular",

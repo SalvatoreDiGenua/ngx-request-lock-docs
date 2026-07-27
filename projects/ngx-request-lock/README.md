@@ -5,7 +5,6 @@ UI locking bound to the lifecycle of your HTTP requests, for Angular.
 [![npm version](https://img.shields.io/npm/v/ngx-request-lock.svg)](https://www.npmjs.com/package/ngx-request-lock)
 [![npm downloads](https://img.shields.io/npm/dm/ngx-request-lock.svg)](https://www.npmjs.com/package/ngx-request-lock)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/ngx-request-lock.svg?label=minzip)](https://bundlephobia.com/package/ngx-request-lock)
-[![license](https://img.shields.io/npm/l/ngx-request-lock.svg)](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/blob/main/LICENSE)
 [![Angular](https://img.shields.io/badge/Angular-%5E22.0.0-dd0031.svg)](https://angular.dev)
 
 `ngx-request-lock` binds a UI flow to the lifecycle of its HTTP requests. A shared `requestId` coordinates every element and every request in the flow (buttons, forms, panels) and re-enables them together when the whole flow settles. No manual `loading` flags. No `finalize` in user code. No manual reset on error paths.
