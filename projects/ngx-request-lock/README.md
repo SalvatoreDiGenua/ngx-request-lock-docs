@@ -194,7 +194,7 @@ Use it to swap a button label, render a spinner, dim a panel, or set `[attr.aria
 - **Repository**: [github.com/SalvatoreDiGenua/ngx-request-lock-docs](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs)
 - **Issues**: [github.com/SalvatoreDiGenua/ngx-request-lock-docs/issues](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/issues)
 - **Changelog**: [CHANGELOG.md](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/blob/main/CHANGELOG.md)
-- **Documentation site**: coming soon
+- **Documentation site**: [DOCS](https://ngx-request-lock-docs.netlify.app/)
 
 ## License
 
