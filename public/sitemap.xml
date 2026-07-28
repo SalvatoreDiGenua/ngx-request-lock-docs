@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://ngx-request-lock-docs.netlify.app/</loc>
-  </url>
-  <url>
-    <loc>https://ngx-request-lock-docs.netlify.app/problem</loc>
-  </url>
-  <url>
-    <loc>https://ngx-request-lock-docs.netlify.app/architecture</loc>
-  </url>
-  <url>
-    <loc>https://ngx-request-lock-docs.netlify.app/installation</loc>
-  </url>
-  <url>
-    <loc>https://ngx-request-lock-docs.netlify.app/directive-usage</loc>
-  </url>
-  <url>
-    <loc>https://ngx-request-lock-docs.netlify.app/flow-lock</loc>
-  </url>
+  <url><loc>https://ngx-request-lock-docs.netlify.app/</loc></url>
+  <url><loc>https://ngx-request-lock-docs.netlify.app/problem</loc></url>
+  <url><loc>https://ngx-request-lock-docs.netlify.app/architecture</loc></url>
+  <url><loc>https://ngx-request-lock-docs.netlify.app/installation</loc></url>
+  <url><loc>https://ngx-request-lock-docs.netlify.app/directive-usage</loc></url>
+  <url><loc>https://ngx-request-lock-docs.netlify.app/flow-lock</loc></url>
 </urlset>
