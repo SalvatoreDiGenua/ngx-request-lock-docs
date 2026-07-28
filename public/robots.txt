@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ngx-request-lock-docs.netlify.app/sitemap.xml
