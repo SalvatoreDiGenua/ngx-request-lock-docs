@@ -16,7 +16,7 @@ import { LanguageService } from '../../i18n/language.service';
         <div class="flex items-center gap-2">
           <button
             type="button"
-            class="rounded-md border border-slate-400 bg-white p-2 text-slate-800 transition hover:border-sky-600 hover:text-sky-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:hidden dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-400 dark:hover:text-sky-300 dark:focus-visible:ring-sky-400 dark:focus-visible:ring-offset-slate-950"
+            class="rounded-md border border-slate-400 bg-white p-2 text-slate-800 transition hover:border-sky-600 hover:text-sky-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white md:hidden dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-400 dark:hover:text-sky-300 dark:focus-visible:ring-sky-400 dark:focus-visible:ring-offset-slate-950 hover:cursor-pointer"
             [attr.aria-label]="
               (mobileNavOpen() ? 'header.closeNav' : 'header.openNav')
                 | transloco
@@ -117,7 +117,7 @@ import { LanguageService } from '../../i18n/language.service';
         <div class="flex items-center gap-2">
           <button
             type="button"
-            class="rounded-md border border-slate-400 bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-slate-800 transition hover:border-sky-600 hover:text-sky-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-400 dark:hover:text-sky-300 dark:focus-visible:ring-sky-400 dark:focus-visible:ring-offset-slate-950"
+            class="rounded-md border border-slate-400 bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-slate-800 transition hover:border-sky-600 hover:text-sky-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-400 dark:hover:text-sky-300 dark:focus-visible:ring-sky-400 dark:focus-visible:ring-offset-slate-950 hover:cursor-pointer"
             [attr.aria-label]="'header.languageSwitch' | transloco"
             [attr.aria-pressed]="language.language() === 'it'"
             (click)="language.toggle()"

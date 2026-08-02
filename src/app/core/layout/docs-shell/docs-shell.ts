@@ -104,7 +104,7 @@ const FOCUSABLE_SELECTOR = [
         <button
           #closeButton
           type="button"
-          class="rounded-md p-2 text-slate-700 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-slate-200 dark:hover:bg-slate-800 dark:focus-visible:ring-sky-400 dark:focus-visible:ring-offset-slate-950"
+          class="rounded-md p-2 text-slate-700 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-slate-200 dark:hover:bg-slate-800 dark:focus-visible:ring-sky-400 dark:focus-visible:ring-offset-slate-950 hover:cursor-pointer"
           [attr.aria-label]="'header.closeNav' | transloco"
           (click)="closeMobileNav()"
         >
