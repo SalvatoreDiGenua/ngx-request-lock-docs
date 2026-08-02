@@ -2,10 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "paths": {
-      "ngx-request-lock": [
-        "./dist/ngx-request-lock",
-        "./projects/ngx-request-lock/src/public-api.ts"
-      ]
+      "ngx-request-lock": ["./projects/ngx-request-lock/src/public-api.ts"]
     },
     "moduleResolution": "bundler",
     "target": "ES2022",
