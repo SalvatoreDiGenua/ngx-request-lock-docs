@@ -1,8 +1,6 @@
-import { Injectable, Signal, computed, signal } from '@angular/core';
+import { Service, Signal, computed, signal } from '@angular/core';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class RequestLockService {
   private readonly _pendingRequests = signal<Map<string, number>>(new Map());
 
