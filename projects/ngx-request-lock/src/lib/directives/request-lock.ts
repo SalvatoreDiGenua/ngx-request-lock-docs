@@ -20,9 +20,12 @@ const MAX_TIMEOUT_MS = 10_000;
   },
 })
 export class RequestLockDirective implements AfterViewInit {
-  public readonly requestId = input<string, string | null>('', {
-    transform: (value: string | null) => value || crypto.randomUUID(),
-  });
+  public readonly requestId = input<string, string | null>(
+    crypto.randomUUID(),
+    {
+      transform: (value: string | null) => value || crypto.randomUUID(),
+    },
+  );
 
   private readonly elementRef: ElementRef<HTMLElement> = inject(
     ElementRef<HTMLElement>,
@@ -40,9 +43,7 @@ export class RequestLockDirective implements AfterViewInit {
 
   constructor() {
     effect(() => {
-      const pending = this.trackingService.isPending(
-        this.requestId() as string,
-      )();
+      const pending = this.trackingService.isPending(this.requestId())();
 
       this.hasSeenPending ||= pending;
 

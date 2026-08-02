@@ -46,6 +46,16 @@ class NoButtonHostComponent {
   public readonly lock = viewChild.required(RequestLockDirective);
 }
 
+@Component({
+  imports: [RequestLockDirective],
+  template: `
+    <button ngxRequestLock #lock="requestLock" type="button">Click me</button>
+  `,
+})
+class UnboundHostComponent {
+  public readonly lock = viewChild.required(RequestLockDirective);
+}
+
 function detect(fixture: ComponentFixture<unknown>): void {
   fixture.detectChanges();
 }
@@ -59,7 +69,7 @@ describe('RequestLockDirective', () => {
     vi.useRealTimers();
   });
 
-  it('generates a stable UUID when no requestId input is provided', () => {
+  it('generates a stable UUID when requestId is bound to null', () => {
     const fixture = TestBed.createComponent(HostComponent);
     detect(fixture);
 
@@ -183,5 +193,14 @@ describe('RequestLockDirective', () => {
       service.end('no-button');
       detect(fixture);
     }).not.toThrow();
+  });
+
+  it('generates a UUID when requestId is not bound in the template at all', () => {
+    const fixture = TestBed.createComponent(UnboundHostComponent);
+    detect(fixture);
+
+    const id = fixture.componentInstance.lock().requestId();
+    expect(typeof id).toBe('string');
+    expect(id.length).toBeGreaterThan(0);
   });
 });
