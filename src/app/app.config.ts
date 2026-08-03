@@ -1,6 +1,8 @@
 import {
   ApplicationConfig,
+  inject,
   isDevMode,
+  provideAppInitializer,
   provideBrowserGlobalErrorListeners,
 } from '@angular/core';
 import {
@@ -15,6 +17,7 @@ import { provideRequestLock } from 'ngx-request-lock';
 import { routes } from './app.routes';
 import { TranslocoHttpLoader } from './core/i18n/transloco-loader';
 import { provideClientHydration } from '@angular/platform-browser';
+import { SeoRouterService } from './core/seo-router.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -27,6 +30,7 @@ export const appConfig: ApplicationConfig = {
       }),
       withViewTransitions(),
     ),
+    provideAppInitializer(() => inject(SeoRouterService).init()),
     // Registers HttpClient with the ngx-request-lock functional interceptor.
     // Do NOT add a separate provideHttpClient() call - it would override this.
     provideRequestLock(),
