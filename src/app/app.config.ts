@@ -14,6 +14,7 @@ import { provideRequestLock } from 'ngx-request-lock';
 
 import { routes } from './app.routes';
 import { TranslocoHttpLoader } from './core/i18n/transloco-loader';
+import { provideClientHydration } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -43,5 +44,6 @@ export const appConfig: ApplicationConfig = {
       storage: { useValue: localStorage },
       storageKey: 'ngx-request-lock-docs.language',
     }),
+    provideClientHydration(),
   ],
 };

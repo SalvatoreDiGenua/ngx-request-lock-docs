@@ -22,7 +22,9 @@
     "lint": "ng lint",
     "format-project": "npx prettier --write .",
     "build:lib": "ng build ngx-request-lock",
-    "build:lib:watch": "ng build ngx-request-lock --watch"
+    "build:lib:watch": "ng build ngx-request-lock --watch",
+    "serve:ssg:ngx-request-lock-docs": "npx http-server dist/ngx-request-lock-docs/browser -p 8080",
+    "serve:ssr:ngx-request-lock-docs": "node dist/ngx-request-lock-docs/server/server.mjs"
   },
   "packageManager": "npm@11.17.0",
   "dependencies": {
@@ -31,9 +33,12 @@
     "@angular/core": "^22.1.0",
     "@angular/forms": "^22.1.0",
     "@angular/platform-browser": "^22.1.0",
+    "@angular/platform-server": "^22.1.0",
     "@angular/router": "^22.1.0",
+    "@angular/ssr": "^22.1.2",
     "@jsverse/transloco": "^8.4.0",
     "@jsverse/transloco-persist-lang": "^8.4.0",
+    "express": "^5.1.0",
     "rxjs": "~7.8.0",
     "shiki": "^4.3.1",
     "tslib": "^2.3.0"
@@ -44,6 +49,8 @@
     "@angular/compiler-cli": "^22.1.0",
     "@eslint/js": "^10.0.1",
     "@tailwindcss/postcss": "^4.1.12",
+    "@types/express": "^5.0.1",
+    "@types/node": "^20.17.19",
     "angular-eslint": "22.0.0",
     "eslint": "^10.3.0",
     "jsdom": "^28.0.0",
