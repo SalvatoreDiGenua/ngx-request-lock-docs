@@ -17,7 +17,7 @@ import { provideRequestLock } from 'ngx-request-lock';
 import { routes } from './app.routes';
 import { TranslocoHttpLoader } from './core/i18n/transloco-loader';
 import { provideClientHydration } from '@angular/platform-browser';
-import { SeoRouterService } from './core/seo-router.service';
+import { SeoRouterService } from './core/services/seo-router-service';
 
 export const appConfig: ApplicationConfig = {
   providers: [

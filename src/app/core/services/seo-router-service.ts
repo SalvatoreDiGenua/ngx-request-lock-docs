@@ -1,16 +1,14 @@
-import { Injectable, inject } from '@angular/core';
+import { Service, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { SeoService } from './seo.service';
+import { SeoService } from './seo-service';
 
 export interface RouteSeoData {
   description?: string;
   structuredData?: Record<string, unknown>;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Service()
 export class SeoRouterService {
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
