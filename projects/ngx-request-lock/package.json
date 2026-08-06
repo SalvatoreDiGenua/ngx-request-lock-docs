@@ -1,6 +1,6 @@
 {
   "name": "ngx-request-lock",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Angular library for binding UI flows to HTTP request lifecycles. A shared requestId coordinates buttons, forms, and panels, unlocking them automatically when requests settle.",
   "keywords": [
     "angular",
