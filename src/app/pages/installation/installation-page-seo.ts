@@ -2,13 +2,13 @@ import { RouteSeoData } from '../../core/services/seo-router-service';
 
 export const INSTALLATION_PAGE_SEO: RouteSeoData = {
   description:
-    'Step-by-step installation and setup guide for ngx-request-lock in Angular applications using provideRequestLock and standalone configuration.',
+    'Install ngx-request-lock in an Angular app: package setup, provideRequestLock() registration, HTTP context wiring, and directive placement.',
   structuredData: {
     '@context': 'https://schema.org',
     '@type': 'TechArticle',
     headline: 'Installation & Setup — ngx-request-lock',
     description:
-      'Step-by-step installation and setup guide for ngx-request-lock in Angular applications using provideRequestLock and standalone configuration.',
+      'Install ngx-request-lock in an Angular app: package setup, provideRequestLock() registration, HTTP context wiring, and directive placement.',
     url: 'https://ngx-request-lock-docs.netlify.app/installation',
     author: {
       '@type': 'Person',

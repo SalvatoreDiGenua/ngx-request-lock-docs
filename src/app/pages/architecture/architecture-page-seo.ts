@@ -2,13 +2,13 @@ import { RouteSeoData } from '../../core/services/seo-router-service';
 
 export const ARCHITECTURE_PAGE_SEO: RouteSeoData = {
   description:
-    'Learn the core architecture of ngx-request-lock: HttpContextTokens, functional interceptor, reference counting, and signal-based UI directives.',
+    'Architecture of ngx-request-lock: HttpContextToken, functional interceptor, reference-counted signal service, and RequestLockDirective.',
   structuredData: {
     '@context': 'https://schema.org',
     '@type': 'TechArticle',
     headline: 'Architecture — ngx-request-lock',
     description:
-      'Learn the core architecture of ngx-request-lock: HttpContextTokens, functional interceptor, reference counting, and signal-based UI directives.',
+      'Architecture of ngx-request-lock: HttpContextToken, functional interceptor, reference-counted signal service, and RequestLockDirective.',
     url: 'https://ngx-request-lock-docs.netlify.app/architecture',
     author: {
       '@type': 'Person',

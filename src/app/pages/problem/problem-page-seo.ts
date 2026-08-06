@@ -2,13 +2,13 @@ import { RouteSeoData } from '../../core/services/seo-router-service';
 
 export const PROBLEM_PAGE_SEO: RouteSeoData = {
   description:
-    'Understand common pitfalls in Angular HTTP request state management and how ngx-request-lock eliminates manual loading flags and race conditions.',
+    'Why unblocked UI elements cause duplicate HTTP requests, state divergence, and stale loading flags in Angular apps — and how ngx-request-lock fixes it.',
   structuredData: {
     '@context': 'https://schema.org',
     '@type': 'TechArticle',
     headline: 'Problem Statement — Angular UI & HTTP Lifecycle Coupling',
     description:
-      'Understand common pitfalls in Angular HTTP request state management and how ngx-request-lock eliminates manual loading flags and race conditions.',
+      'Why unblocked UI elements cause duplicate HTTP requests, state divergence, and stale loading flags in Angular apps — and how ngx-request-lock fixes it.',
     url: 'https://ngx-request-lock-docs.netlify.app/problem',
     author: {
       '@type': 'Person',

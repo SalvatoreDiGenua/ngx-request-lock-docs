@@ -2,13 +2,13 @@ import { RouteSeoData } from '../../core/services/seo-router-service';
 
 export const HOME_PAGE_SEO: RouteSeoData = {
   description:
-    'ngx-request-lock is an Angular library that binds a UI flow to the lifecycle of its HTTP requests: a shared requestId coordinates every element and request.',
+    'ngx-request-lock: Angular library for binding UI flows to HTTP request lifecycles. A shared requestId coordinates buttons, forms, and panels, unlocking them automatically when requests settle.',
   structuredData: {
     '@context': 'https://schema.org',
     '@type': 'SoftwareSourceCode',
     name: 'ngx-request-lock',
     description:
-      'ngx-request-lock is an Angular library that binds a UI flow to the lifecycle of its HTTP requests: a shared requestId coordinates every element and every request in the flow, with no manual loading flags.',
+      'ngx-request-lock: Angular library for binding UI flows to HTTP request lifecycles. A shared requestId coordinates buttons, forms, and panels, unlocking them automatically when requests settle.',
     programmingLanguage: 'TypeScript',
     runtimePlatform: 'Angular 22',
     license:

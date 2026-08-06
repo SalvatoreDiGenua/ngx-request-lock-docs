@@ -2,13 +2,13 @@ import { RouteSeoData } from '../../core/services/seo-router-service';
 
 export const DIRECTIVE_USAGE_PAGE_SEO: RouteSeoData = {
   description:
-    'Explore how to use [ngxRequestLock] directive to automatically manage loading states, disabled attributes, and button spinners in Angular forms.',
+    '[ngxRequestLock] directive usage in Angular: disabling buttons during HTTP requests, pending state spinners, and custom loading animations.',
   structuredData: {
     '@context': 'https://schema.org',
     '@type': 'TechArticle',
     headline: 'Directive Usage — ngx-request-lock',
     description:
-      'Explore how to use [ngxRequestLock] directive to automatically manage loading states, disabled attributes, and button spinners in Angular forms.',
+      '[ngxRequestLock] directive usage in Angular: disabling buttons during HTTP requests, pending state spinners, and custom loading animations.',
     url: 'https://ngx-request-lock-docs.netlify.app/directive-usage',
     author: {
       '@type': 'Person',

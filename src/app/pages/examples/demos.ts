@@ -9,9 +9,9 @@
  *   2. `lock.requestId()` passed to `createRequestLockContext(id)` on click.
  *   3. `HttpClient` with `{ context }` on a real endpoint.
  *
- * The library takes care of disabling the button while the interceptor sees
- * the request pending. When the request settles - success, error, or a
- * safety timeout - the button re-enables automatically.
+ * The library disables the button while the request remains pending in the
+ * interceptor. When the request settles (success, error, or safety timeout),
+ * the button re-enables automatically.
  */
 
 import { Component, computed, inject, signal, viewChild } from '@angular/core';

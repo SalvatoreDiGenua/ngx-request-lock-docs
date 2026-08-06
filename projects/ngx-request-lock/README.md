@@ -7,7 +7,7 @@ UI locking bound to the lifecycle of your HTTP requests, for Angular.
 [![bundle size](https://img.shields.io/bundlephobia/minzip/ngx-request-lock.svg?label=minzip)](https://bundlephobia.com/package/ngx-request-lock)
 [![Angular](https://img.shields.io/badge/Angular-%5E22.0.0-dd0031.svg)](https://angular.dev)
 
-`ngx-request-lock` binds a UI flow to the lifecycle of its HTTP requests. A shared `requestId` coordinates every element and every request in the flow (buttons, forms, panels) and re-enables them together when the whole flow settles. No manual `loading` flags. No `finalize` in user code. No manual reset on error paths.
+`ngx-request-lock` binds a UI flow to the lifecycle of its HTTP requests. A shared `requestId` coordinates buttons, forms, and panels across single or chained requests, unlocking them automatically when all calls complete.
 
 ## Table of contents
 
@@ -27,9 +27,9 @@ UI locking bound to the lifecycle of your HTTP requests, for Angular.
 
 ## Why this library
 
-A common category of front-end bugs comes from the gap between a UI flow and the HTTP requests it triggers. The user starts an action, the request is in flight, the UI is still enabled, the user clicks again, or clicks a related button, or edits the form that is about to be refreshed. Duplicate requests reach the server. State diverges.
+Front-end state bugs often stem from active UI elements during pending HTTP requests. Unblocked controls allow repeated clicks and concurrent edits, sending duplicate requests to the server and causing state divergence.
 
-`ngx-request-lock` treats the `requestId` as the unit of coordination. Any number of interactive elements and any number of HTTP requests can share the same id and count as one reference-counted flow. The interceptor drives the lock through Angular primitives (`HttpContext`, `HttpInterceptorFn`, signals). No external state container. No RxJS orchestration in user code.
+`ngx-request-lock` uses `requestId` as the unit of coordination. Interactive elements and HTTP requests share an ID to form a reference-counted flow. The interceptor manages state through Angular primitives (`HttpContext`, `HttpInterceptorFn`, signals) without external state managers or RxJS code.
 
 ## Requirements
 

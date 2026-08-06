@@ -2,13 +2,13 @@ import { RouteSeoData } from '../../core/services/seo-router-service';
 
 export const FLOW_LOCK_PAGE_SEO: RouteSeoData = {
   description:
-    'Discover advanced Flow Lock examples: coordinating multi-step UI flows and multi-request HTTP lifecycles seamlessly with ngx-request-lock.',
+    'Flow lock patterns in ngx-request-lock: shared requestId across multiple buttons and chained HTTP calls, with reference-counted unlocking.',
   structuredData: {
     '@context': 'https://schema.org',
     '@type': 'TechArticle',
     headline: 'Flow Lock Examples — ngx-request-lock',
     description:
-      'Discover advanced Flow Lock examples: coordinating multi-step UI flows and multi-request HTTP lifecycles seamlessly with ngx-request-lock.',
+      'Flow lock patterns in ngx-request-lock: shared requestId across multiple buttons and chained HTTP calls, with reference-counted unlocking.',
     url: 'https://ngx-request-lock-docs.netlify.app/flow-lock',
     author: {
       '@type': 'Person',
