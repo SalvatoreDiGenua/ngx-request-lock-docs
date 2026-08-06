@@ -20,8 +20,14 @@
     "navAriaLabelMobile": "Documentazione (mobile)"
   },
   "footer": {
-    "builtWith": "Realizzato con Angular e Tailwind CSS",
-    "sourceCode": "Codice sorgente"
+    "tagline": "Blocco della UI legato al ciclo di vita delle richieste HTTP per applicazioni Angular",
+    "docs": "Documentazione",
+    "installation": "Installazione e setup",
+    "architecture": "Architettura",
+    "links": "Link",
+    "sourceCode": "Codice sorgente",
+    "license": "Licenza",
+    "builtWith": "Realizzato con Angular e Tailwind CSS"
   },
   "common": {
     "copy": "Copia",

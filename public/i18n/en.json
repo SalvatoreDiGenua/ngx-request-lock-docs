@@ -20,8 +20,14 @@
     "navAriaLabelMobile": "Documentation (mobile)"
   },
   "footer": {
-    "builtWith": "Built with Angular and Tailwind CSS",
-    "sourceCode": "Source code"
+    "tagline": "UI locking bound to HTTP request lifecycle for Angular applications",
+    "docs": "Documentation",
+    "installation": "Installation",
+    "architecture": "Architecture",
+    "links": "Links",
+    "sourceCode": "Source code",
+    "license": "License",
+    "builtWith": "Built with Angular and Tailwind CSS"
   },
   "common": {
     "copy": "Copy",
