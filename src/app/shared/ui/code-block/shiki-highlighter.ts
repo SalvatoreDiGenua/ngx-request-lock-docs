@@ -1,3 +1,5 @@
+import { codeToHtml } from 'shiki';
+
 /**
  * Shared, lazy Shiki highlighter for the docs app.
  *
@@ -68,7 +70,6 @@ export async function highlightToHtml(
   language: ShikiLang,
 ): Promise<string | null> {
   try {
-    const { codeToHtml } = await import('shiki');
     return await codeToHtml(code, {
       lang: language,
       theme: 'github-dark',
