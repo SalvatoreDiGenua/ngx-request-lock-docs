@@ -22,4 +22,15 @@ export class SeoService {
     script.textContent = JSON.stringify(data, null, 2);
     this.document.head.appendChild(script);
   }
+
+  setCanonicalUrl(path: string): void {
+    const url = `https://ngx-request-lock-docs.netlify.app${path}`;
+    let link = this.document.querySelector('link[rel="canonical"]');
+    if (!link) {
+      link = this.document.createElement('link');
+      link.setAttribute('rel', 'canonical');
+      this.document.head.appendChild(link);
+    }
+    link.setAttribute('href', url);
+  }
 }

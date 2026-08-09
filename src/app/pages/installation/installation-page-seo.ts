@@ -9,7 +9,7 @@ export const INSTALLATION_PAGE_SEO: RouteSeoData = {
     headline: 'Installation & Setup — ngx-request-lock',
     description:
       'Install ngx-request-lock in an Angular app: package setup, provideRequestLock() registration, HTTP context wiring, and directive placement.',
-    url: 'https://ngx-request-lock-docs.netlify.app/installation',
+    url: 'https://ngx-request-lock-docs.netlify.app/installation/',
     author: {
       '@type': 'Person',
       name: 'Salvatore Di Genua',
