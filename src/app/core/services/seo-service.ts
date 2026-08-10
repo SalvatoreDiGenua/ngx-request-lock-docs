@@ -18,7 +18,7 @@ export class SeoService {
 
   setStructuredData(data: Record<string, unknown>): void {
     const existingScripts = this.document.head.querySelectorAll(
-      'script[type="application/ld+json"]',
+      'script[type="application/ld+json"]:not([data-seo-persistent])',
     );
     existingScripts.forEach((script) => script.remove());
 
