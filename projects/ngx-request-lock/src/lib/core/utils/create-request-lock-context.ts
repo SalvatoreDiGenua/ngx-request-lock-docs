@@ -21,4 +21,3 @@ export function createRequestLockContext(id: string): HttpContext {
   }
   return context.set(REQUEST_LOCK_ID, id);
 }
-
