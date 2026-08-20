@@ -3,6 +3,24 @@ import { Service, inject } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
 
 const SITE_ORIGIN = 'https://ngx-request-lock-docs.netlify.app';
+const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
+
+export interface OpenGraphMeta {
+  title?: string;
+  description?: string;
+  url?: string;
+  image?: string;
+  type?: string;
+  siteName?: string;
+  locale?: string;
+}
+
+export interface TwitterCardMeta {
+  card?: 'summary' | 'summary_large_image' | 'app' | 'player';
+  title?: string;
+  description?: string;
+  image?: string;
+}
 
 @Service()
 export class SeoService {
@@ -16,16 +34,96 @@ export class SeoService {
     );
   }
 
-  setStructuredData(data: Record<string, unknown>): void {
+  setKeywords(keywords: string | string[]): void {
+    const content = Array.isArray(keywords) ? keywords.join(', ') : keywords;
+    this.meta.updateTag({ name: 'keywords', content }, 'name="keywords"');
+  }
+
+  setOpenGraph(og: OpenGraphMeta): void {
+    if (og.title) {
+      this.meta.updateTag(
+        { property: 'og:title', content: og.title },
+        'property="og:title"',
+      );
+    }
+    if (og.description) {
+      this.meta.updateTag(
+        { property: 'og:description', content: og.description },
+        'property="og:description"',
+      );
+    }
+    if (og.image) {
+      this.meta.updateTag(
+        { property: 'og:image', content: og.image },
+        'property="og:image"',
+      );
+    } else {
+      this.meta.updateTag(
+        { property: 'og:image', content: DEFAULT_OG_IMAGE },
+        'property="og:image"',
+      );
+    }
+    if (og.type) {
+      this.meta.updateTag(
+        { property: 'og:type', content: og.type },
+        'property="og:type"',
+      );
+    }
+    if (og.url) {
+      this.meta.updateTag(
+        { property: 'og:url', content: og.url },
+        'property="og:url"',
+      );
+    }
+  }
+
+  setTwitterCard(twitter: TwitterCardMeta): void {
+    if (twitter.card) {
+      this.meta.updateTag(
+        { name: 'twitter:card', content: twitter.card },
+        'name="twitter:card"',
+      );
+    }
+    if (twitter.title) {
+      this.meta.updateTag(
+        { name: 'twitter:title', content: twitter.title },
+        'name="twitter:title"',
+      );
+    }
+    if (twitter.description) {
+      this.meta.updateTag(
+        { name: 'twitter:description', content: twitter.description },
+        'name="twitter:description"',
+      );
+    }
+    if (twitter.image) {
+      this.meta.updateTag(
+        { name: 'twitter:image', content: twitter.image },
+        'name="twitter:image"',
+      );
+    } else {
+      this.meta.updateTag(
+        { name: 'twitter:image', content: DEFAULT_OG_IMAGE },
+        'name="twitter:image"',
+      );
+    }
+  }
+
+  setStructuredData(
+    data: Record<string, unknown> | Record<string, unknown>[],
+  ): void {
     const existingScripts = this.document.head.querySelectorAll(
       'script[type="application/ld+json"]:not([data-seo-persistent])',
     );
     existingScripts.forEach((script) => script.remove());
 
-    const script = this.document.createElement('script');
-    script.type = 'application/ld+json';
-    script.textContent = JSON.stringify(data, null, 2);
-    this.document.head.appendChild(script);
+    const items = Array.isArray(data) ? data : [data];
+    for (const item of items) {
+      const script = this.document.createElement('script');
+      script.type = 'application/ld+json';
+      script.textContent = JSON.stringify(item, null, 2);
+      this.document.head.appendChild(script);
+    }
   }
 
   /**

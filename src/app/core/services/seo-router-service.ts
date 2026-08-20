@@ -4,8 +4,18 @@ import { filter } from 'rxjs/operators';
 import { SeoService } from './seo-service';
 
 export interface RouteSeoData {
+  title?: string;
   description?: string;
-  structuredData?: Record<string, unknown>;
+  keywords?: string | string[];
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  ogType?: string;
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImage?: string;
+  twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player';
+  structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
 }
 
 @Service()
@@ -35,17 +45,36 @@ export class SeoRouterService {
       route = route.firstChild;
     }
 
-    this.seoService.setCanonicalUrl(this.buildCanonicalPath());
+    const canonicalPath = this.buildCanonicalPath();
+    this.seoService.setCanonicalUrl(canonicalPath);
 
     const seoData = route.snapshot.data['seo'] as RouteSeoData | undefined;
-    if (!seoData) {
-      return;
+    const pageTitle = seoData?.title ?? route.snapshot.title ?? 'ngx-request-lock';
+    const description =
+      seoData?.description ??
+      'ngx-request-lock is an Angular library for binding UI flows to HTTP request lifecycles.';
+
+    this.seoService.setMetaDescription(description);
+
+    if (seoData?.keywords) {
+      this.seoService.setKeywords(seoData.keywords);
     }
 
-    if (seoData.description) {
-      this.seoService.setMetaDescription(seoData.description);
-    }
-    if (seoData.structuredData) {
+    this.seoService.setOpenGraph({
+      title: seoData?.ogTitle ?? pageTitle,
+      description: seoData?.ogDescription ?? description,
+      image: seoData?.ogImage,
+      type: seoData?.ogType ?? 'website',
+    });
+
+    this.seoService.setTwitterCard({
+      card: seoData?.twitterCard ?? 'summary_large_image',
+      title: seoData?.twitterTitle ?? pageTitle,
+      description: seoData?.twitterDescription ?? description,
+      image: seoData?.twitterImage,
+    });
+
+    if (seoData?.structuredData) {
       this.seoService.setStructuredData(seoData.structuredData);
     }
   }
