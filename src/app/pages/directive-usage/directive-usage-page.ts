@@ -39,7 +39,15 @@ export class BasicExample {
   }
 }`;
 
-const SAVE_CODE = `@Component({
+const SAVE_CODE = `import { Component, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { FormBuilder } from '@angular/forms';
+import {
+  RequestLockDirective,
+  createRequestLockContext,
+} from 'ngx-request-lock';
+
+@Component({
   selector: 'ngx-save-user',
   imports: [RequestLockDirective],
   template: \`
@@ -64,7 +72,14 @@ export class SaveUser {
   }
 }`;
 
-const DELETE_CODE = `@Component({
+const DELETE_CODE = `import { Component, inject, input } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import {
+  RequestLockDirective,
+  createRequestLockContext,
+} from 'ngx-request-lock';
+
+@Component({
   selector: 'ngx-delete-user',
   imports: [RequestLockDirective],
   template: \`
@@ -91,7 +106,15 @@ export class DeleteUser {
   }
 }`;
 
-const FORM_CODE = `@Component({
+const FORM_CODE = `import { Component, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  RequestLockDirective,
+  createRequestLockContext,
+} from 'ngx-request-lock';
+
+@Component({
   selector: 'ngx-signup-form',
   imports: [ReactiveFormsModule, RequestLockDirective],
   template: \`
