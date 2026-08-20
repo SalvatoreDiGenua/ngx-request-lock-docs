@@ -61,6 +61,14 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+           "options": {
+            "allowedHosts": [
+              "localhost",
+              "localhost:5200",
+              "127.0.0.1",
+              "127.0.0.1:5200"
+            ]
+          },
           "configurations": {
             "production": {
               "buildTarget": "ngx-request-lock-docs:build:production"
