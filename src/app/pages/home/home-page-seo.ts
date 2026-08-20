@@ -41,4 +41,3 @@ export const HOME_PAGE_SEO: RouteSeoData = {
     },
   },
 };
-

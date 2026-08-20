@@ -49,7 +49,8 @@ export class SeoRouterService {
     this.seoService.setCanonicalUrl(canonicalPath);
 
     const seoData = route.snapshot.data['seo'] as RouteSeoData | undefined;
-    const pageTitle = seoData?.title ?? route.snapshot.title ?? 'ngx-request-lock';
+    const pageTitle =
+      seoData?.title ?? route.snapshot.title ?? 'ngx-request-lock';
     const description =
       seoData?.description ??
       'ngx-request-lock is an Angular library for binding UI flows to HTTP request lifecycles.';

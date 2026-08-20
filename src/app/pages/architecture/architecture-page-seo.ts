@@ -57,4 +57,3 @@ export const ARCHITECTURE_PAGE_SEO: RouteSeoData = {
     },
   ],
 };
-

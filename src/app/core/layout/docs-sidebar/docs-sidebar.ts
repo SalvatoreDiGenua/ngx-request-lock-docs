@@ -23,9 +23,9 @@ import { TranslocoPipe } from '@jsverse/transloco';
               <li>
                 <a
                   [routerLink]="item.route"
-                  routerLinkActive="bg-sky-100 text-sky-900 font-semibold dark:bg-sky-900/50 dark:text-sky-100"
+                  routerLinkActive="bg-sky-50 text-sky-900 font-semibold border-l-2 border-sky-600 pl-2.5 dark:bg-sky-950/50 dark:text-sky-100 dark:border-sky-400"
                   [routerLinkActiveOptions]="{ exact: item.route === '/' }"
-                  class="block rounded px-3 py-1.5 text-sm font-medium text-slate-800 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white dark:focus-visible:ring-sky-400 dark:focus-visible:ring-offset-slate-950"
+                  class="block rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 transition-all hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:text-slate-300 dark:hover:bg-slate-800/80 dark:hover:text-white dark:focus-visible:ring-sky-400 dark:focus-visible:ring-offset-slate-950"
                   (click)="navigate.emit()"
                 >
                   {{ item.labelKey | transloco }}

@@ -12,10 +12,12 @@ export const PROBLEM_PAGE_SEO: RouteSeoData = {
     'state divergence',
     'ngx-request-lock problem',
   ],
-  ogTitle: 'Problem Statement — UI & HTTP Lifecycle Coupling | ngx-request-lock',
+  ogTitle:
+    'Problem Statement — UI & HTTP Lifecycle Coupling | ngx-request-lock',
   ogDescription:
     'Learn why manual boolean flags fail when handling concurrent clicks and asynchronous HTTP flows in Angular applications.',
-  twitterTitle: 'Problem Statement — UI & HTTP Lifecycle Coupling | ngx-request-lock',
+  twitterTitle:
+    'Problem Statement — UI & HTTP Lifecycle Coupling | ngx-request-lock',
   twitterDescription:
     'Learn why manual boolean flags fail when handling concurrent clicks and asynchronous HTTP flows in Angular applications.',
   structuredData: [
@@ -57,4 +59,3 @@ export const PROBLEM_PAGE_SEO: RouteSeoData = {
     },
   ],
 };
-

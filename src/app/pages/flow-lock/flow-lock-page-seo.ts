@@ -57,4 +57,3 @@ export const FLOW_LOCK_PAGE_SEO: RouteSeoData = {
     },
   ],
 };
-

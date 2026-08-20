@@ -85,7 +85,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
           </div>
         </div>
 
-        <div class="mt-8 border-t border-slate-200 pt-4 dark:border-slate-800">
+        <div class="mt-8 pt-4">
           <p class="text-xs text-slate-700 dark:text-slate-300">
             © {{ currentYear }} Salvatore Di Genua -
             {{ 'footer.builtWith' | transloco }}

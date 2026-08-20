@@ -56,4 +56,3 @@ export const DIRECTIVE_USAGE_PAGE_SEO: RouteSeoData = {
     },
   ],
 };
-

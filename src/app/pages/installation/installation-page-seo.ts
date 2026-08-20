@@ -56,4 +56,3 @@ export const INSTALLATION_PAGE_SEO: RouteSeoData = {
     },
   ],
 };
-

@@ -93,20 +93,50 @@ import { highlightToHtml, normalizeLanguage } from './shiki-highlighter';
     >
       @if (language(); as lang) {
         <figcaption
-          class="flex items-center justify-between border-b border-slate-800 bg-slate-900 px-4 py-2 text-xs font-mono uppercase tracking-wide text-slate-200"
+          class="flex items-center justify-between border-b border-slate-800/80 bg-slate-900/90 px-4 py-2 text-xs font-mono uppercase tracking-wider text-slate-300 backdrop-blur-xs"
         >
-          <span>{{ lang }}</span>
+          <span class="font-semibold text-sky-400">{{ lang }}</span>
           <button
             type="button"
-            class="rounded px-2 py-1 text-xs font-sans font-medium text-slate-100 hover:bg-slate-800 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+            class="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-sans font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 cursor-pointer"
             [attr.aria-label]="'common.copyAriaLabel' | transloco"
             (click)="copy()"
           >
-            {{
-              copied()
-                ? ('common.copied' | transloco)
-                : ('common.copy' | transloco)
-            }}
+            @if (copied()) {
+              <svg
+                class="h-3.5 w-3.5 text-emerald-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2.5"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+              <span class="text-emerald-400">{{
+                'common.copied' | transloco
+              }}</span>
+            } @else {
+              <svg
+                class="h-3.5 w-3.5 text-slate-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                />
+              </svg>
+              <span>{{ 'common.copy' | transloco }}</span>
+            }
           </button>
         </figcaption>
       }
