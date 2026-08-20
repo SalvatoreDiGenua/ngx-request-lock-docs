@@ -9,7 +9,8 @@
     {
       "files": "*.html",
       "options": {
-        "parser": "angular"
+        "parser": "angular",
+        "htmlWhitespaceSensitivity": "ignore"
       }
     }
   ]
