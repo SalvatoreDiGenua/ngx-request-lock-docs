@@ -189,6 +189,8 @@ export class DeleteDemo {
           type="email"
           formControlName="email"
           autocomplete="email"
+          required
+          aria-required="true"
           class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
         />
       </div>
@@ -205,6 +207,8 @@ export class DeleteDemo {
           type="password"
           formControlName="password"
           autocomplete="new-password"
+          required
+          aria-required="true"
           class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
         />
       </div>
