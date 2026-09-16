@@ -82,8 +82,8 @@ export class SeoRouterService {
 
   /**
    * Normalizes the current router URL into the canonical path form used
-   * across sitemap, structured data and physical SSG output: root stays
-   * "/", every other route gets a trailing slash and no query/fragment.
+   * across sitemap, structured data and internal links: root is "/",
+   * every other route has no trailing slash and no query/fragment.
    */
   private buildCanonicalPath(): string {
     const urlTree = this.router.parseUrl(this.router.url);
@@ -96,6 +96,6 @@ export class SeoRouterService {
       return '/';
     }
 
-    return path.endsWith('/') ? path : `${path}/`;
+    return path.endsWith('/') ? path.slice(0, -1) : path;
   }
 }

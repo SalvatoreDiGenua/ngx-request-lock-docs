@@ -27,7 +27,7 @@ export const PROBLEM_PAGE_SEO: RouteSeoData = {
       headline: 'Problem Statement — Angular UI & HTTP Lifecycle Coupling',
       description:
         'Why unblocked UI elements cause duplicate HTTP requests, state divergence, and stale loading flags in Angular apps — and how ngx-request-lock fixes it.',
-      url: 'https://ngx-request-lock-docs.netlify.app/problem/',
+      url: 'https://ngx-request-lock-docs.netlify.app/problem',
       author: {
         '@type': 'Person',
         name: 'Salvatore Di Genua',
@@ -53,7 +53,7 @@ export const PROBLEM_PAGE_SEO: RouteSeoData = {
           '@type': 'ListItem',
           position: 2,
           name: 'Problem Statement',
-          item: 'https://ngx-request-lock-docs.netlify.app/problem/',
+          item: 'https://ngx-request-lock-docs.netlify.app/problem',
         },
       ],
     },

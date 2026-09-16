@@ -25,7 +25,7 @@ export const FLOW_LOCK_PAGE_SEO: RouteSeoData = {
       headline: 'Flow Lock Examples — ngx-request-lock',
       description:
         'Flow lock patterns in ngx-request-lock: shared requestId across multiple buttons and chained HTTP calls, with reference-counted unlocking.',
-      url: 'https://ngx-request-lock-docs.netlify.app/flow-lock/',
+      url: 'https://ngx-request-lock-docs.netlify.app/flow-lock',
       author: {
         '@type': 'Person',
         name: 'Salvatore Di Genua',
@@ -51,7 +51,7 @@ export const FLOW_LOCK_PAGE_SEO: RouteSeoData = {
           '@type': 'ListItem',
           position: 2,
           name: 'Flow Lock Examples',
-          item: 'https://ngx-request-lock-docs.netlify.app/flow-lock/',
+          item: 'https://ngx-request-lock-docs.netlify.app/flow-lock',
         },
       ],
     },

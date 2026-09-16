@@ -1,3 +1,10 @@
 /sitemap.xml   /sitemap.xml   200
 /robots.txt    /robots.txt    200
+
+/problem/           /problem           301
+/architecture/      /architecture      301
+/installation/      /installation      301
+/directive-usage/   /directive-usage   301
+/flow-lock/         /flow-lock         301
+
 /*             /index.html    200

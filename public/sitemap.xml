@@ -7,31 +7,31 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://ngx-request-lock-docs.netlify.app/problem/</loc>
+    <loc>https://ngx-request-lock-docs.netlify.app/problem</loc>
     <lastmod>2026-08-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ngx-request-lock-docs.netlify.app/architecture/</loc>
+    <loc>https://ngx-request-lock-docs.netlify.app/architecture</loc>
     <lastmod>2026-08-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ngx-request-lock-docs.netlify.app/installation/</loc>
+    <loc>https://ngx-request-lock-docs.netlify.app/installation</loc>
     <lastmod>2026-08-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ngx-request-lock-docs.netlify.app/directive-usage/</loc>
+    <loc>https://ngx-request-lock-docs.netlify.app/directive-usage</loc>
     <lastmod>2026-08-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ngx-request-lock-docs.netlify.app/flow-lock/</loc>
+    <loc>https://ngx-request-lock-docs.netlify.app/flow-lock</loc>
     <lastmod>2026-08-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
