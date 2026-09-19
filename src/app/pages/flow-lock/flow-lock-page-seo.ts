@@ -4,17 +4,17 @@ export const FLOW_LOCK_PAGE_SEO: RouteSeoData = {
   title: 'Lock Angular Forms Across HTTP Flows | ngx-request-lock',
   description:
     'Flow lock patterns in ngx-request-lock: shared requestId across multiple buttons and chained HTTP calls, with reference-counted unlocking.',
-  ogTitle: 'Flow Lock Pattern Examples — ngx-request-lock',
+  ogTitle: 'Flow Lock Pattern Examples - ngx-request-lock',
   ogDescription:
     'Explore complex multi-button coordination and chained HTTP request flows with reference-counted locking in Angular.',
-  twitterTitle: 'Flow Lock Pattern Examples — ngx-request-lock',
+  twitterTitle: 'Flow Lock Pattern Examples - ngx-request-lock',
   twitterDescription:
     'Explore complex multi-button coordination and chained HTTP request flows with reference-counted locking in Angular.',
   structuredData: [
     {
       '@context': 'https://schema.org',
       '@type': 'TechArticle',
-      headline: 'Flow Lock Examples — ngx-request-lock',
+      headline: 'Flow Lock Examples - ngx-request-lock',
       description:
         'Flow lock patterns in ngx-request-lock: shared requestId across multiple buttons and chained HTTP calls, with reference-counted unlocking.',
       url: 'https://ngx-request-lock-docs.netlify.app/flow-lock/',

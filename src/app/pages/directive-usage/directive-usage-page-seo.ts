@@ -4,17 +4,17 @@ export const DIRECTIVE_USAGE_PAGE_SEO: RouteSeoData = {
   title: 'Angular Button Loading State Directive | ngx-request-lock',
   description:
     '[ngxRequestLock] directive usage in Angular: disabling buttons during HTTP requests, pending state spinners, and custom loading animations.',
-  ogTitle: 'Directive Usage Guide — ngx-request-lock',
+  ogTitle: 'Directive Usage Guide - ngx-request-lock',
   ogDescription:
     'Complete guide to the [ngxRequestLock] directive: binding requestId to buttons, templates, inputs, and loading indicators.',
-  twitterTitle: 'Directive Usage Guide — ngx-request-lock',
+  twitterTitle: 'Directive Usage Guide - ngx-request-lock',
   twitterDescription:
     'Complete guide to the [ngxRequestLock] directive: binding requestId to buttons, templates, inputs, and loading indicators.',
   structuredData: [
     {
       '@context': 'https://schema.org',
       '@type': 'TechArticle',
-      headline: 'Directive Usage — ngx-request-lock',
+      headline: 'Directive Usage - ngx-request-lock',
       description:
         '[ngxRequestLock] directive usage in Angular: disabling buttons during HTTP requests, pending state spinners, and custom loading animations.',
       url: 'https://ngx-request-lock-docs.netlify.app/directive-usage/',

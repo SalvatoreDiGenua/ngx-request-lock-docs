@@ -1,13 +1,13 @@
 import { RouteSeoData } from '../../core/services/seo-router-service';
 
 export const HOME_PAGE_SEO: RouteSeoData = {
-  title: 'ngx-request-lock — Angular UI/HTTP Request Lifecycle Binding',
+  title: 'ngx-request-lock - Angular UI/HTTP Request Lifecycle Binding',
   description:
     'Angular library that binds UI flows to HTTP request lifecycles. One shared requestId locks buttons, forms and panels and unlocks them when requests settle.',
-  ogTitle: 'ngx-request-lock — Angular UI/HTTP Request Lifecycle Binding',
+  ogTitle: 'ngx-request-lock - Angular UI/HTTP Request Lifecycle Binding',
   ogDescription:
     'Declarative UI disabling and pending state management tied directly to Angular HTTP requests using Signals and reference counting.',
-  twitterTitle: 'ngx-request-lock — Angular UI/HTTP Request Lifecycle Binding',
+  twitterTitle: 'ngx-request-lock - Angular UI/HTTP Request Lifecycle Binding',
   twitterDescription:
     'Declarative UI disabling and pending state management tied directly to Angular HTTP requests using Signals and reference counting.',
   structuredData: {

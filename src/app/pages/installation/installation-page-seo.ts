@@ -4,17 +4,17 @@ export const INSTALLATION_PAGE_SEO: RouteSeoData = {
   title: 'Install and Set Up ngx-request-lock in Angular',
   description:
     'Install ngx-request-lock in an Angular app: package setup, provideRequestLock() registration, HTTP context wiring, and directive placement.',
-  ogTitle: 'Installation & Setup Guide — ngx-request-lock',
+  ogTitle: 'Installation & Setup Guide - ngx-request-lock',
   ogDescription:
     'Step-by-step guide to installing ngx-request-lock via npm/yarn/pnpm and configuring providers in Angular standalone applications.',
-  twitterTitle: 'Installation & Setup Guide — ngx-request-lock',
+  twitterTitle: 'Installation & Setup Guide - ngx-request-lock',
   twitterDescription:
     'Step-by-step guide to installing ngx-request-lock via npm/yarn/pnpm and configuring providers in Angular standalone applications.',
   structuredData: [
     {
       '@context': 'https://schema.org',
       '@type': 'TechArticle',
-      headline: 'Installation & Setup — ngx-request-lock',
+      headline: 'Installation & Setup - ngx-request-lock',
       description:
         'Install ngx-request-lock in an Angular app: package setup, provideRequestLock() registration, HTTP context wiring, and directive placement.',
       url: 'https://ngx-request-lock-docs.netlify.app/installation/',

@@ -4,17 +4,17 @@ export const ARCHITECTURE_PAGE_SEO: RouteSeoData = {
   title: 'Angular HTTP Interceptor Architecture | ngx-request-lock',
   description:
     'Architecture of ngx-request-lock: HttpContextToken, functional interceptor, reference-counted signal service, and RequestLockDirective.',
-  ogTitle: 'Architecture Overview — ngx-request-lock',
+  ogTitle: 'Architecture Overview - ngx-request-lock',
   ogDescription:
     'Deep dive into the internal design of ngx-request-lock: HttpContextTokens, interceptors, signal maps, and directive bindings.',
-  twitterTitle: 'Architecture Overview — ngx-request-lock',
+  twitterTitle: 'Architecture Overview - ngx-request-lock',
   twitterDescription:
     'Deep dive into the internal design of ngx-request-lock: HttpContextTokens, interceptors, signal maps, and directive bindings.',
   structuredData: [
     {
       '@context': 'https://schema.org',
       '@type': 'TechArticle',
-      headline: 'Architecture — ngx-request-lock',
+      headline: 'Architecture - ngx-request-lock',
       description:
         'Architecture of ngx-request-lock: HttpContextToken, functional interceptor, reference-counted signal service, and RequestLockDirective.',
       url: 'https://ngx-request-lock-docs.netlify.app/architecture/',
