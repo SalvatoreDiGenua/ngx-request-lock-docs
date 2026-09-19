@@ -1,10 +1,12 @@
+# Static files are always served as-is. These lines keep the SPA fallback
+# below from ever swallowing them.
 /sitemap.xml   /sitemap.xml   200
 /robots.txt    /robots.txt    200
+/llms.txt      /llms.txt      200
 
-/problem/           /problem           301
-/architecture/      /architecture      301
-/installation/      /installation      301
-/directive-usage/   /directive-usage   301
-/flow-lock/         /flow-lock         301
+# NOTE: no trailing-slash rules here on purpose.
+# SSG emits `<route>/index.html`, so Netlify already answers `/problem` with
+# a 301 to `/problem/`. Canonical URLs, sitemap and JSON-LD all use the
+# slash-terminated form to match.
 
 /*             /index.html    200

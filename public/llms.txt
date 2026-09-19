@@ -1,0 +1,22 @@
+# ngx-request-lock
+
+> Angular library that binds UI flows to HTTP request lifecycles. A shared `requestId` coordinates buttons, forms and panels across single or chained requests, unlocking them together when the flow settles, without manual `loading` flags. Requires Angular 22+, standalone APIs, functional HTTP interceptors and signals. MIT licensed.
+
+## Docs
+
+- [Home](https://ngx-request-lock-docs.netlify.app/): Overview, install command and entry points to the guides.
+- [Problem statement](https://ngx-request-lock-docs.netlify.app/problem/): Why unblocked UI causes duplicate HTTP requests and stale loading flags, and how a shared requestId fixes it.
+- [Architecture](https://ngx-request-lock-docs.netlify.app/architecture/): How the directive, HttpContext, interceptor and reference-counted signal service connect.
+- [Installation and setup](https://ngx-request-lock-docs.netlify.app/installation/): Add provideRequestLock() or register the interceptor manually.
+- [Directive usage](https://ngx-request-lock-docs.netlify.app/directive-usage/): Per-element patterns: basic, CRUD, pending state, custom directive.
+- [Flow lock examples](https://ngx-request-lock-docs.netlify.app/flow-lock/): One requestId coordinating a whole flow of chained requests.
+
+## Source and package
+
+- [npm package](https://www.npmjs.com/package/ngx-request-lock): Published library.
+- [GitHub repository](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs): Library source and this documentation site.
+- [Changelog](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/blob/main/CHANGELOG.md): Release notes.
+
+## Optional
+
+- [License (MIT)](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/blob/main/LICENSE)

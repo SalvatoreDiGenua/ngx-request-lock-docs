@@ -4,9 +4,9 @@ import { filter } from 'rxjs/operators';
 import { SeoService } from './seo-service';
 
 export interface RouteSeoData {
-  title?: string;
+  /** Document <title>. Single source of truth: routes reuse it. */
+  title: string;
   description?: string;
-  keywords?: string | string[];
   ogTitle?: string;
   ogDescription?: string;
   ogImage?: string;
@@ -15,7 +15,7 @@ export interface RouteSeoData {
   twitterDescription?: string;
   twitterImage?: string;
   twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player';
-  structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 @Service()
@@ -57,10 +57,6 @@ export class SeoRouterService {
 
     this.seoService.setMetaDescription(description);
 
-    if (seoData?.keywords) {
-      this.seoService.setKeywords(seoData.keywords);
-    }
-
     this.seoService.setOpenGraph({
       title: seoData?.ogTitle ?? pageTitle,
       description: seoData?.ogDescription ?? description,
@@ -82,20 +78,22 @@ export class SeoRouterService {
 
   /**
    * Normalizes the current router URL into the canonical path form used
-   * across sitemap, structured data and internal links: root is "/",
-   * every other route has no trailing slash and no query/fragment.
+   * across sitemap, structured data and <link rel="canonical">: every path
+   * ends with a trailing slash ("/", "/problem/", ...) and carries no
+   * query string or fragment.
+   *
+   * The trailing slash is deliberate: SSG emits `problem/index.html`, and
+   * Netlify answers `/problem` with a 301 to `/problem/`. Declaring the
+   * slash-terminated URL as canonical keeps HTML, sitemap and hosting
+   * behaviour consistent.
    */
   private buildCanonicalPath(): string {
     const urlTree = this.router.parseUrl(this.router.url);
     urlTree.queryParams = {};
     urlTree.fragment = null;
 
-    const path = urlTree.toString();
+    const path = urlTree.toString().replace(/\/+$/, '');
 
-    if (path === '' || path === '/') {
-      return '/';
-    }
-
-    return path.endsWith('/') ? path.slice(0, -1) : path;
+    return `${path}/`;
   }
 }

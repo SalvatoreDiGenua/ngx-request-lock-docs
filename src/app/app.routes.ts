@@ -11,7 +11,7 @@ export const routes: Routes = [
     path: '',
     pathMatch: 'full',
     loadComponent: () => import('./pages/home/home-page'),
-    title: 'Home | ngx-request-lock',
+    title: HOME_PAGE_SEO.title,
     data: {
       seo: HOME_PAGE_SEO,
     },
@@ -19,7 +19,7 @@ export const routes: Routes = [
   {
     path: 'problem',
     loadComponent: () => import('./pages/problem/problem-page'),
-    title: 'Problem Statement | ngx-request-lock',
+    title: PROBLEM_PAGE_SEO.title,
     data: {
       seo: PROBLEM_PAGE_SEO,
     },
@@ -27,7 +27,7 @@ export const routes: Routes = [
   {
     path: 'architecture',
     loadComponent: () => import('./pages/architecture/architecture-page'),
-    title: 'Architecture | ngx-request-lock',
+    title: ARCHITECTURE_PAGE_SEO.title,
     data: {
       seo: ARCHITECTURE_PAGE_SEO,
     },
@@ -35,7 +35,7 @@ export const routes: Routes = [
   {
     path: 'installation',
     loadComponent: () => import('./pages/installation/installation-page'),
-    title: 'Installation and Setup | ngx-request-lock',
+    title: INSTALLATION_PAGE_SEO.title,
     data: {
       seo: INSTALLATION_PAGE_SEO,
     },
@@ -43,7 +43,7 @@ export const routes: Routes = [
   {
     path: 'directive-usage',
     loadComponent: () => import('./pages/directive-usage/directive-usage-page'),
-    title: 'Directive Usage | ngx-request-lock',
+    title: DIRECTIVE_USAGE_PAGE_SEO.title,
     data: {
       seo: DIRECTIVE_USAGE_PAGE_SEO,
     },
@@ -51,7 +51,7 @@ export const routes: Routes = [
   {
     path: 'flow-lock',
     loadComponent: () => import('./pages/flow-lock/flow-lock-page'),
-    title: 'Flow Lock Examples | ngx-request-lock',
+    title: FLOW_LOCK_PAGE_SEO.title,
     data: {
       seo: FLOW_LOCK_PAGE_SEO,
     },

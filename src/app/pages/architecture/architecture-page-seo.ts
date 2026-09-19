@@ -1,17 +1,9 @@
 import { RouteSeoData } from '../../core/services/seo-router-service';
 
 export const ARCHITECTURE_PAGE_SEO: RouteSeoData = {
-  title: 'Architecture | ngx-request-lock',
+  title: 'Angular HTTP Interceptor Architecture | ngx-request-lock',
   description:
     'Architecture of ngx-request-lock: HttpContextToken, functional interceptor, reference-counted signal service, and RequestLockDirective.',
-  keywords: [
-    'angular architecture',
-    'http context token',
-    'functional interceptor',
-    'reference counting',
-    'signals service',
-    'request-lock architecture',
-  ],
   ogTitle: 'Architecture Overview — ngx-request-lock',
   ogDescription:
     'Deep dive into the internal design of ngx-request-lock: HttpContextTokens, interceptors, signal maps, and directive bindings.',
@@ -25,7 +17,7 @@ export const ARCHITECTURE_PAGE_SEO: RouteSeoData = {
       headline: 'Architecture — ngx-request-lock',
       description:
         'Architecture of ngx-request-lock: HttpContextToken, functional interceptor, reference-counted signal service, and RequestLockDirective.',
-      url: 'https://ngx-request-lock-docs.netlify.app/architecture',
+      url: 'https://ngx-request-lock-docs.netlify.app/architecture/',
       author: {
         '@type': 'Person',
         name: 'Salvatore Di Genua',
@@ -51,7 +43,7 @@ export const ARCHITECTURE_PAGE_SEO: RouteSeoData = {
           '@type': 'ListItem',
           position: 2,
           name: 'Architecture',
-          item: 'https://ngx-request-lock-docs.netlify.app/architecture',
+          item: 'https://ngx-request-lock-docs.netlify.app/architecture/',
         },
       ],
     },
