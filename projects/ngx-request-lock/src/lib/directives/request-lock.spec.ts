@@ -1,7 +1,18 @@
-import { Component, viewChild } from '@angular/core';
+import {
+  HttpClient,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
+import { Component, inject, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RequestLockDirective } from './request-lock';
+import { RequestLockDirective, RequestLockMouseEvent } from './request-lock';
 import { RequestLockService } from '../core/services/request-lock-service';
+import { requestLockInterceptor } from '../core/interceptors/request-lock-interceptor';
+import { REQUEST_LOCK_ID } from '../core/tokens/request-lock-token';
 
 @Component({
   imports: [RequestLockDirective],
@@ -54,6 +65,27 @@ class NoButtonHostComponent {
 })
 class UnboundHostComponent {
   public readonly lock = viewChild.required(RequestLockDirective);
+}
+
+@Component({
+  imports: [RequestLockDirective],
+  template: `
+    <button
+      ngxRequestLock
+      [requestId]="'event-flow'"
+      (click)="save($event)"
+      type="button"
+    >
+      Save
+    </button>
+  `,
+})
+class NativeEventHostComponent {
+  private readonly http = inject(HttpClient);
+
+  public save(event: RequestLockMouseEvent): void {
+    this.http.get('/api/ping', { context: event.context }).subscribe();
+  }
 }
 
 function detect(fixture: ComponentFixture<unknown>): void {
@@ -202,5 +234,77 @@ describe('RequestLockDirective', () => {
     const id = fixture.componentInstance.lock().requestId();
     expect(typeof id).toBe('string');
     expect(id.length).toBeGreaterThan(0);
+  });
+});
+
+describe('RequestLockDirective $event', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(withInterceptors([requestLockInterceptor])),
+        provideHttpClientTesting(),
+      ],
+    });
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('carries a context that keeps the button disabled until the request settles', () => {
+    const fixture = TestBed.createComponent(NativeEventHostComponent);
+    detect(fixture);
+
+    const httpMock = TestBed.inject(HttpTestingController);
+    const button = fixture.nativeElement.querySelector(
+      'button',
+    ) as HTMLButtonElement;
+
+    button.click();
+    detect(fixture);
+    expect(button.hasAttribute('disabled')).toBe(true);
+
+    const req = httpMock.expectOne('/api/ping');
+    expect(req.request.context.get(REQUEST_LOCK_ID)).toBe('event-flow');
+
+    vi.advanceTimersByTime(500);
+    detect(fixture);
+    expect(button.hasAttribute('disabled')).toBe(true);
+
+    req.flush({});
+    detect(fixture);
+    expect(button.hasAttribute('disabled')).toBe(false);
+
+    httpMock.verify();
+  });
+
+  it('tags a click dispatched while locked, so the duplicate stays in the flow', () => {
+    const fixture = TestBed.createComponent(NativeEventHostComponent);
+    detect(fixture);
+
+    const httpMock = TestBed.inject(HttpTestingController);
+    const button = fixture.nativeElement.querySelector(
+      'button',
+    ) as HTMLButtonElement;
+
+    button.click();
+    button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    detect(fixture);
+
+    const requests = httpMock.match('/api/ping');
+    expect(requests.map((r) => r.request.context.get(REQUEST_LOCK_ID))).toEqual(
+      ['event-flow', 'event-flow'],
+    );
+
+    requests[0].flush({});
+    detect(fixture);
+    expect(button.hasAttribute('disabled')).toBe(true);
+
+    requests[1].flush({});
+    detect(fixture);
+    expect(button.hasAttribute('disabled')).toBe(false);
+
+    httpMock.verify();
   });
 });
