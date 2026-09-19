@@ -27,6 +27,8 @@
     "links": "Link",
     "sourceCode": "Codice sorgente",
     "license": "Licenza",
+    "changelog": "Changelog",
+    "author": "Autore",
     "builtWith": "Realizzato con Angular e Tailwind CSS"
   },
   "common": {
