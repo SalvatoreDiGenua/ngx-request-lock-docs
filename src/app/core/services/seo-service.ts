@@ -34,11 +34,6 @@ export class SeoService {
     );
   }
 
-  setKeywords(keywords: string | string[]): void {
-    const content = Array.isArray(keywords) ? keywords.join(', ') : keywords;
-    this.meta.updateTag({ name: 'keywords', content }, 'name="keywords"');
-  }
-
   setOpenGraph(og: OpenGraphMeta): void {
     if (og.title) {
       this.meta.updateTag(
