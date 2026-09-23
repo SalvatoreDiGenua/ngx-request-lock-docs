@@ -18,6 +18,7 @@ UI locking bound to the lifecycle of your HTTP requests, for Angular.
 - [Setup](#setup)
 - [Usage](#usage)
   - [Basic: one button, one request](#basic-one-button-one-request)
+  - [Without a template reference: `$event`](#without-a-template-reference-event)
   - [Shared flow: many elements, many requests](#shared-flow-many-elements-many-requests)
   - [Pending state: swap label, show spinner](#pending-state-swap-label-show-spinner)
 - [Public API](#public-api)
@@ -119,6 +120,28 @@ The button is disabled from the click until the request settles (success or erro
 - **500 ms** if no pending state has been observed by then.
 - **10 s** unconditionally.
 
+### Without a template reference: `$event`
+
+The directive attaches `requestId` and a ready `context` to the native click event, so the same example can drop the `#lock` reference:
+
+```ts
+import { RequestLockDirective, RequestLockMouseEvent } from 'ngx-request-lock';
+
+@Component({
+  imports: [RequestLockDirective],
+  template: `<button ngxRequestLock (click)="ping($event)">Ping</button>`,
+})
+export class Ping {
+  private readonly http = inject(HttpClient);
+
+  protected ping(event: RequestLockMouseEvent): void {
+    this.http.get('/api/ping', { context: event.context }).subscribe();
+  }
+}
+```
+
+This works for a `(click)` bound on the element that carries the directive. A handler on a descendant runs before the directive sees the event, so a wrapper host still needs `#lock="requestLock"`.
+
 ### Shared flow: many elements, many requests
 
 Bind the same `requestId` to every directive and every request that participates in the same flow:
@@ -180,6 +203,7 @@ Use it to swap a button label, render a spinner, dim a panel, or set `[attr.aria
 | `requestLockInterceptor`       | `HttpInterceptorFn`                | Reads the id from the context and drives the service.               |
 | `RequestLockService`           | Root-provided service              | Reference-counted pending state, `isPending(id): Signal<boolean>`.  |
 | `RequestLockDirective`         | Standalone directive               | Selector `[ngxRequestLock]`, exportAs `requestLock`.                |
+| `RequestLockMouseEvent`        | `interface`                        | Native click event with `requestId` and `context` attached.         |
 | `provideRequestLock()`         | `() => EnvironmentProviders`       | Registers `provideHttpClient(withInterceptors([...]))` in one call. |
 
 ## What this library is not

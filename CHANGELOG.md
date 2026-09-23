@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `RequestLockDirective` attaches `requestId` and a ready `HttpContext` to the
+  native click event, typed as `RequestLockMouseEvent`, so
+  `(click)="save($event)"` needs no template reference.
+
 ## [1.0.0] - 2026-07-27
 
 Initial public release.
