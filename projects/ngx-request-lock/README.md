@@ -17,6 +17,7 @@ UI locking bound to the lifecycle of your HTTP requests, for Angular.
 - [Installation](#installation)
 - [Setup](#setup)
 - [Usage](#usage)
+  - [Native click event: `$event`](#native-click-event-event)
   - [Basic: one button, one request](#basic-one-button-one-request)
   - [Without a template reference: `$event`](#without-a-template-reference-event)
   - [Shared flow: many elements, many requests](#shared-flow-many-elements-many-requests)
@@ -82,6 +83,42 @@ providers: [
 ```
 
 ## Usage
+
+### Native click event: `$event`
+
+The directive attaches the generated `requestId` and a ready `HttpContext` to
+the native click event. Type the handler as `RequestLockMouseEvent` and pass
+`event.context` directly to `HttpClient`:
+
+```ts
+import { Component, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import {
+  RequestLockDirective,
+  RequestLockMouseEvent,
+} from 'ngx-request-lock';
+
+@Component({
+  selector: 'app-ping',
+  imports: [RequestLockDirective],
+  template: `
+    <button ngxRequestLock (click)="ping($event)">
+      Ping
+    </button>
+  `,
+})
+export class Ping {
+  private readonly http = inject(HttpClient);
+
+  protected ping(event: RequestLockMouseEvent): void {
+    this.http.get('/api/ping', { context: event.context }).subscribe();
+  }
+}
+```
+
+This works for a `(click)` binding on the element that carries the directive.
+For a handler on a descendant or wrapper host, use `#lock="requestLock"` and
+`lock.requestId()` instead.
 
 ### Basic: one button, one request
 

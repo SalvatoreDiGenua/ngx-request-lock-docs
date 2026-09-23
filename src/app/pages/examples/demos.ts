@@ -5,9 +5,9 @@
  * call against https://jsonplaceholder.typicode.com (a public fake REST API
  * used for docs and testing). Each demo follows the same three-piece pattern:
  *
- *   1. `ngxRequestLock #lock="requestLock"` on the button.
- *   2. `lock.requestId()` passed to `createRequestLockContext(id)` on click.
- *   3. `HttpClient` with `{ context }` on a real endpoint.
+ *   1. `ngxRequestLock` on the button.
+ *   2. The native click event passed to the handler.
+ *   3. `HttpClient` with the event's ready `{ context }` on a real endpoint.
  *
  * The library disables the button while the request remains pending in the
  * interceptor. When the request settles (success, error, or safety timeout),
@@ -19,6 +19,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   RequestLockDirective,
+  RequestLockMouseEvent,
   RequestLockService,
   createRequestLockContext,
 } from 'ngx-request-lock';
@@ -47,7 +48,45 @@ const BTN_DANGER =
   'disabled:cursor-not-allowed disabled:opacity-60';
 
 /* --------------------------------------------------------------------------
- * 1. Basic (GET)
+ * 1. Native click event (GET)
+ * ------------------------------------------------------------------------ */
+
+@Component({
+  selector: 'ngx-native-click-demo',
+  imports: [RequestLockDirective, DemoStatusPillComponent],
+  template: `
+    <div class="flex flex-wrap items-center">
+      <button
+        ngxRequestLock
+        type="button"
+        [class]="btn"
+        (click)="ping($event)"
+      >
+        Ping with $event
+      </button>
+      <ngx-demo-status-pill [status]="status()" />
+    </div>
+  `,
+})
+export class NativeClickDemo {
+  protected readonly btn = BTN;
+  protected readonly status = signal<DemoStatus>(IDLE);
+  private readonly http = inject(HttpClient);
+
+  protected ping(event: RequestLockMouseEvent): void {
+    this.status.set(IDLE);
+    this.http
+      .get<{ id: number }>(`${API}/posts/1`, { context: event.context })
+      .subscribe({
+        next: (post) =>
+          this.status.set({ kind: 'ok', text: `Loaded post #${post.id}` }),
+        error: () => this.status.set({ kind: 'error', text: 'Request failed' }),
+      });
+  }
+}
+
+/* --------------------------------------------------------------------------
+ * 2. Basic (GET)
  * ------------------------------------------------------------------------ */
 
 @Component({

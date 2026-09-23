@@ -5,13 +5,16 @@ All notable changes to `ngx-request-lock` are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.2.0] - 2026-09-23
 
 ### Added
 
 - `RequestLockDirective` attaches `requestId` and a ready `HttpContext` to the
   native click event, typed as `RequestLockMouseEvent`, so
   `(click)="save($event)"` needs no template reference.
+- Documentation examples in the Installation and Architecture pages now show
+  the native click event flow, while retaining `createRequestLockContext(id)`
+  for manual request context creation.
 
 ## [1.0.0] - 2026-07-27
 
@@ -45,5 +48,5 @@ Initial public release.
 - Distributed as Angular Package Format, tree-shakable, `sideEffects: false`.
 - Zero CSS shipped: the library stays styling-agnostic.
 
-[Unreleased]: https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/compare/v1.0.0...HEAD
+[1.2.0]: https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/releases/tag/v1.2.0
 [1.0.0]: https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/releases/tag/v1.0.0

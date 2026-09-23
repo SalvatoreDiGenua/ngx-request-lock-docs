@@ -5,7 +5,7 @@ import { DiagramBlockComponent } from '../../shared/ui/diagram-block/diagram-blo
 import { SectionHeadingComponent } from '../../shared/ui/section-heading/section-heading';
 
 const DIAGRAM = `  (user action, one flow)
-             │
+             │ native click event
              ▼
 ┌────────────────────────────────┐         ┌───────────────────────┐
 │ N × RequestLockDirective       │         │  RequestLockService   │
@@ -13,7 +13,8 @@ const DIAGRAM = `  (user action, one flow)
 │   (buttons, forms, panels...)  │         │  start(id) / end(id)  │
 └──────────────┬─────────────────┘         └─────────▲─────────────┘
                │                                     │
-               ▼                                     │ start / end
+               │ requestId + HttpContext              │ start / end
+               ▼                                     │
      M × HttpClient requests                         │
      each with HttpContext:                          │
        REQUEST_LOCK_ID = flowId                      │

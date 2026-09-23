@@ -9,9 +9,30 @@ import {
   DeleteDemo,
   FormDemo,
   LoadingCustomDemo,
+  NativeClickDemo,
   PendingStateDemo,
   SaveDemo,
 } from '../examples/demos';
+
+const NATIVE_CLICK_CODE = `import { Component, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import {
+  RequestLockDirective,
+  RequestLockMouseEvent,
+} from 'ngx-request-lock';
+
+@Component({
+  selector: 'app-ping',
+  imports: [RequestLockDirective],
+  template: \`<button ngxRequestLock (click)="ping(\$event)">Ping</button>\`,
+})
+export class Ping {
+  private readonly http = inject(HttpClient);
+
+  protected ping(event: RequestLockMouseEvent): void {
+    this.http.get('/api/ping', { context: event.context }).subscribe();
+  }
+}`;
 
 const BASIC_CODE = `import { Component, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -299,6 +320,7 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
     CodeExampleComponent,
     LinkCardComponent,
     SectionHeadingComponent,
+    NativeClickDemo,
     BasicDemo,
     SaveDemo,
     DeleteDemo,
@@ -320,6 +342,38 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
       <ngx-callout variant="tip">
         <p [innerHTML]="t('shared.tipConfig')"></p>
       </ngx-callout>
+
+      <ngx-section-heading>
+        {{ t('directiveUsage.nativeClick.title') }}
+      </ngx-section-heading>
+
+      <p
+        class="text-slate-700 dark:text-slate-300"
+        [innerHTML]="t('directiveUsage.nativeClick.text')"
+      ></p>
+
+      <ngx-code-example
+        [code]="nativeClickCode"
+        language="typescript"
+        title="RequestLockMouseEvent"
+      />
+
+      <section
+        class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        [attr.aria-label]="t('shared.liveDemoAriaLabel')"
+      >
+        <p
+          class="mb-3 text-xs font-semibold uppercase tracking-wide text-slate-600 dark:text-slate-400"
+        >
+          {{ t('shared.liveDemo') }}
+        </p>
+        <ngx-native-click-demo />
+      </section>
+
+      <ul
+        class="list-disc space-y-2 pl-6 text-slate-700 dark:text-slate-300"
+        [innerHTML]="t('directiveUsage.nativeClick.bullets')"
+      ></ul>
 
       <ngx-section-heading>
         {{ t('directiveUsage.basic.title') }}
@@ -518,6 +572,7 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
 })
 export default class DirectiveUsagePage {
   protected readonly title = translateSignal('nav.directiveUsage');
+  protected readonly nativeClickCode = NATIVE_CLICK_CODE;
   protected readonly basicCode = BASIC_CODE;
   protected readonly saveCode = SAVE_CODE;
   protected readonly deleteCode = DELETE_CODE;

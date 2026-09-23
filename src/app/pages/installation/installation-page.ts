@@ -49,14 +49,14 @@ const DIRECTIVE_CODE = `import { Component, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
   RequestLockDirective,
-  createRequestLockContext,
+  RequestLockMouseEvent,
 } from 'ngx-request-lock';
 
 @Component({
   selector: 'ngx-save-button',
   imports: [RequestLockDirective],
   template: \`
-    <button ngxRequestLock #lock="requestLock" (click)="save(lock.requestId())">
+    <button ngxRequestLock (click)="save($event)">
       Save
     </button>
   \`,
@@ -64,9 +64,9 @@ import {
 export class SaveButton {
   private readonly http = inject(HttpClient);
 
-  protected save(id: string): void {
+  protected save(event: RequestLockMouseEvent): void {
     this.http
-      .post('/api/users', {}, { context: createRequestLockContext(id) })
+      .post('/api/users', {}, { context: event.context })
       .subscribe();
   }
 }`;
@@ -88,7 +88,7 @@ const FULL_COMPONENT_CODE = `import { Component, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {
   RequestLockDirective,
-  createRequestLockContext,
+  RequestLockMouseEvent,
 } from 'ngx-request-lock';
 
 @Component({
@@ -97,9 +97,8 @@ import {
   template: \`
     <button
       ngxRequestLock
-      #lock="requestLock"
       type="button"
-      (click)="ping(lock.requestId())"
+      (click)="ping($event)"
     >
       Ping
     </button>
@@ -108,9 +107,9 @@ import {
 export class Ping {
   private readonly http = inject(HttpClient);
 
-  protected ping(id: string): void {
+  protected ping(event: RequestLockMouseEvent): void {
     this.http
-      .get('/api/ping', { context: createRequestLockContext(id) })
+      .get('/api/ping', { context: event.context })
       .subscribe();
   }
 }`;
