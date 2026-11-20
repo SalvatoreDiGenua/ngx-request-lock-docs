@@ -45,8 +45,9 @@ export class SeoRouterService {
       route = route.firstChild;
     }
 
-    const canonicalPath = this.buildCanonicalPath();
-    this.seoService.setCanonicalUrl(canonicalPath);
+    const noIndex = route.snapshot.data['noIndex'] === true;
+    this.seoService.setIndexable(!noIndex);
+    this.seoService.setCanonicalUrl(noIndex ? null : this.buildCanonicalPath());
 
     const seoData = route.snapshot.data['seo'] as RouteSeoData | undefined;
     const pageTitle =
@@ -71,9 +72,7 @@ export class SeoRouterService {
       image: seoData?.twitterImage,
     });
 
-    if (seoData?.structuredData) {
-      this.seoService.setStructuredData(seoData.structuredData);
-    }
+    this.seoService.setStructuredData(seoData?.structuredData ?? []);
   }
 
   /**

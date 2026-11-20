@@ -73,6 +73,7 @@ export async function highlightToHtml(
     return await codeToHtml(code, {
       lang: language,
       theme: 'github-dark',
+      tabindex: 0,
     });
   } catch {
     return null;

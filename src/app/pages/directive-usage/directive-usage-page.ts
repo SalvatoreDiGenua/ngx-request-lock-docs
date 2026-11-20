@@ -24,7 +24,7 @@ import {
 @Component({
   selector: 'app-ping',
   imports: [RequestLockDirective],
-  template: \`<button ngxRequestLock (click)="ping(\$event)">Ping</button>\`,
+  template: \`<button ngxRequestLock (click)="ping($event)">Ping</button>\`,
 })
 export class Ping {
   private readonly http = inject(HttpClient);
@@ -360,6 +360,7 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
 
       <section
         class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        role="group"
         [attr.aria-label]="t('shared.liveDemoAriaLabel')"
       >
         <p
@@ -388,6 +389,7 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
 
       <section
         class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        role="group"
         [attr.aria-label]="t('shared.liveDemoAriaLabel')"
       >
         <p
@@ -419,6 +421,7 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
 
       <section
         class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        role="group"
         [attr.aria-label]="t('shared.liveDemoAriaLabel')"
       >
         <p
@@ -437,6 +440,7 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
 
       <section
         class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        role="group"
         [attr.aria-label]="t('shared.liveDemoAriaLabel')"
       >
         <p
@@ -455,6 +459,7 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
 
       <section
         class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        role="group"
         [attr.aria-label]="t('shared.liveDemoAriaLabel')"
       >
         <p
@@ -480,6 +485,7 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
 
       <section
         class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        role="group"
         [attr.aria-label]="t('shared.liveDemoAriaLabel')"
       >
         <p
@@ -542,6 +548,7 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
 
       <section
         class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        role="group"
         [attr.aria-label]="t('shared.liveDemoAriaLabel')"
       >
         <p
@@ -571,7 +578,7 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
   `,
 })
 export default class DirectiveUsagePage {
-  protected readonly title = translateSignal('nav.directiveUsage');
+  protected readonly title = translateSignal('directiveUsage.heading');
   protected readonly nativeClickCode = NATIVE_CLICK_CODE;
   protected readonly basicCode = BASIC_CODE;
   protected readonly saveCode = SAVE_CODE;

@@ -1,4 +1,9 @@
 {
+  "notFound": {
+    "title": "Pagina non trovata",
+    "description": "La pagina potrebbe essere stata spostata o rimossa.",
+    "home": "Torna alla home della documentazione"
+  },
   "nav": {
     "home": "Home",
     "problem": "Problema",
@@ -12,7 +17,7 @@
   "header": {
     "title": "ngx-request-lock",
     "subtitle": "Blocco della UI legato al ciclo di vita HTTP",
-    "languageSwitch": "Cambia lingua",
+    "languageSwitch": "EN: passa alla versione inglese",
     "skipToContent": "Vai al contenuto",
     "openNav": "Apri navigazione",
     "closeNav": "Chiudi navigazione",
@@ -78,6 +83,7 @@
     }
   },
   "problem": {
+    "heading": "Prevenire le richieste HTTP duplicate in Angular",
     "intro": "I bug lato client derivano spesso dal disallineamento tra la UI e le chiamate HTTP. Se la UI resta attiva durante una richiesta, l'utente può fare clic ripetuti, premere pulsanti correlati o modificare form in corso di caricamento, inviando richieste duplicate al server e compromettendo lo stato dell'applicazione",
     "symptoms": {
       "title": "Sintomi",
@@ -97,6 +103,7 @@
     }
   },
   "architecture": {
+    "heading": "Come funziona il blocco delle richieste HTTP in Angular",
     "intro": "La libreria utilizza quattro elementi basati su primitive native Angular: un <code class=\"font-mono text-sm\">HttpContextToken</code>, un interceptor funzionale <code class=\"font-mono text-sm\">HttpInterceptorFn</code>, un servizio basato su signal e una direttiva. Il coordinamento avviene tramite un <code class=\"font-mono text-sm\">requestId</code> condiviso che collega elementi UI e richieste HTTP senza richiedere state manager esterni o RxJS nel codice utente",
     "buildingBlocks": {
       "title": "Componenti",
@@ -177,7 +184,8 @@
     "liveDemoAriaLabel": "Demo interattiva"
   },
   "directiveUsage": {
-    "intro": "Uso di <code class=\"font-mono text-sm\">RequestLockDirective</code> per bloccare singoli elementi interattivi. Ogni istanza genera un <code class=\"font-mono text-sm\">requestId</code>, associa la richiesta HTTP tramite <code class=\"font-mono text-sm\">createRequestLockContext(id)</code> e riabilita l'elemento al completamento della chiamata. Per gestire flussi complessi con più elementi o chiamate, consultare gli <a class=\"underline\" href=\"/flow-lock\">esempi di flow lock</a>",
+    "heading": "Disabilitare i pulsanti Angular durante le richieste HTTP",
+    "intro": "Uso di <code class=\"font-mono text-sm\">RequestLockDirective</code> per bloccare singoli elementi interattivi. Ogni istanza genera un <code class=\"font-mono text-sm\">requestId</code>, associa la richiesta HTTP tramite <code class=\"font-mono text-sm\">createRequestLockContext(id)</code> e riabilita l'elemento al completamento della chiamata. Per gestire flussi complessi con più elementi o chiamate, consultare gli <a class=\"underline\" href=\"/flow-lock/\">esempi di flow lock</a>",
     "nativeClick": {
       "title": "Passare il contesto della richiesta tramite $event",
       "text": "La direttiva arricchisce l'evento click nativo con il <code class=\"font-mono text-sm\">requestId</code> generato e un <code class=\"font-mono text-sm\">HttpContext</code> pronto all'uso, così il gestore non richiede né un riferimento nel template né la creazione manuale del contesto",
@@ -213,7 +221,8 @@
     }
   },
   "flowLock": {
-    "intro": "Un <code class=\"font-mono text-sm\">requestId</code> può essere associato a più elementi UI e a successive chiamate HTTP per bloccarli e sbloccarli in modo coordinato. Il conteggio dei riferimenti in <code class=\"font-mono text-sm\">RequestLockService</code> garantisce che il blocco persista fino al termine di <em>tutte</em> le richieste del flusso. Per il caso con singolo elemento, consultare la sezione <a class=\"underline\" href=\"/directive-usage\">Uso della direttiva</a>",
+    "heading": "Bloccare i form Angular durante richieste HTTP concatenate",
+    "intro": "Un <code class=\"font-mono text-sm\">requestId</code> può essere associato a più elementi UI e a successive chiamate HTTP per bloccarli e sbloccarli in modo coordinato. Il conteggio dei riferimenti in <code class=\"font-mono text-sm\">RequestLockService</code> garantisce che il blocco persista fino al termine di <em>tutte</em> le richieste del flusso. Per il caso con singolo elemento, consultare la sezione <a class=\"underline\" href=\"/directive-usage/\">Uso della direttiva</a>",
     "sharedFlow": {
       "title": "Flow lock: requestId condiviso su una pagina",
       "text": "Associare lo stesso ID all'azione principale, alle azioni secondarie e alle eventuali chiamate di aggiornamento per sincronizzarne lo stato disabilitato",

@@ -56,6 +56,11 @@ export const routes: Routes = [
       seo: FLOW_LOCK_PAGE_SEO,
     },
   },
-  { path: 'examples', redirectTo: 'directive-usage', pathMatch: 'full' },
-  { path: '**', redirectTo: '' },
+  { path: 'examples', redirectTo: 'directive-usage/', pathMatch: 'full' },
+  {
+    path: '**',
+    loadComponent: () => import('./pages/not-found/not-found-page'),
+    title: 'Page not found | ngx-request-lock',
+    data: { noIndex: true },
+  },
 ];

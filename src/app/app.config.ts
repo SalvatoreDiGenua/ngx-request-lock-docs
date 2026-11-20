@@ -19,7 +19,11 @@ import { routes } from './app.routes';
 import { TranslocoHttpLoader } from './core/i18n/transloco-loader';
 import { provideClientHydration } from '@angular/platform-browser';
 import { SeoRouterService } from './core/services/seo-router-service';
-import { isPlatformBrowser } from '@angular/common';
+import {
+  isPlatformBrowser,
+  LocationStrategy,
+  TrailingSlashPathLocationStrategy,
+} from '@angular/common';
 
 class NoopStorage implements Storage {
   length = 0;
@@ -43,6 +47,7 @@ class NoopStorage implements Storage {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    { provide: LocationStrategy, useClass: TrailingSlashPathLocationStrategy },
     provideRouter(
       routes,
       withInMemoryScrolling({

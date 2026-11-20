@@ -36,14 +36,14 @@ const IDLE: DemoStatus = { kind: 'idle', text: '' };
  * ------------------------------------------------------------------------ */
 
 const BTN =
-  'inline-flex items-center gap-2 rounded-md bg-sky-600 px-4 py-2 text-sm font-semibold text-white shadow-sm ' +
-  'hover:bg-sky-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 ' +
+  'inline-flex items-center gap-2 rounded-md bg-sky-700 px-4 py-2 text-sm font-semibold text-white shadow-sm ' +
+  'hover:bg-sky-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 ' +
   'focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900 ' +
   'disabled:cursor-not-allowed disabled:opacity-60';
 
 const BTN_DANGER =
-  'inline-flex items-center gap-2 rounded-md bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm ' +
-  'hover:bg-rose-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 ' +
+  'inline-flex items-center gap-2 rounded-md bg-rose-700 px-4 py-2 text-sm font-semibold text-white shadow-sm ' +
+  'hover:bg-rose-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 ' +
   'focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900 ' +
   'disabled:cursor-not-allowed disabled:opacity-60';
 

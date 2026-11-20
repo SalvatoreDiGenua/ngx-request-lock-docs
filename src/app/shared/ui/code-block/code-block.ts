@@ -60,6 +60,11 @@ import { highlightToHtml, normalizeLanguage } from './shiki-highlighter';
         background-color: transparent !important;
       }
 
+      :host ::ng-deep pre.shiki:focus-visible {
+        outline: 2px solid #38bdf8;
+        outline-offset: -2px;
+      }
+
       /*
        * Line numbers, applied identically to Shiki's highlighted output
        * (each line already wrapped in <span class="line">) and to the
@@ -99,7 +104,7 @@ import { highlightToHtml, normalizeLanguage } from './shiki-highlighter';
           <button
             type="button"
             class="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-sans font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 cursor-pointer"
-            [attr.aria-label]="'common.copyAriaLabel' | transloco"
+            [attr.aria-label]="(copied() ? 'common.copied' : 'common.copyAriaLabel') | transloco"
             (click)="copy()"
           >
             @if (copied()) {
@@ -145,7 +150,8 @@ import { highlightToHtml, normalizeLanguage } from './shiki-highlighter';
         <div [class.line-numbers]="lineNumbers()" [innerHTML]="html"></div>
       } @else {
         <pre
-          class="overflow-x-auto px-4 py-4 text-sm leading-relaxed"
+          tabindex="0"
+          class="overflow-x-auto px-4 py-4 text-sm leading-relaxed focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sky-400"
           [class.line-numbers]="lineNumbers()"
         >
           <code>

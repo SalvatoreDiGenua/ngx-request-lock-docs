@@ -27,6 +27,16 @@ export class SeoService {
   private readonly document = inject(DOCUMENT);
   private readonly meta = inject(Meta);
 
+  setIndexable(indexable: boolean): void {
+    this.meta.updateTag(
+      {
+        name: 'robots',
+        content: indexable ? 'index, follow' : 'noindex, follow',
+      },
+      'name="robots"',
+    );
+  }
+
   setMetaDescription(description: string): void {
     this.meta.updateTag(
       { name: 'description', content: description },
@@ -127,13 +137,19 @@ export class SeoService {
    * route other than the home page, a trailing slash too
    * (e.g. "/", "/installation/", "/directive-usage/"),
    * to match the physical files produced by SSG and the sitemap entries.
+   * A null path removes both tags from a page excluded from indexing.
    */
-  setCanonicalUrl(path: string): void {
-    const url = `${SITE_ORIGIN}${path}`;
-
+  setCanonicalUrl(path: string | null): void {
     let link: HTMLLinkElement | null = this.document.head.querySelector(
       'link[rel="canonical"]',
     );
+    if (path === null) {
+      link?.remove();
+      this.meta.removeTag('property="og:url"');
+      return;
+    }
+
+    const url = `${SITE_ORIGIN}${path}`;
 
     if (!link) {
       link = this.document.createElement('link');

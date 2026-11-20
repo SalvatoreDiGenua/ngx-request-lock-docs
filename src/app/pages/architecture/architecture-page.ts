@@ -88,6 +88,6 @@ const DIAGRAM = `  (user action, one flow)
   `,
 })
 export default class ArchitecturePage {
-  protected readonly title = translateSignal('nav.architecture');
+  protected readonly title = translateSignal('architecture.heading');
   protected readonly diagram = DIAGRAM;
 }

@@ -1,4 +1,9 @@
 {
+  "notFound": {
+    "title": "Page not found",
+    "description": "This page may have moved or been removed.",
+    "home": "Go to the documentation home"
+  },
   "nav": {
     "home": "Home",
     "problem": "Problem Statement",
@@ -12,7 +17,7 @@
   "header": {
     "title": "ngx-request-lock",
     "subtitle": "UI locking bound to HTTP request lifecycle",
-    "languageSwitch": "Switch language",
+    "languageSwitch": "IT: switch to Italian",
     "skipToContent": "Skip to content",
     "openNav": "Open navigation",
     "closeNav": "Close navigation",
@@ -78,6 +83,7 @@
     }
   },
   "problem": {
+    "heading": "Preventing duplicate HTTP requests in Angular",
     "intro": "Front-end state bugs often stem from active UI elements during pending HTTP requests. Unblocked buttons or forms allow repeated clicks and concurrent edits, sending duplicate requests to the server and causing state divergence",
     "symptoms": {
       "title": "Symptoms",
@@ -97,6 +103,7 @@
     }
   },
   "architecture": {
+    "heading": "Angular HTTP interceptor and request lock architecture",
     "intro": "The library consists of four native Angular building blocks: an <code class=\"font-mono text-sm\">HttpContextToken</code>, a functional <code class=\"font-mono text-sm\">HttpInterceptorFn</code>, a signal service, and a directive. Coordination uses a shared <code class=\"font-mono text-sm\">requestId</code> to group requests and UI elements without external state managers or custom RxJS logic",
     "buildingBlocks": {
       "title": "Building blocks",
@@ -177,7 +184,8 @@
     "liveDemoAriaLabel": "Live interactive demo"
   },
   "directiveUsage": {
-    "intro": "Using <code class=\"font-mono text-sm\">RequestLockDirective</code> for single interactive elements. Each directive instance generates a <code class=\"font-mono text-sm\">requestId</code>, tags the HTTP request via <code class=\"font-mono text-sm\">createRequestLockContext(id)</code>, and unlocks automatically when the request settles. For multi-element or multi-request scenarios, see <a class=\"underline\" href=\"/flow-lock\">Flow Lock Examples</a>",
+    "heading": "Disable Angular buttons during HTTP requests",
+    "intro": "Using <code class=\"font-mono text-sm\">RequestLockDirective</code> for single interactive elements. Each directive instance generates a <code class=\"font-mono text-sm\">requestId</code>, tags the HTTP request via <code class=\"font-mono text-sm\">createRequestLockContext(id)</code>, and unlocks automatically when the request settles. For multi-element or multi-request scenarios, see <a class=\"underline\" href=\"/flow-lock/\">Flow Lock Examples</a>",
     "nativeClick": {
       "title": "Pass the request context through $event",
       "text": "The directive enriches the native click event with the generated <code class=\"font-mono text-sm\">requestId</code> and a ready-to-use <code class=\"font-mono text-sm\">HttpContext</code>, so the handler needs no template reference or manual context creation",
@@ -213,7 +221,8 @@
     }
   },
   "flowLock": {
-    "intro": "A <code class=\"font-mono text-sm\">requestId</code> can attach to multiple UI elements and sequential HTTP calls to lock and unlock them together. Reference counting in <code class=\"font-mono text-sm\">RequestLockService</code> ensures the lock persists until <em>every</em> request in the flow settles. For single-element use cases, see <a class=\"underline\" href=\"/directive-usage\">Directive Usage</a>",
+    "heading": "Lock Angular forms across chained HTTP requests",
+    "intro": "A <code class=\"font-mono text-sm\">requestId</code> can attach to multiple UI elements and sequential HTTP calls to lock and unlock them together. Reference counting in <code class=\"font-mono text-sm\">RequestLockService</code> ensures the lock persists until <em>every</em> request in the flow settles. For single-element use cases, see <a class=\"underline\" href=\"/directive-usage/\">Directive Usage</a>",
     "sharedFlow": {
       "title": "Flow lock: shared requestId across a page",
       "text": "Bind the same ID to primary actions, secondary actions, and follow-up refreshes to synchronize their disabled states",

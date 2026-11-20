@@ -266,6 +266,7 @@ export class PostPanel {
 
       <section
         class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        role="group"
         [attr.aria-label]="t('shared.liveDemoAriaLabel')"
       >
         <p
@@ -313,6 +314,7 @@ export class PostPanel {
 
       <section
         class="my-6 rounded-lg border border-slate-300 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-900/40"
+        role="group"
         [attr.aria-label]="t('shared.liveDemoAriaLabel')"
       >
         <p
@@ -349,7 +351,7 @@ export class PostPanel {
   `,
 })
 export default class FlowLockPage {
-  protected readonly title = translateSignal('nav.flowLock');
+  protected readonly title = translateSignal('flowLock.heading');
   protected readonly flowLockCode = FLOW_LOCK_CODE;
   protected readonly formRefreshCode = FORM_REFRESH_CODE;
   protected readonly inFlightCode = IN_FLIGHT_CODE;

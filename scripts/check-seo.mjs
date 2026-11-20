@@ -86,6 +86,19 @@ for (const { loc } of urls) {
   }
   const html = readFileSync(file, 'utf8');
 
+  const internalLinks = new Set(
+    [...html.matchAll(/<a\b[^>]*\shref="([^"]+)"[^>]*>/g)]
+      .map(([, href]) => new URL(decode(href), loc))
+      .filter((url) => url.origin === ORIGIN && !/\.[a-z0-9]+$/i.test(url.pathname))
+      .map((url) => url.origin + url.pathname),
+  );
+  const nonCanonicalLinks = [...internalLinks].filter((url) => !locs.has(url));
+  check(
+    nonCanonicalLinks.length === 0,
+    'internal page links point to canonical URLs',
+    'internal links missing from the sitemap: ' + nonCanonicalLinks.join(', '),
+  );
+
   const titleTags = html.match(/<title>[^<]*<\/title>/g) ?? [];
   const title = decode(titleTags[0]?.replace(/<\/?title>/g, '') ?? '');
   check(

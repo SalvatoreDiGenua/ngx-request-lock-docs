@@ -7,11 +7,11 @@ import { CodeBlockComponent } from '../code-block/code-block';
   template: `
     <section class="my-6">
       @if (title(); as t) {
-        <h4
+        <p
           class="mb-2 text-sm font-semibold text-slate-900 dark:text-slate-100"
         >
           {{ t }}
-        </h4>
+        </p>
       }
       @if (caption(); as c) {
         <p class="mb-2 text-sm text-slate-700 dark:text-slate-300">{{ c }}</p>

@@ -36,7 +36,8 @@ import { Component, input } from '@angular/core';
       <div
         role="img"
         [attr.aria-label]="ariaLabel() ?? title() ?? 'Architecture diagram'"
-        class="overflow-x-auto px-4 py-4"
+        tabindex="0"
+        class="overflow-x-auto px-4 py-4 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sky-700 dark:focus-visible:outline-sky-400"
       >
         <pre
           class="whitespace-pre font-mono text-sm leading-6 text-slate-800 dark:text-slate-200"

@@ -126,7 +126,7 @@ export class SaveUser {
   `,
 })
 export default class ProblemPage {
-  protected readonly title = translateSignal('nav.problem');
+  protected readonly title = translateSignal('problem.heading');
   protected readonly naiveCode = NAIVE_CODE;
   protected readonly libraryCode = LIBRARY_CODE;
 }
