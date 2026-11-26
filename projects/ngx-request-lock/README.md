@@ -1,44 +1,43 @@
 # ngx-request-lock
 
-UI locking bound to the lifecycle of your HTTP requests, for Angular.
+Disable Angular buttons during HTTP requests and expose loading state through signals.
 
 [![npm version](https://img.shields.io/npm/v/ngx-request-lock.svg)](https://www.npmjs.com/package/ngx-request-lock)
 [![npm downloads](https://img.shields.io/npm/dm/ngx-request-lock.svg)](https://www.npmjs.com/package/ngx-request-lock)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/ngx-request-lock.svg?label=minzip)](https://bundlephobia.com/package/ngx-request-lock)
 [![Angular](https://img.shields.io/badge/Angular-%5E22.0.0-dd0031.svg)](https://angular.dev)
 
-`ngx-request-lock` binds a UI flow to the lifecycle of its HTTP requests. A shared `requestId` coordinates buttons, forms, and panels across single or chained requests, unlocking them automatically when all calls complete.
+[English documentation](https://ngx-request-lock-docs.netlify.app/) | [Documentazione in italiano](https://ngx-request-lock-docs.netlify.app/it/)
 
-## Table of contents
+`ngx-request-lock` connects a button's disabled state to selected Angular `HttpClient` calls. Add `ngxRequestLock` to a button and pass the click event's `HttpContext` to the request. A shared `requestId` coordinates multiple buttons and concurrent or chained calls; a boolean signal exposes the pending state for loading labels and spinners.
 
-- [Why this library](#why-this-library)
-- [Requirements](#requirements)
+The directive has a **10-second safety unlock**, so a slow request can outlast the button's disabled state. It limits repeat clicks in the browser; server-side idempotency is still needed for operations that must never run twice.
+
+## Contents
+
+- [Requirements and installation](#requirements-and-installation)
 - [Compatibility](#compatibility)
-- [Installation](#installation)
-- [Setup](#setup)
-- [Usage](#usage)
-  - [Native click event: `$event`](#native-click-event-event)
-  - [Basic: one button, one request](#basic-one-button-one-request)
-  - [Without a template reference: `$event`](#without-a-template-reference-event)
-  - [Shared flow: many elements, many requests](#shared-flow-many-elements-many-requests)
-  - [Pending state: swap label, show spinner](#pending-state-swap-label-show-spinner)
+- [Configure the HTTP interceptor](#configure-the-http-interceptor)
+- [Disable a button during an HTTP request](#disable-a-button-during-an-http-request)
+- [Use an explicit request ID](#use-an-explicit-request-id)
+- [Coordinate buttons and chained requests](#coordinate-buttons-and-chained-requests)
+- [Show loading state with a signal](#show-loading-state-with-a-signal)
+- [Request lifecycle and safety timeouts](#request-lifecycle-and-safety-timeouts)
 - [Public API](#public-api)
-- [What this library is not](#what-this-library-is-not)
-- [Links](#links)
-- [License](#license)
+- [Scope and limitations](#scope-and-limitations)
+- [Documentation and support](#documentation-and-support)
 
-## Why this library
+## Requirements and installation
 
-Front-end state bugs often stem from active UI elements during pending HTTP requests. Unblocked controls allow repeated clicks and concurrent edits, sending duplicate requests to the server and causing state divergence.
+```bash
+npm install ngx-request-lock
+```
 
-`ngx-request-lock` uses `requestId` as the unit of coordination. Interactive elements and HTTP requests share an ID to form a reference-counted flow. The interceptor manages state through Angular primitives (`HttpContext`, `HttpInterceptorFn`, signals) without external state managers or RxJS code.
+- The current package declares Angular peer dependencies `@angular/common ^22.0.0` and `@angular/core ^22.0.0`.
+- Examples use standalone components, functional HTTP interceptors and signals.
+- The default ID generator uses `crypto.randomUUID()`, which requires a secure browser context: HTTPS or `localhost`.
 
-## Requirements
-
-- Angular **v22** or newer.
-- Peer dependencies: `@angular/common ^22.0.0`, `@angular/core ^22.0.0`.
-- Standalone APIs, functional HTTP interceptors, and signals (default in v22).
-- Secure context (HTTPS or `localhost`) for `crypto.randomUUID()`.
+The library ships in Angular Package Format with `sideEffects: false` and supports tree-shaking. Its only declared runtime dependency is `tslib`, alongside the Angular peer dependencies.
 
 ## Compatibility
 
@@ -46,17 +45,9 @@ Front-end state bugs often stem from active UI elements during pending HTTP requ
 | ------------------ | --------- |
 | `1.x`              | `^22.0.0` |
 
-## Installation
+## Configure the HTTP interceptor
 
-```bash
-npm install ngx-request-lock
-```
-
-The library ships as Angular Package Format, is tree-shakable, and is marked `sideEffects: false`. The only runtime dependency is `tslib`.
-
-## Setup
-
-Register the provider in your application config:
+Register `provideRequestLock()` in the application config:
 
 ```ts
 import { ApplicationConfig } from '@angular/core';
@@ -67,196 +58,239 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-`provideRequestLock()` calls `provideHttpClient(withInterceptors([requestLockInterceptor]))` internally. Do not add a separate `provideHttpClient(...)` alongside it, or the interceptor will be overridden.
-
-If your app already configures `provideHttpClient` with other interceptors, skip `provideRequestLock()` and register the interceptor directly:
+This provider registers `HttpClient` with `requestLockInterceptor`. If your app already configures `provideHttpClient`, add the interceptor to that configuration instead of calling `provideRequestLock()` alongside it:
 
 ```ts
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { ApplicationConfig } from '@angular/core';
 import { requestLockInterceptor } from 'ngx-request-lock';
 
-providers: [
-  provideHttpClient(
-    withInterceptors([requestLockInterceptor /*, ...others */]),
-  ),
-];
+export const appConfig: ApplicationConfig = {
+  providers: [provideHttpClient(withInterceptors([requestLockInterceptor]))],
+};
 ```
 
-## Usage
+Keep your existing HTTP features and interceptors in the same configuration.
 
-### Native click event: `$event`
+## Disable a button during an HTTP request
 
-The directive attaches the generated `requestId` and a ready `HttpContext` to
-the native click event. Type the handler as `RequestLockMouseEvent` and pass
-`event.context` directly to `HttpClient`:
+The directive enriches the host's native click event with `requestId` and a ready `HttpContext`. Type the handler as `RequestLockMouseEvent` and pass `event.context` to `HttpClient`:
 
 ```ts
-import { Component, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {
-  RequestLockDirective,
-  RequestLockMouseEvent,
-} from 'ngx-request-lock';
+import { Component, inject } from '@angular/core';
+import { RequestLockDirective, RequestLockMouseEvent } from 'ngx-request-lock';
 
 @Component({
-  selector: 'app-ping',
+  selector: 'app-save-button',
   imports: [RequestLockDirective],
   template: `
-    <button ngxRequestLock (click)="ping($event)">
-      Ping
-    </button>
+    <button type="button" ngxRequestLock (click)="save($event)">Save</button>
   `,
 })
-export class Ping {
+export class SaveButton {
   private readonly http = inject(HttpClient);
 
-  protected ping(event: RequestLockMouseEvent): void {
-    this.http.get('/api/ping', { context: event.context }).subscribe();
+  protected save(event: RequestLockMouseEvent): void {
+    this.http
+      .post(
+        '/api/items',
+        { title: 'Hello' },
+        {
+          context: event.context,
+        },
+      )
+      .subscribe();
   }
 }
 ```
 
-This works for a `(click)` binding on the element that carries the directive.
-For a handler on a descendant or wrapper host, use `#lock="requestLock"` and
-`lock.requestId()` instead.
+The `(click)` binding must be on the element carrying the directive. A handler on a descendant can run before the directive enriches the event; use an explicit ID for that pattern. The example subscribes to start the request; add error handling appropriate to your application.
 
-### Basic: one button, one request
+## Use an explicit request ID
 
-Place the directive on the interactive element and tag the request with the same id:
+A template reference exposes the directive's `requestId()` signal. Build a request context from that ID when the handler does not use the enriched event:
+
+```html
+<button
+  type="button"
+  ngxRequestLock
+  #lock="requestLock"
+  (click)="ping(lock.requestId())"
+>
+  Ping
+</button>
+```
+
+In the component, inject `HttpClient` and use the exported helper:
 
 ```ts
-import { Component, inject } from '@angular/core';
+import { createRequestLockContext } from 'ngx-request-lock';
+
+// Component method; `http` is an injected HttpClient.
+protected ping(id: string): void {
+  this.http.get('/api/ping', {
+    context: createRequestLockContext(id),
+  }).subscribe();
+}
+```
+
+`HttpContext` holds client-side Angular metadata. The lock ID is not serialized into headers, the request body or query parameters, and is not sent to the server.
+
+## Coordinate buttons and chained requests
+
+Give related buttons the same ID and tag every participating request with it. In this example, Save sends a POST followed by a GET; Refresh joins the same flow:
+
+```ts
 import { HttpClient } from '@angular/common/http';
+import { Component, inject } from '@angular/core';
+import { switchMap } from 'rxjs';
 import {
   RequestLockDirective,
   createRequestLockContext,
 } from 'ngx-request-lock';
 
 @Component({
-  selector: 'app-ping',
+  selector: 'app-item-editor',
   imports: [RequestLockDirective],
   template: `
-    <button ngxRequestLock #lock="requestLock" (click)="ping(lock.requestId())">
-      Ping
+    <button type="button" ngxRequestLock [requestId]="flowId" (click)="save()">
+      Save
+    </button>
+    <button
+      type="button"
+      ngxRequestLock
+      [requestId]="flowId"
+      (click)="refresh()"
+    >
+      Refresh
     </button>
   `,
 })
-export class Ping {
+export class ItemEditor {
   private readonly http = inject(HttpClient);
-
-  protected ping(id: string): void {
-    this.http
-      .get('/api/ping', { context: createRequestLockContext(id) })
-      .subscribe();
-  }
-}
-```
-
-The button is disabled from the click until the request settles (success or error). Two safety timeouts also unblock the element:
-
-- **500 ms** if no pending state has been observed by then.
-- **10 s** unconditionally.
-
-### Without a template reference: `$event`
-
-The directive attaches `requestId` and a ready `context` to the native click event, so the same example can drop the `#lock` reference:
-
-```ts
-import { RequestLockDirective, RequestLockMouseEvent } from 'ngx-request-lock';
-
-@Component({
-  imports: [RequestLockDirective],
-  template: `<button ngxRequestLock (click)="ping($event)">Ping</button>`,
-})
-export class Ping {
-  private readonly http = inject(HttpClient);
-
-  protected ping(event: RequestLockMouseEvent): void {
-    this.http.get('/api/ping', { context: event.context }).subscribe();
-  }
-}
-```
-
-This works for a `(click)` bound on the element that carries the directive. A handler on a descendant runs before the directive sees the event, so a wrapper host still needs `#lock="requestLock"`.
-
-### Shared flow: many elements, many requests
-
-Bind the same `requestId` to every directive and every request that participates in the same flow:
-
-```ts
-@Component({
-  imports: [RequestLockDirective],
-  template: `
-    <button ngxRequestLock [requestId]="flowId()" (click)="save()">Save</button>
-    <button ngxRequestLock [requestId]="flowId()" (click)="reset()">
-      Reset
-    </button>
-  `,
-})
-export class Editor {
-  private readonly http = inject(HttpClient);
-  protected readonly flowId = signal(crypto.randomUUID());
+  protected readonly flowId = crypto.randomUUID();
 
   protected save(): void {
+    const context = createRequestLockContext(this.flowId);
     this.http
-      .post('/api/items', payload, {
-        context: createRequestLockContext(this.flowId()),
+      .post('/api/items', { title: 'Hello' }, { context })
+      .pipe(switchMap(() => this.http.get('/api/items', { context })))
+      .subscribe();
+  }
+
+  protected refresh(): void {
+    this.http
+      .get('/api/items', {
+        context: createRequestLockContext(this.flowId),
       })
       .subscribe();
   }
+}
+```
 
-  protected reset(): void {
-    /* ... */
+The interceptor reference-counts active requests per ID. The pending signal remains true while any tagged call is active. Linked buttons observe that state, subject to the directive's safety timeouts. A delayed follow-up request joins when it starts; the counter does not reserve a lock across gaps with no active requests.
+
+## Show loading state with a signal
+
+For a component that owns a stable ID, store the pending signal once and bind it in the template:
+
+```ts
+import { HttpClient } from '@angular/common/http';
+import { Component, inject } from '@angular/core';
+import {
+  RequestLockDirective,
+  RequestLockService,
+  createRequestLockContext,
+} from 'ngx-request-lock';
+
+@Component({
+  selector: 'app-loading-button',
+  imports: [RequestLockDirective],
+  template: `
+    <button
+      type="button"
+      ngxRequestLock
+      [requestId]="requestId"
+      [attr.aria-busy]="isPending()"
+      (click)="save()"
+    >
+      {{ isPending() ? 'Saving…' : 'Save' }}
+    </button>
+  `,
+})
+export class LoadingButton {
+  private readonly http = inject(HttpClient);
+  protected readonly requestId = crypto.randomUUID();
+  protected readonly isPending = inject(RequestLockService).isPending(
+    this.requestId,
+  );
+
+  protected save(): void {
+    this.http
+      .post(
+        '/api/items',
+        { title: 'Hello' },
+        {
+          context: createRequestLockContext(this.requestId),
+        },
+      )
+      .subscribe();
   }
 }
 ```
 
-Every request that carries the same id contributes to one reference-counted lock. Both buttons stay disabled until every request in the flow has settled.
+`isPending(id)` returns a new computed signal on each call. Retain it when reading the same ID repeatedly. Use the signal for custom spinners, panel states or accessible loading labels. The directive itself only updates the target button's native `disabled` attribute.
 
-### Pending state: swap label, show spinner
+## Request lifecycle and safety timeouts
 
-`RequestLockService.isPending(id)` returns a `Signal<boolean>` you can consume anywhere:
+1. Clicking a directive host immediately locks its target button.
+2. Each subscribed HTTP request tagged with the ID increments the pending counter.
+3. The interceptor uses `finalize` to decrement the counter on completion, error or unsubscription.
+4. When the counter reaches zero, the pending signal becomes false and linked directives unlock.
 
-```ts
-import { computed, inject, viewChild } from '@angular/core';
-import { RequestLockDirective, RequestLockService } from 'ngx-request-lock';
+Two safety timers are scheduled on click:
 
-private readonly service = inject(RequestLockService);
-private readonly lock = viewChild.required(RequestLockDirective);
+- At **500 ms**, the directive unlocks if it has not observed a pending request.
+- At **10 seconds**, it unlocks unconditionally, even if HTTP is still pending.
 
-protected readonly isPending = computed(() =>
-  this.service.isPending(this.lock().requestId())(),
-);
-```
-
-Use it to swap a button label, render a spinner, dim a panel, or set `[attr.aria-busy]` on a wrapper. `isPending(id)` returns a new `computed` on every call, so store it in a field if you read it repeatedly.
+These timers affect the directive's disabled state. They do not cancel requests or reset the service's pending counter. A loading indicator bound to the signal can therefore remain active after the button unlocks.
 
 ## Public API
 
-| Export                         | Kind                               | Purpose                                                             |
-| ------------------------------ | ---------------------------------- | ------------------------------------------------------------------- |
-| `REQUEST_LOCK_ID`              | `HttpContextToken<string \| null>` | Tags a request with a lock identifier. Default is `null`.           |
-| `createRequestLockContext(id)` | `(id: string) => HttpContext`      | Builds the `HttpContext` for a tracked request.                     |
-| `requestLockInterceptor`       | `HttpInterceptorFn`                | Reads the id from the context and drives the service.               |
-| `RequestLockService`           | Root-provided service              | Reference-counted pending state, `isPending(id): Signal<boolean>`.  |
-| `RequestLockDirective`         | Standalone directive               | Selector `[ngxRequestLock]`, exportAs `requestLock`.                |
-| `RequestLockMouseEvent`        | `interface`                        | Native click event with `requestId` and `context` attached.         |
-| `provideRequestLock()`         | `() => EnvironmentProviders`       | Registers `provideHttpClient(withInterceptors([...]))` in one call. |
+| Export                         | Kind                               | Purpose                                                                    |
+| ------------------------------ | ---------------------------------- | -------------------------------------------------------------------------- |
+| `REQUEST_LOCK_ID`              | `HttpContextToken<string \| null>` | Request lock identifier; defaults to `null`.                               |
+| `createRequestLockContext(id)` | `(id: string) => HttpContext`      | Creates metadata for a tracked request.                                    |
+| `requestLockInterceptor`       | `HttpInterceptorFn`                | Tracks requests carrying a lock ID.                                        |
+| `RequestLockService`           | Root service                       | Exposes `start(id)`, `end(id)` and `isPending(id): Signal<boolean>`.       |
+| `RequestLockDirective`         | Standalone directive               | Selector `[ngxRequestLock]`, export name `requestLock`, input `requestId`. |
+| `RequestLockMouseEvent`        | Interface extending `MouseEvent`   | Native click event enriched with `requestId` and `context`.                |
+| `provideRequestLock()`         | `() => EnvironmentProviders`       | Registers `HttpClient` with the lock interceptor.                          |
 
-## What this library is not
+`RequestLockMouseEvent.requestId` and `.context` are optional in the TypeScript interface for compatibility with Angular's native event typing. The directive assigns them to the click event on its host.
 
-- It does not cancel or debounce requests.
-- It does not replace HTTP-level idempotency on the server.
-- It does not implement a global spinner or toast system.
-- It does not ship any CSS.
+## Scope and limitations
 
-## Links
+- Only requests tagged with a lock ID are tracked; untagged requests pass through unchanged.
+- The directive targets the matching or nearest ancestor button, or the first descendant button. It does not disable every control in an arbitrary form or panel.
+- It does not deduplicate requests already sent, cancel requests or debounce interactions.
+- It does not replace server-side idempotency or concurrency controls.
+- It ships no CSS, global spinner or toast system. Render custom loading UI from the pending signal.
+- The 10-second safety unlock means it is not a guarantee that buttons stay disabled for an entire long-running request.
 
-- **Repository**: [github.com/SalvatoreDiGenua/ngx-request-lock-docs](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs)
-- **Issues**: [github.com/SalvatoreDiGenua/ngx-request-lock-docs/issues](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/issues)
-- **Changelog**: [CHANGELOG.md](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/blob/main/CHANGELOG.md)
-- **Documentation site**: [DOCS](https://ngx-request-lock-docs.netlify.app/)
+## Documentation and support
+
+| Guide         | English                                                                                 | Italiano                                                                                           |
+| ------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Repeat clicks | [Prevent duplicate requests](https://ngx-request-lock-docs.netlify.app/problem/)        | [Evitare richieste duplicate](https://ngx-request-lock-docs.netlify.app/it/problem/)               |
+| Architecture  | [HTTP interceptor and signals](https://ngx-request-lock-docs.netlify.app/architecture/) | [Interceptor HTTP e signal](https://ngx-request-lock-docs.netlify.app/it/architecture/)            |
+| Setup         | [Installation](https://ngx-request-lock-docs.netlify.app/installation/)                 | [Installazione](https://ngx-request-lock-docs.netlify.app/it/installation/)                        |
+| Examples      | [Button loading state](https://ngx-request-lock-docs.netlify.app/directive-usage/)      | [Stato di caricamento dei pulsanti](https://ngx-request-lock-docs.netlify.app/it/directive-usage/) |
+| Shared flows  | [Coordinate HTTP requests](https://ngx-request-lock-docs.netlify.app/flow-lock/)        | [Coordinare le richieste HTTP](https://ngx-request-lock-docs.netlify.app/it/flow-lock/)            |
+
+[Source code](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/tree/main/projects/ngx-request-lock) | [Issues](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/issues) | [Changelog](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/blob/main/CHANGELOG.md)
 
 ## License
 
-[MIT](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/blob/main/LICENSE) (c) 2026.
+[MIT](https://github.com/SalvatoreDiGenua/ngx-request-lock-docs/blob/main/LICENSE) © 2026.
