@@ -5,16 +5,20 @@ import { CodeBlockComponent } from '../code-block/code-block';
   selector: 'ngx-code-example',
   imports: [CodeBlockComponent],
   template: `
-    <section class="my-6">
+    <section class="my-8 min-w-0">
       @if (title(); as t) {
         <p
-          class="mb-2 text-sm font-semibold text-slate-900 dark:text-slate-100"
+          class="mb-2 text-base font-semibold text-slate-900 dark:text-slate-100"
         >
           {{ t }}
         </p>
       }
       @if (caption(); as c) {
-        <p class="mb-2 text-sm text-slate-700 dark:text-slate-300">{{ c }}</p>
+        <p
+          class="mb-3 max-w-prose text-sm leading-relaxed text-slate-700 dark:text-slate-300"
+        >
+          {{ c }}
+        </p>
       }
       <ngx-code-block [code]="code()" [language]="language()" />
     </section>

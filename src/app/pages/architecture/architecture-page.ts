@@ -1,29 +1,38 @@
 import { Component } from '@angular/core';
 import { TranslocoDirective, translateSignal } from '@jsverse/transloco';
 import { CalloutComponent } from '../../shared/ui/callout/callout';
-import { DiagramBlockComponent } from '../../shared/ui/diagram-block/diagram-block';
+import {
+  DiagramBlockComponent,
+  DiagramStage,
+} from '../../shared/ui/diagram-block/diagram-block';
 import { SectionHeadingComponent } from '../../shared/ui/section-heading/section-heading';
 
-const DIAGRAM = `  (user action, one flow)
-             │ native click event
-             ▼
-┌────────────────────────────────┐         ┌───────────────────────┐
-│ N × RequestLockDirective       │         │  RequestLockService   │
-│   [requestId]="flowId()"       │ ◀────── │  isPending(id): Signal│
-│   (buttons, forms, panels...)  │         │  start(id) / end(id)  │
-└──────────────┬─────────────────┘         └─────────▲─────────────┘
-               │                                     │
-               │ requestId + HttpContext              │ start / end
-               ▼                                     │
-     M × HttpClient requests                         │
-     each with HttpContext:                          │
-       REQUEST_LOCK_ID = flowId                      │
-               │                                     │
-               ▼                                     │
-       requestLockInterceptor ───────────────────────┘
-               │
-               ▼
-             server(s)`;
+const REQUEST_STAGES: readonly DiagramStage[] = [
+  {
+    id: 'click',
+    titleKey: 'architecture.dataFlow.clickTitle',
+    code: 'ngxRequestLock',
+    descriptionKey: 'architecture.dataFlow.clickDescription',
+  },
+  {
+    id: 'context',
+    titleKey: 'architecture.dataFlow.contextTitle',
+    code: 'REQUEST_LOCK_ID',
+    descriptionKey: 'architecture.dataFlow.contextDescription',
+  },
+  {
+    id: 'interceptor',
+    titleKey: 'architecture.dataFlow.interceptorTitle',
+    code: 'requestLockInterceptor',
+    descriptionKey: 'architecture.dataFlow.interceptorDescription',
+  },
+  {
+    id: 'signal',
+    titleKey: 'architecture.dataFlow.signalTitle',
+    code: 'isPending(id): Signal<boolean>',
+    descriptionKey: 'architecture.dataFlow.signalDescription',
+  },
+];
 
 @Component({
   selector: 'ngx-architecture-page',
@@ -35,7 +44,9 @@ const DIAGRAM = `  (user action, one flow)
   ],
   template: `
     <article *transloco="let t" class="max-w-none">
-      <h1 class="mb-4 text-3xl font-bold text-slate-900 dark:text-slate-100">
+      <h1
+        class="mb-4 text-3xl font-semibold text-slate-900 dark:text-slate-100"
+      >
         {{ title() }}
       </h1>
 
@@ -58,8 +69,8 @@ const DIAGRAM = `  (user action, one flow)
       </ngx-section-heading>
 
       <ngx-diagram-block
-        [content]="diagram"
-        [title]="t('architecture.dataFlow.title')"
+        [stages]="stages"
+        [caption]="t('architecture.dataFlow.caption')"
         [ariaLabel]="t('architecture.dataFlow.diagramAriaLabel')"
       />
 
@@ -89,5 +100,5 @@ const DIAGRAM = `  (user action, one flow)
 })
 export default class ArchitecturePage {
   protected readonly title = translateSignal('architecture.heading');
-  protected readonly diagram = DIAGRAM;
+  protected readonly stages = REQUEST_STAGES;
 }

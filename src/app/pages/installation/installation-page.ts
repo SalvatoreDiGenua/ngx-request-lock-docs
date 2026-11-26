@@ -126,7 +126,9 @@ export class Ping {
   ],
   template: `
     <article *transloco="let t" class="max-w-none">
-      <h1 class="mb-4 text-3xl font-bold text-slate-900 dark:text-slate-100">
+      <h1
+        class="mb-4 text-3xl font-semibold text-slate-900 dark:text-slate-100"
+      >
         {{ title() }}
       </h1>
 
@@ -302,7 +304,7 @@ export class Ping {
   `,
 })
 export default class InstallationPage {
-  protected readonly title = translateSignal('nav.installation');
+  protected readonly title = translateSignal('installation.heading');
   protected readonly installCmd = INSTALL_CMD;
   protected readonly providerCode = PROVIDER_CODE;
   protected readonly manualProviderCode = MANUAL_PROVIDER_CODE;

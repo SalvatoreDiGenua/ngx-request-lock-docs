@@ -1,22 +1,22 @@
 import { RouteSeoData } from '../../core/services/seo-router-service';
 
 export const ARCHITECTURE_PAGE_SEO: RouteSeoData = {
-  title: 'Angular HTTP Interceptor Architecture | ngx-request-lock',
+  title: 'Angular HTTP interceptor and signals | ngx-request-lock',
   description:
-    'Architecture of ngx-request-lock: HttpContextToken, functional interceptor, reference-counted signal service, and RequestLockDirective.',
-  ogTitle: 'Architecture Overview - ngx-request-lock',
+    'Understand how Angular HttpContext, a functional interceptor and signals track pending requests per ID and update buttons in ngx-request-lock.',
+  ogTitle: 'Angular HTTP interceptor and signals | ngx-request-lock',
   ogDescription:
-    'Deep dive into the internal design of ngx-request-lock: HttpContextTokens, interceptors, signal maps, and directive bindings.',
-  twitterTitle: 'Architecture Overview - ngx-request-lock',
+    'Trace a request ID through Angular HttpContext, the interceptor and a signal that tracks pending HTTP calls.',
+  twitterTitle: 'Angular HTTP interceptor and signals | ngx-request-lock',
   twitterDescription:
-    'Deep dive into the internal design of ngx-request-lock: HttpContextTokens, interceptors, signal maps, and directive bindings.',
+    'Trace a request ID through Angular HttpContext, the interceptor and a signal that tracks pending HTTP calls.',
   structuredData: [
     {
       '@context': 'https://schema.org',
       '@type': 'TechArticle',
-      headline: 'Architecture - ngx-request-lock',
+      headline: 'How an Angular HTTP interceptor tracks button loading state',
       description:
-        'Architecture of ngx-request-lock: HttpContextToken, functional interceptor, reference-counted signal service, and RequestLockDirective.',
+        'Understand how Angular HttpContext, a functional interceptor and signals track pending requests per ID and update buttons in ngx-request-lock.',
       url: 'https://ngx-request-lock-docs.netlify.app/architecture/',
       author: {
         '@type': 'Person',

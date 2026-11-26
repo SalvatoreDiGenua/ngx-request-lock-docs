@@ -11,7 +11,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
       <div class="mx-auto max-w-7xl px-4 md:px-6">
         <div class="flex flex-col gap-8 md:flex-row md:justify-between">
           <div class="flex flex-col gap-2">
-            <p class="font-mono font-semibold text-slate-900 dark:text-white">
+            <p class="font-semibold text-slate-900 dark:text-white">
               ngx-request-lock
             </p>
             <p class="max-w-sm text-slate-600 dark:text-slate-400">

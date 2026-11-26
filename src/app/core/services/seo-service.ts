@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Service, inject } from '@angular/core';
 import { Meta } from '@angular/platform-browser';
+import { Language } from '../i18n/language.service';
 
 const SITE_ORIGIN = 'https://ngx-request-lock-docs.netlify.app';
 const DEFAULT_OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
@@ -26,6 +27,33 @@ export interface TwitterCardMeta {
 export class SeoService {
   private readonly document = inject(DOCUMENT);
   private readonly meta = inject(Meta);
+
+  setLanguage(language: Language): void {
+    this.document.documentElement.lang = language;
+    this.meta.updateTag(
+      { property: 'og:locale', content: language === 'it' ? 'it_IT' : 'en_US' },
+      'property="og:locale"',
+    );
+  }
+
+  setAlternates(path: string | null): void {
+    this.document.head
+      .querySelectorAll('link[rel="alternate"][hreflang]')
+      .forEach((link) => link.remove());
+    if (path === null) return;
+    const englishPath = path.replace(/^\/it(?=\/|$)/, '') || '/';
+    for (const [lang, url] of [
+      ['en', `${SITE_ORIGIN}${englishPath}`],
+      ['it', `${SITE_ORIGIN}/it${englishPath}`],
+      ['x-default', `${SITE_ORIGIN}${englishPath}`],
+    ]) {
+      const link = this.document.createElement('link');
+      link.rel = 'alternate';
+      link.hreflang = lang;
+      link.href = url;
+      this.document.head.appendChild(link);
+    }
+  }
 
   setIndexable(indexable: boolean): void {
     this.meta.updateTag(

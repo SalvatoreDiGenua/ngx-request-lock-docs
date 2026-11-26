@@ -53,15 +53,15 @@ import { highlightToHtml, normalizeLanguage } from './shiki-highlighter';
        */
       :host ::ng-deep pre.shiki {
         margin: 0;
-        padding: 1rem;
+        padding: 1.25rem 1.5rem;
         overflow-x: auto;
         font-size: 0.875rem;
-        line-height: 1.625;
+        line-height: 1.7;
         background-color: transparent !important;
       }
 
       :host ::ng-deep pre.shiki:focus-visible {
-        outline: 2px solid #38bdf8;
+        outline: 2px solid var(--color-ring-inverse);
         outline-offset: -2px;
       }
 
@@ -87,29 +87,54 @@ import { highlightToHtml, normalizeLanguage } from './shiki-highlighter';
         margin-right: 1rem;
         padding-right: 0.5rem;
         text-align: right;
-        color: rgb(148 163 184 / 0.5); /* slate-400/50 */
+        color: var(--color-code-line-number);
         user-select: none;
+      }
+
+      :host ::ng-deep .line-numbers .line:hover {
+        background-color: var(--color-code-line-hover);
+      }
+
+      .code-body {
+        background: var(--color-code-canvas);
+      }
+
+      .code-body.is-collapsed {
+        max-height: 25rem;
+        overflow-y: auto;
+      }
+
+      .code-body:focus-visible {
+        outline: 2px solid var(--color-ring-inverse);
+        outline-offset: -2px;
       }
     `,
   ],
   template: `
     <figure
-      class="relative my-4 overflow-hidden rounded-lg border border-slate-300 bg-slate-950 text-slate-100 shadow-sm dark:border-slate-700"
+      class="my-5 min-w-0 overflow-hidden rounded-xl bg-slate-900 text-slate-100 ring-1 ring-slate-700/80 dark:ring-slate-600/70"
     >
-      @if (language(); as lang) {
-        <figcaption
-          class="flex items-center justify-between border-b border-slate-800/80 bg-slate-900/90 px-4 py-2 text-xs font-mono uppercase tracking-wider text-slate-300 backdrop-blur-xs"
-        >
-          <span class="font-semibold text-sky-400">{{ lang }}</span>
+      <figcaption
+        class="flex min-h-12 items-center justify-between gap-3 bg-slate-800 px-4 py-2 text-sm text-slate-200 sm:px-6"
+      >
+        <span class="font-medium">{{ displayLanguage() }}</span>
+        <div class="flex items-center gap-3">
+          @if (copyFailed()) {
+            <span role="status" class="text-sm text-amber-200">{{
+              'common.copyFailed' | transloco
+            }}</span>
+          }
           <button
             type="button"
-            class="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-sans font-medium text-slate-300 transition-colors hover:bg-slate-800 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 cursor-pointer"
-            [attr.aria-label]="(copied() ? 'common.copied' : 'common.copyAriaLabel') | transloco"
+            class="inline-flex min-h-8 items-center gap-2 rounded-md px-2.5 py-1 text-sm font-medium text-slate-100 transition-colors hover:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300"
+            [attr.aria-label]="
+              (copied() ? 'common.copied' : 'common.copyAriaLabel') | transloco
+            "
             (click)="copy()"
           >
             @if (copied()) {
               <svg
-                class="h-3.5 w-3.5 text-emerald-400"
+                class="h-4 w-4 text-emerald-300"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -122,12 +147,12 @@ import { highlightToHtml, normalizeLanguage } from './shiki-highlighter';
                   d="M5 13l4 4L19 7"
                 />
               </svg>
-              <span class="text-emerald-400">{{
+              <span class="text-emerald-300">{{
                 'common.copied' | transloco
               }}</span>
             } @else {
               <svg
-                class="h-3.5 w-3.5 text-slate-400"
+                class="h-4 w-4 text-slate-200"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -143,23 +168,37 @@ import { highlightToHtml, normalizeLanguage } from './shiki-highlighter';
               <span>{{ 'common.copy' | transloco }}</span>
             }
           </button>
-        </figcaption>
-      }
+        </div>
+      </figcaption>
 
-      @if (highlightedHtml(); as html) {
-        <div [class.line-numbers]="lineNumbers()" [innerHTML]="html"></div>
-      } @else {
-        <pre
-          tabindex="0"
-          class="overflow-x-auto px-4 py-4 text-sm leading-relaxed focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sky-400"
-          [class.line-numbers]="lineNumbers()"
+      <div
+        class="code-body"
+        [class.is-collapsed]="isLong() && !expanded()"
+        [attr.tabindex]="isLong() && !expanded() ? 0 : null"
+      >
+        @if (highlightedHtml(); as html) {
+          <div [class.line-numbers]="lineNumbers()" [innerHTML]="html"></div>
+        } @else {
+          <pre
+            tabindex="0"
+            class="overflow-x-auto px-6 py-5 text-sm leading-relaxed focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sky-300"
+            [class.line-numbers]="lineNumbers()"
+          ><code>@for (line of codeLines(); track $index) {<span class="line">{{ line }}</span>}</code></pre>
+        }
+      </div>
+
+      @if (isLong()) {
+        <button
+          type="button"
+          class="flex w-full items-center justify-center bg-slate-800 px-4 py-2.5 text-sm font-medium text-slate-100 transition-colors hover:bg-slate-700 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sky-300"
+          [attr.aria-expanded]="expanded()"
+          (click)="expanded.update((value) => !value)"
         >
-          <code>
-            @for (line of codeLines(); track $index) {
-              <span class="line">{{ line }}</span>
-            }
-          </code>
-        </pre>
+          {{
+            (expanded() ? 'common.collapseCode' : 'common.showFullCode')
+              | transloco
+          }}
+        </button>
       }
     </figure>
   `,
@@ -170,8 +209,25 @@ export class CodeBlockComponent {
   public readonly lineNumbers = input<boolean>(true);
 
   protected readonly copied = signal(false);
+  protected readonly copyFailed = signal(false);
   protected readonly highlightedHtml = signal<SafeHtml | null>(null);
   protected readonly codeLines = computed(() => this.code().split('\n'));
+  protected readonly isLong = computed(() => this.codeLines().length > 18);
+  protected readonly expanded = signal(false);
+  protected readonly displayLanguage = computed(() => {
+    switch (normalizeLanguage(this.language())) {
+      case 'typescript':
+        return 'TypeScript';
+      case 'bash':
+        return 'Bash';
+      case 'css':
+        return 'CSS';
+      case 'html':
+        return 'HTML';
+      case 'json':
+        return 'JSON';
+    }
+  });
 
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
@@ -209,9 +265,10 @@ export class CodeBlockComponent {
     try {
       await navigator.clipboard.writeText(this.code());
       this.copied.set(true);
+      this.copyFailed.set(false);
       setTimeout(() => this.copied.set(false), 1500);
     } catch {
-      // clipboard unavailable, silently ignore
+      this.copyFailed.set(true);
     }
   }
 }

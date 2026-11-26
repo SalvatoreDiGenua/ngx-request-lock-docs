@@ -1,21 +1,21 @@
 import { RouteSeoData } from '../../core/services/seo-router-service';
 
 export const HOME_PAGE_SEO: RouteSeoData = {
-  title: 'ngx-request-lock - Angular UI/HTTP Request Lifecycle Binding',
+  title: 'Angular HTTP loading and button locking | ngx-request-lock',
   description:
-    'Angular library that binds UI flows to HTTP request lifecycles. One shared requestId locks buttons, forms and panels and unlocks them when requests settle.',
-  ogTitle: 'ngx-request-lock - Angular UI/HTTP Request Lifecycle Binding',
+    'Disable Angular buttons during HTTP requests with ngx-request-lock. Use an interceptor, HttpContext and signals to coordinate loading state across a flow.',
+  ogTitle: 'Angular HTTP loading and button locking | ngx-request-lock',
   ogDescription:
-    'Declarative UI disabling and pending state management tied directly to Angular HTTP requests using Signals and reference counting.',
-  twitterTitle: 'ngx-request-lock - Angular UI/HTTP Request Lifecycle Binding',
+    'Disable buttons while Angular HTTP requests are pending and coordinate related actions with a shared requestId.',
+  twitterTitle: 'Angular HTTP loading and button locking | ngx-request-lock',
   twitterDescription:
-    'Declarative UI disabling and pending state management tied directly to Angular HTTP requests using Signals and reference counting.',
+    'Disable buttons while Angular HTTP requests are pending and coordinate related actions with a shared requestId.',
   structuredData: {
     '@context': 'https://schema.org',
     '@type': 'SoftwareSourceCode',
     name: 'ngx-request-lock',
     description:
-      'ngx-request-lock: Angular library for binding UI flows to HTTP request lifecycles. A shared requestId coordinates buttons, forms, and panels, unlocking them automatically when requests settle.',
+      'ngx-request-lock is an Angular library that disables buttons during tagged HTTP requests and exposes a signal for loading state across related actions.',
     programmingLanguage: 'TypeScript',
     runtimePlatform: 'Angular 22',
     license:

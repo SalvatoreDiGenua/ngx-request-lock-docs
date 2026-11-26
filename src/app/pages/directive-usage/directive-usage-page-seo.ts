@@ -1,22 +1,22 @@
 import { RouteSeoData } from '../../core/services/seo-router-service';
 
 export const DIRECTIVE_USAGE_PAGE_SEO: RouteSeoData = {
-  title: 'Angular Button Loading State Directive | ngx-request-lock',
+  title: 'Disable Angular buttons during HTTP requests | Examples',
   description:
-    '[ngxRequestLock] directive usage in Angular: disabling buttons during HTTP requests, pending state spinners, and custom loading animations.',
-  ogTitle: 'Directive Usage Guide - ngx-request-lock',
+    'Use ngxRequestLock to disable an Angular button while an HTTP request runs. Follow working examples for click events, forms, loading labels and spinners.',
+  ogTitle: 'Disable Angular buttons during HTTP requests | Examples',
   ogDescription:
-    'Complete guide to the [ngxRequestLock] directive: binding requestId to buttons, templates, inputs, and loading indicators.',
-  twitterTitle: 'Directive Usage Guide - ngx-request-lock',
+    'See Angular code and live demos for disabling a button while an HTTP call runs, including form actions and loading labels.',
+  twitterTitle: 'Disable Angular buttons during HTTP requests | Examples',
   twitterDescription:
-    'Complete guide to the [ngxRequestLock] directive: binding requestId to buttons, templates, inputs, and loading indicators.',
+    'See Angular code and live demos for disabling a button while an HTTP call runs, including form actions and loading labels.',
   structuredData: [
     {
       '@context': 'https://schema.org',
       '@type': 'TechArticle',
-      headline: 'Directive Usage - ngx-request-lock',
+      headline: 'Disable an Angular button while an HTTP request runs',
       description:
-        '[ngxRequestLock] directive usage in Angular: disabling buttons during HTTP requests, pending state spinners, and custom loading animations.',
+        'Use ngxRequestLock to disable an Angular button while an HTTP request runs. Follow working examples for click events, forms, loading labels and spinners.',
       url: 'https://ngx-request-lock-docs.netlify.app/directive-usage/',
       author: {
         '@type': 'Person',

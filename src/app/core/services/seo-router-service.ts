@@ -2,6 +2,7 @@ import { Service, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { SeoService } from './seo-service';
+import { Language } from '../i18n/language.service';
 
 export interface RouteSeoData {
   /** Document <title>. Single source of truth: routes reuse it. */
@@ -46,6 +47,10 @@ export class SeoRouterService {
     }
 
     const noIndex = route.snapshot.data['noIndex'] === true;
+    const language =
+      (route.snapshot.data['language'] as Language | undefined) ?? 'en';
+    this.seoService.setLanguage(language);
+    this.seoService.setAlternates(noIndex ? null : this.buildCanonicalPath());
     this.seoService.setIndexable(!noIndex);
     this.seoService.setCanonicalUrl(noIndex ? null : this.buildCanonicalPath());
 

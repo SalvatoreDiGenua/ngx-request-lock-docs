@@ -6,17 +6,17 @@
   },
   "nav": {
     "home": "Home",
-    "problem": "Problema",
-    "architecture": "Architettura",
-    "installation": "Installazione e setup",
-    "directiveUsage": "Uso della direttiva",
-    "flowLock": "Esempi di flow lock",
+    "problem": "Evitare richieste duplicate",
+    "architecture": "Come funziona l’interceptor",
+    "installation": "Installazione e configurazione",
+    "directiveUsage": "Disabilitare i pulsanti",
+    "flowLock": "Coordinare le richieste HTTP",
     "sectionGuide": "Guida",
     "sectionUsage": "Utilizzo"
   },
   "header": {
     "title": "ngx-request-lock",
-    "subtitle": "Blocco della UI legato al ciclo di vita HTTP",
+    "subtitle": "Disabilitare i pulsanti Angular durante le richieste HTTP",
     "languageSwitch": "EN: passa alla versione inglese",
     "skipToContent": "Vai al contenuto",
     "openNav": "Apri navigazione",
@@ -25,7 +25,7 @@
     "navAriaLabelMobile": "Documentazione (mobile)"
   },
   "footer": {
-    "tagline": "Blocco della UI legato al ciclo di vita delle richieste HTTP per applicazioni Angular",
+    "tagline": "Pulsanti Angular e stato di caricamento sincronizzati con le richieste HTTP",
     "docs": "Documentazione",
     "installation": "Installazione e setup",
     "architecture": "Architettura",
@@ -40,6 +40,9 @@
     "copy": "Copia",
     "copied": "Copiato",
     "copyAriaLabel": "Copia il codice negli appunti",
+    "copyFailed": "Copia non disponibile",
+    "showFullCode": "Mostra l’esempio completo",
+    "collapseCode": "Riduci l’esempio",
     "placeholder": "Contenuto in arrivo"
   },
   "callout": {
@@ -49,53 +52,57 @@
     "warning": "Attenzione"
   },
   "home": {
+    "badge": "Senza Zone.js · Signal",
     "cards": {
       "problem": {
-        "title": "Il problema",
-        "description": "Perché legare il blocco della UI alle richieste HTTP"
+        "title": "Evitare richieste duplicate",
+        "description": "Scopri perché i click ripetuti inviano POST duplicati e come disabilitare i controlli durante la chiamata"
       },
       "architecture": {
-        "title": "Architettura",
-        "description": "Come si collegano direttiva, context, interceptor e service"
+        "title": "Come funziona l’interceptor",
+        "description": "Segui l’ID della richiesta da HttpContext all’interceptor fino al signal di caricamento"
       },
       "installation": {
         "title": "Installazione",
-        "description": "Aggiungi il provider e inizia a usarlo"
+        "description": "Installa il pacchetto, registra l’interceptor e collega la prima richiesta HttpClient"
       },
       "directiveUsage": {
-        "title": "Uso della direttiva",
-        "description": "Pattern per singolo elemento: base, CRUD, stato in corso, direttiva personalizzata"
+        "title": "Disabilitare i pulsanti",
+        "description": "Esempi per salvataggio, eliminazione, form, etichetta di caricamento e spinner personalizzato"
       },
       "flowLock": {
-        "title": "Esempi di flow lock",
-        "description": "Un requestId condiviso coordina interi flussi e stato visivo in corso"
+        "title": "Coordinare le richieste HTTP",
+        "description": "Condividi un requestId tra pulsanti e chiamate POST e GET concatenate"
       }
     },
     "hero": {
-      "intro": "Libreria Angular per gestire il blocco della UI durante le richieste HTTP. Usa un <code class=\"font-mono text-sm\">requestId</code> condiviso per coordinare pulsanti, form e pannelli, riabilitandoli insieme al termine del flusso senza gestire flag <code class=\"font-mono text-sm\">loading</code> manuali"
+      "exampleTitle": "Un pulsante, una richiesta HTTP tracciata",
+      "exampleLink": "Apri gli esempi completi per i pulsanti",
+      "intro": "Evita i click ripetuti mentre una richiesta HTTP Angular è in corso. Aggiungi <code class=\"font-mono text-sm\">ngxRequestLock</code> a un pulsante e passa il suo <code class=\"font-mono text-sm\">HttpContext</code> a <code class=\"font-mono text-sm\">HttpClient</code>. Un <code class=\"font-mono text-sm\">requestId</code> condiviso coordina più pulsanti e richieste; l’interceptor espone lo stato di caricamento con un signal. La direttiva ha uno sblocco di sicurezza dopo 10 secondi."
     },
     "install": {
       "title": "Installazione",
       "note": "Richiede Angular v22 o superiore. Utilizza API standalone, interceptor HTTP funzionali e signal"
     },
     "startHere": {
-      "title": "Inizia da qui"
+      "title": "Scegli il tuo caso d’uso Angular HTTP",
+      "description": "Trova la guida per click duplicati, configurazione iniziale, caricamento del pulsante o flussi con più richieste."
     }
   },
   "problem": {
-    "heading": "Prevenire le richieste HTTP duplicate in Angular",
-    "intro": "I bug lato client derivano spesso dal disallineamento tra la UI e le chiamate HTTP. Se la UI resta attiva durante una richiesta, l'utente può fare clic ripetuti, premere pulsanti correlati o modificare form in corso di caricamento, inviando richieste duplicate al server e compromettendo lo stato dell'applicazione",
+    "heading": "Evitare richieste HTTP duplicate da click ripetuti in Angular",
+    "intro": "Un utente può premere Salva due volte prima che il primo POST finisca. Le due richieste possono modificare lo stesso record, mentre un flag di caricamento manuale può non coprire un errore o un successivo GET. Questa guida mostra il problema, l’approccio con un booleano e come ngx-request-lock collega il pulsante alle chiamate HttpClient selezionate. Per le operazioni che non devono essere eseguite due volte serve comunque l’idempotenza lato server.",
     "symptoms": {
-      "title": "Sintomi",
+      "title": "Quando la UI Angular non segue le chiamate HTTP",
       "list": "<li>Richieste POST/PUT/DELETE duplicate causate da interazioni ripetute.</li><li>Chiamate di refresh che gareggiano con la mutazione che dovrebbero riflettere.</li><li>Azioni correlate (Salva + Reset, Invio + Ricarica) che restano cliccabili durante lo stesso flusso.</li><li>Flag <code class=\"font-mono text-sm\">loading</code> ad hoc distribuiti nei componenti.</li><li>Flag di caricamento che restano <code class=\"font-mono text-sm\">true</code> se un ramo di errore dimentica di resettarli.</li><li>Logica di disabilitazione disallineata dal reale ciclo di vita della richiesta.</li>"
     },
     "naive": {
-      "title": "L'approccio ingenuo",
+      "title": "I limiti di un solo booleano loading",
       "text": "Usare un booleano a livello di componente funziona solo per singole chiamate. Gestire refresh consecutivi, azioni correlate o pannelli richiede flag separati da resettare manualmente su ogni ramo di errore"
     },
     "withLibrary": {
-      "title": "Con ngx-request-lock",
-      "text": "Un <code class=\"font-mono text-sm\">requestId</code> condiviso traccia l'intero flusso tramite <code class=\"font-mono text-sm\">HttpContext</code>. L'interceptor aggiorna un servizio reattivo con conteggio dei riferimenti: direttive e componenti collegati allo stesso ID si sbloccano automaticamente al termine di tutte le chiamate, anche in caso di errore"
+      "title": "Bloccare il pulsante con ngx-request-lock",
+      "text": "Associa lo stesso <code class=\"font-mono text-sm\">requestId</code> alle richieste pertinenti tramite <code class=\"font-mono text-sm\">HttpContext</code>. L’interceptor conta le chiamate in corso per ID e la direttiva disabilita i pulsanti collegati. Li riabilita dopo successo, errore o annullamento, salvo lo sblocco di sicurezza dopo 10 secondi. Questo limita i click ripetuti nel browser: non elimina le richieste già inviate."
     },
     "scope": {
       "title": "Cosa questa libreria non fa",
@@ -103,37 +110,46 @@
     }
   },
   "architecture": {
-    "heading": "Come funziona il blocco delle richieste HTTP in Angular",
-    "intro": "La libreria utilizza quattro elementi basati su primitive native Angular: un <code class=\"font-mono text-sm\">HttpContextToken</code>, un interceptor funzionale <code class=\"font-mono text-sm\">HttpInterceptorFn</code>, un servizio basato su signal e una direttiva. Il coordinamento avviene tramite un <code class=\"font-mono text-sm\">requestId</code> condiviso che collega elementi UI e richieste HTTP senza richiedere state manager esterni o RxJS nel codice utente",
+    "heading": "Come un interceptor HTTP Angular aggiorna i pulsanti",
+    "intro": "ngx-request-lock collega le chiamate <code class=\"font-mono text-sm\">HttpClient</code> selezionate ai pulsanti con quattro primitive Angular: un <code class=\"font-mono text-sm\">HttpContextToken</code>, un interceptor funzionale, un servizio con signal e una direttiva. Lo stesso <code class=\"font-mono text-sm\">requestId</code> raggruppa le chiamate correlate. Segui il contatore dall’avvio della richiesta allo sblocco della UI.",
     "buildingBlocks": {
-      "title": "Componenti",
+      "title": "HttpContext, interceptor, signal e direttiva",
       "list": "<li><code class=\"font-mono text-sm\">REQUEST_LOCK_ID</code>: un <code class=\"font-mono text-sm\">HttpContextToken&lt;string | null&gt;</code> che associa un identificativo di lock a una richiesta. Più richieste possono condividere lo stesso ID per formare un unico flusso.</li><li><code class=\"font-mono text-sm\">createRequestLockContext(id)</code>: costruisce l'<code class=\"font-mono text-sm\">HttpContext</code> da allegare alla richiesta. Un gestore click può usare invece il <code class=\"font-mono text-sm\">context</code> pronto esposto da <code class=\"font-mono text-sm\">RequestLockMouseEvent</code>.</li><li><code class=\"font-mono text-sm\">requestLockInterceptor</code>: interceptor funzionale che legge l'ID dal context e aggiorna il servizio.</li><li><code class=\"font-mono text-sm\">RequestLockService</code>: servizio singleton con una mappa a conteggio dei riferimenti delle richieste attive, esposta tramite il signal booleano <code class=\"font-mono text-sm\">isPending(id)</code>. Qualunque componente può usare questo signal per mostrare uno stato di caricamento.</li><li><code class=\"font-mono text-sm\">RequestLockDirective</code> (<code class=\"font-mono text-sm\">[ngxRequestLock]</code>): applicata a qualsiasi elemento contenente o corrispondente a un <code class=\"font-mono text-sm\">&lt;button&gt;</code>, arricchisce il suo evento click nativo con <code class=\"font-mono text-sm\">requestId</code> e <code class=\"font-mono text-sm\">HttpContext</code>, osserva <code class=\"font-mono text-sm\">isPending(requestId)</code> e aggiorna l'attributo <code class=\"font-mono text-sm\">disabled</code>. Le istanze con lo stesso <code class=\"font-mono text-sm\">requestId</code> si sbloccano contemporaneamente.</li><li><code class=\"font-mono text-sm\">provideRequestLock()</code>: registra <code class=\"font-mono text-sm\">provideHttpClient(withInterceptors([requestLockInterceptor]))</code> in una singola chiamata.</li>"
     },
     "dataFlow": {
-      "title": "Flusso dei dati",
+      "title": "Dal click alla risposta HTTP",
+      "clickTitle": "Click e blocco",
+      "clickDescription": "La direttiva disabilita il pulsante premuto ed espone il suo ID.",
+      "contextTitle": "Identificare la chiamata",
+      "contextDescription": "HttpClient trasporta l’ID nei metadati locali di HttpContext.",
+      "interceptorTitle": "Contare le richieste",
+      "interceptorDescription": "L’interceptor avvia il tracciamento, inoltra la chiamata e decrementa con finalize.",
+      "signalTitle": "Aggiornare la UI",
+      "signalDescription": "Il signal delle richieste attive aggiorna tutti i pulsanti con lo stesso ID.",
+      "caption": "Il signal ritorna ai pulsanti. Lo sblocco di sicurezza dopo 10 secondi può riattivarli prima della fine di una richiesta lenta.",
       "diagramAriaLabel": "Diagramma del flusso dati del request lock: un'azione utente pilota le istanze della direttiva e le richieste HTTP attraverso l'interceptor e RequestLockService",
       "steps": "<li>L'azione dell'utente avvia il flusso. Ogni direttiva legata al <code class=\"font-mono text-sm\">requestId</code> imposta <code class=\"font-mono text-sm\">isBlocked = true</code> e applica l'attributo <code class=\"font-mono text-sm\">disabled</code> al pulsante. Quando il binding click è sull'host della direttiva, l'evento riceve anche il <code class=\"font-mono text-sm\">requestId</code> generato e l'<code class=\"font-mono text-sm\">HttpContext</code> pronto.</li><li>L'applicazione invia una o più richieste HTTP il cui <code class=\"font-mono text-sm\">HttpContext</code> trasporta il <code class=\"font-mono text-sm\">requestId</code>, tramite <code class=\"font-mono text-sm\">event.context</code> oppure <code class=\"font-mono text-sm\">createRequestLockContext(id)</code>. Refresh, mutazioni o chiamate in cascata possono riutilizzare lo stesso ID.</li><li>Per ogni richiesta, <code class=\"font-mono text-sm\">requestLockInterceptor</code> legge <code class=\"font-mono text-sm\">REQUEST_LOCK_ID</code>, invoca <code class=\"font-mono text-sm\">RequestLockService.start(id)</code> e aggancia l'operazione di chiusura via <code class=\"font-mono text-sm\">finalize(() =&gt; end(id))</code>. Il servizio incrementa e decrementa il contatore delle richieste attive per ciascun ID.</li><li><code class=\"font-mono text-sm\">isPending(id)</code> rimane <code class=\"font-mono text-sm\">true</code> fino al completamento di <em>tutte</em> le richieste associate all'ID. Solo a quel punto direttive e componenti collegati si sbloccano.</li><li>Due timeout di sicurezza sbloccano la direttiva: a 500 ms se non viene avviata alcuna chiamata HTTP, e a 10 s come limite massimo.</li>"
     },
     "httpContextNote": "<strong>HttpContext è locale.</strong> <code class=\"font-mono text-sm\">HttpContext</code> contiene metadati lato client gestiti da Angular per la singola richiesta. Non viene serializzato in header, body o query string e non viene inviato al server",
     "refCount": {
-      "title": "Stato con conteggio dei riferimenti",
-      "text": "<code class=\"font-mono text-sm\">RequestLockService</code> incrementa un contatore per ID su <code class=\"font-mono text-sm\">start</code> e lo decrementa su <code class=\"font-mono text-sm\">end</code>. Più chiamate (mutazioni, refresh automatici o fetch correlati) possono condividere lo stesso ID: solo l'ultimo <code class=\"font-mono text-sm\">end</code> riporta <code class=\"font-mono text-sm\">isPending(id)</code> a <code class=\"font-mono text-sm\">false</code>, estendendo il blocco all'intero flusso",
+      "title": "Perché più richieste richiedono un contatore",
+      "text": "<code class=\"font-mono text-sm\">RequestLockService</code> incrementa un contatore per ID con <code class=\"font-mono text-sm\">start</code> e lo decrementa con <code class=\"font-mono text-sm\">end</code>. Più chiamate contemporanee mantengono <code class=\"font-mono text-sm\">isPending(id)</code> su true fino alla conclusione dell’ultima. La direttiva ha anche uno sblocco di sicurezza incondizionato dopo 10 secondi: una richiesta lenta può quindi proseguire mentre il pulsante è già attivo.",
       "note": "<code class=\"font-mono text-sm\">RequestLockService.isPending(id)</code> restituisce un nuovo signal <code class=\"font-mono text-sm\">computed</code> a ogni chiamata. Assegnare il valore a una proprietà della classe in caso di letture ripetute nello stesso componente"
     }
   },
   "installation": {
-    "intro": "Configurazione di <code class=\"font-mono text-sm\">ngx-request-lock</code>: installazione del pacchetto, registrazione del provider, associazione del <code class=\"font-mono text-sm\">requestId</code> alle chiamate HTTP e applicazione della direttiva agli elementi UI del flusso",
+    "intro": "Installa <code class=\"font-mono text-sm\">ngx-request-lock</code> in Angular 22+, registra l’interceptor HTTP funzionale e aggiungi <code class=\"font-mono text-sm\">ngxRequestLock</code> a un pulsante. Il primo esempio passa l’<code class=\"font-mono text-sm\">HttpContext</code> dell’evento click a <code class=\"font-mono text-sm\">HttpClient</code>; le sezioni successive mostrano ID condivisi e configurazioni con altri interceptor.",
     "requirements": {
       "title": "Requisiti",
       "list": "<li>Angular <strong>v22</strong> o superiore, con peer dependency <code class=\"font-mono text-sm\">@angular/common</code> e <code class=\"font-mono text-sm\">@angular/core</code> impostate a <code class=\"font-mono text-sm\">^22.0.0</code>.</li><li>Supporto per API standalone, interceptor HTTP funzionali e signal (default in v22).</li><li>La direttiva genera l'ID di default con <code class=\"font-mono text-sm\">crypto.randomUUID()</code>, che nel browser richiede un contesto sicuro (HTTPS o <code class=\"font-mono text-sm\">localhost</code>).</li>"
     },
     "install": {
-      "title": "Installazione",
+      "title": "Installare ngx-request-lock con npm",
       "text": "Installare il pacchetto via npm. Non sono presenti dipendenze runtime oltre a <code class=\"font-mono text-sm\">tslib</code>",
       "peerNote": "La libreria segue lo standard Angular Package Format, supporta il tree-shaking ed è contrassegnata con <code class=\"font-mono text-sm\">sideEffects: false</code>"
     },
     "provider": {
-      "title": "Registrazione del provider",
+      "title": "Registrare l’interceptor HTTP Angular",
       "text": "<code class=\"font-mono text-sm\">provideRequestLock()</code> è una factory di environment provider che registra l'interceptor funzionale. Aggiungerla all'array <code class=\"font-mono text-sm\">providers</code> in <code class=\"font-mono text-sm\">ApplicationConfig</code>",
       "warning": "<strong>Non registrare <code class=\"font-mono text-sm\">provideHttpClient()</code> separatamente da <code class=\"font-mono text-sm\">provideRequestLock()</code>.</strong> La factory include già <code class=\"font-mono text-sm\">provideHttpClient(withInterceptors([requestLockInterceptor]))</code>. Un'ulteriore chiamata a <code class=\"font-mono text-sm\">provideHttpClient(...)</code> sovrascriverebbe i provider disabilitando l'interceptor"
     },
@@ -148,14 +164,14 @@
       "bullets": "<li><code class=\"font-mono text-sm\">REQUEST_LOCK_ID</code> è un <code class=\"font-mono text-sm\">HttpContextToken&lt;string | null&gt;</code> con valore predefinito <code class=\"font-mono text-sm\">null</code>.</li><li><code class=\"font-mono text-sm\">createRequestLockContext(id)</code> restituisce un <code class=\"font-mono text-sm\">HttpContext</code> con l'ID specificato. Se l'ID è vuoto o non definito, restituisce un contesto vuoto e l'interceptor ignora la chiamata.</li><li>Le chiamate prive di questo contesto proseguono senza modifiche. La libreria interviene solo sulle richieste espressamente tracciate.</li>"
     },
     "directive": {
-      "title": "Applicazione della direttiva nella UI",
+      "title": "Disabilitare un pulsante con ngxRequestLock",
       "text": "<code class=\"font-mono text-sm\">RequestLockDirective</code> è una direttiva standalone con selector <code class=\"font-mono text-sm\">[ngxRequestLock]</code> ed <code class=\"font-mono text-sm\">exportAs: 'requestLock'</code>. Importarla nell'array <code class=\"font-mono text-sm\">imports</code> del componente e applicarla agli elementi del flusso",
       "bullets": "<li>Ogni istanza della direttiva genera un <code class=\"font-mono text-sm\">requestId</code> unico tramite <code class=\"font-mono text-sm\">crypto.randomUUID()</code>. Passare l'input <code class=\"font-mono text-sm\">[requestId]</code> per condividere lo stesso ID tra più elementi e coordinare un flusso.</li><li>Esportando l'istanza con <code class=\"font-mono text-sm\">#lock=\"requestLock\"</code> è possibile leggere <code class=\"font-mono text-sm\">lock.requestId()</code> per blocchi su singoli elementi. Per flussi condivisi, definire l'ID nel componente (es. <code class=\"font-mono text-sm\">signal(crypto.randomUUID())</code>) e collegarlo alla direttiva e alle chiamate <code class=\"font-mono text-sm\">createRequestLockContext(...)</code>.</li><li>La direttiva individua il pulsante tramite <code class=\"font-mono text-sm\">elementRef.closest('button')</code> o selezionando il primo <code class=\"font-mono text-sm\">&lt;button&gt;</code> figlio, aggiornandone l'attributo <code class=\"font-mono text-sm\">disabled</code>. Su elementi diversi da pulsanti non vengono apportate modifiche al DOM, ma l'evento contribuisce comunque al signal condiviso utilizzabile da componenti wrapper per visualizzare lo stato di caricamento.</li>"
     },
     "lifecycle": {
       "title": "Sblocco della UI",
       "text": "Lo sblocco avviene in modo automatico al completamento del ciclo di vita della richiesta",
-      "steps": "<li>Al click, la direttiva imposta <code class=\"font-mono text-sm\">isBlocked = true</code> e disabilita il pulsante associato.</li><li><code class=\"font-mono text-sm\">requestLockInterceptor</code> rileva l'ID nell'<code class=\"font-mono text-sm\">HttpContext</code> e richiama <code class=\"font-mono text-sm\">RequestLockService.start(id)</code>. Ogni risposta esegue <code class=\"font-mono text-sm\">finalize(() =&gt; service.end(id))</code> al termine, decrementando il contatore in caso di successo, errore o cancellazione.</li><li><code class=\"font-mono text-sm\">RequestLockService</code> mantiene un <code class=\"font-mono text-sm\">signal&lt;Record&lt;string, number&gt;&gt;</code> per tracciare il conteggio dei riferimenti ed espone il booleano <code class=\"font-mono text-sm\">isPending(id)</code>.</li><li>Le direttive e i componenti basati su <code class=\"font-mono text-sm\">isPending(id)</code> reagiscono alle modifiche del signal tramite <code class=\"font-mono text-sm\">effect</code>, rimuovendo lo stato disabilitato solo quando il contatore torna a zero.</li>"
+      "steps": "<li>Al click, la direttiva disabilita il pulsante associato.</li><li><code class=\"font-mono text-sm\">requestLockInterceptor</code> trova l’ID nell’<code class=\"font-mono text-sm\">HttpContext</code> e richiama <code class=\"font-mono text-sm\">RequestLockService.start(id)</code>. Il suo <code class=\"font-mono text-sm\">finalize</code> decrementa il contatore dopo successo, errore o annullamento.</li><li><code class=\"font-mono text-sm\">RequestLockService</code> usa un <code class=\"font-mono text-sm\">signal&lt;Map&lt;string, number&gt;&gt;</code> ed espone <code class=\"font-mono text-sm\">isPending(id)</code>.</li><li>La direttiva osserva il signal e riabilita il pulsante quando il contatore torna a zero oppure dopo lo sblocco di sicurezza a 10 secondi.</li>"
     },
     "safety": {
       "title": "Timeout di sicurezza",
@@ -176,7 +192,8 @@
       "flowLockDesc": "Coordinamento di più elementi e richieste tramite requestId condiviso",
       "architectureTitle": "Architettura",
       "architectureDesc": "Struttura dei componenti e gestione disaccoppiata del ciclo di vita"
-    }
+    },
+    "heading": "Installare ngx-request-lock in Angular 22+"
   },
   "shared": {
     "tipConfig": "Gli esempi presuppongono che <code class=\"font-mono text-sm\">provideRequestLock()</code> sia registrato in <code class=\"font-mono text-sm\">app.config.ts</code> (consultare la pagina Installazione)",
@@ -184,25 +201,25 @@
     "liveDemoAriaLabel": "Demo interattiva"
   },
   "directiveUsage": {
-    "heading": "Disabilitare i pulsanti Angular durante le richieste HTTP",
-    "intro": "Uso di <code class=\"font-mono text-sm\">RequestLockDirective</code> per bloccare singoli elementi interattivi. Ogni istanza genera un <code class=\"font-mono text-sm\">requestId</code>, associa la richiesta HTTP tramite <code class=\"font-mono text-sm\">createRequestLockContext(id)</code> e riabilita l'elemento al completamento della chiamata. Per gestire flussi complessi con più elementi o chiamate, consultare gli <a class=\"underline\" href=\"/flow-lock/\">esempi di flow lock</a>",
+    "heading": "Disabilitare un pulsante Angular durante una richiesta HTTP",
+    "intro": "Aggiungi <code class=\"font-mono text-sm\">ngxRequestLock</code> a un pulsante, poi passa il contesto dell’evento click o <code class=\"font-mono text-sm\">createRequestLockContext(id)</code> a <code class=\"font-mono text-sm\">HttpClient</code>. La direttiva disabilita il pulsante fino al termine della chiamata tracciata, con sblocco di sicurezza dopo 10 secondi. Prova gli esempi per salvataggio, eliminazione, invio di form e stato di caricamento. Per più chiamate correlate, leggi come <a class=\"underline\" href=\"/it/flow-lock/\">coordinare i flussi HTTP in Angular</a>.",
     "nativeClick": {
       "title": "Passare il contesto della richiesta tramite $event",
       "text": "La direttiva arricchisce l'evento click nativo con il <code class=\"font-mono text-sm\">requestId</code> generato e un <code class=\"font-mono text-sm\">HttpContext</code> pronto all'uso, così il gestore non richiede né un riferimento nel template né la creazione manuale del contesto",
       "bullets": "<li>Tipizzare il parametro del gestore come <code class=\"font-mono text-sm\">RequestLockMouseEvent</code>.</li><li>Usare direttamente <code class=\"font-mono text-sm\">event.context</code> nella richiesta <code class=\"font-mono text-sm\">HttpClient</code>.</li><li>Il pattern funziona quando il binding <code class=\"font-mono text-sm\">(click)</code> è sull'elemento che contiene <code class=\"font-mono text-sm\">ngxRequestLock</code>.</li>"
     },
     "basic": {
-      "title": "Caso d'uso base",
+      "title": "Un pulsante e una richiesta HTTP",
       "text": "Configurazione minima per una singola interazione: elemento UI, direttiva, variabile di template <code class=\"font-mono text-sm\">requestLock</code> e richiesta HTTP con <code class=\"font-mono text-sm\">createRequestLockContext(id)</code>",
-      "bullets": "<li><code class=\"font-mono text-sm\">#lock=\"requestLock\"</code> espone l'istanza della direttiva nel template.</li><li><code class=\"font-mono text-sm\">lock.requestId()</code> fornisce un UUID generato per l'istanza.</li><li>L'elemento rimane disabilitato fino alla conclusione della richiesta HTTP.</li>"
+      "bullets": "<li><code class=\"font-mono text-sm\">#lock=\"requestLock\"</code> espone la direttiva nel template.</li><li><code class=\"font-mono text-sm\">lock.requestId()</code> fornisce un UUID stabile per l’istanza.</li><li>Il pulsante resta disabilitato fino alla conclusione della richiesta tracciata o allo sblocco di sicurezza dopo 10 secondi.</li>"
     },
     "crud": {
       "title": "Esempi di salvataggio, eliminazione e form",
       "text": "Il pattern si applica a qualsiasi azione HTTP modificando verbo e payload, mantenendo invariati la direttiva, il riferimento nel template e il contesto"
     },
-    "formNote": "Nel submit dei form è possibile combinare <code class=\"font-mono text-sm\">ngxRequestLock</code> con <code class=\"font-mono text-sm\">[disabled]=\"form.invalid\"</code>. La direttiva applica il blocco solo durante la chiamata HTTP; al termine della richiesta, il controllo della disabilitazione torna alla validazione del form",
+    "formNote": "Per un pulsante di invio, combina validazione e stato di caricamento nella stessa espressione <code class=\"font-mono text-sm\">[disabled]</code> quando serve. La direttiva modifica anche l’attributo nativo <code class=\"font-mono text-sm\">disabled</code>: verifica lo stato di validazione dopo ogni richiesta. Non disabilita l’intero form e non blocca invii effettuati senza questo pulsante.",
     "pending": {
-      "title": "Gestione dello stato di caricamento nei pulsanti",
+      "title": "Mostrare un’etichetta o uno spinner di caricamento",
       "text": "Per personalizzare l'etichetta o mostrare uno spinner durante il caricamento (es. da <em>Salva</em> a <em>Salvataggio...</em>), si può usare il signal fornito dal servizio leggendo <code class=\"font-mono text-sm\">RequestLockService.isPending(lock.requestId())</code> all'interno di un <code class=\"font-mono text-sm\">computed()</code>",
       "bullets": "<li><code class=\"font-mono text-sm\">viewChild.required(RequestLockDirective)</code> recupera l'istanza della direttiva nel componente.</li><li><code class=\"font-mono text-sm\">computed(() =&gt; service.isPending(lock().requestId)())</code> converte lo stato del servizio in un booleano per il template.</li><li>L'istruzione <code class=\"font-mono text-sm\">&#64;if (isPending())</code> nel template consente di variare testo o icone senza aggiungere flag di caricamento manuali o blocchi <code class=\"font-mono text-sm\">finalize</code>.</li><li>Impostare <code class=\"font-mono text-sm\">[attr.aria-busy]</code> durante il caricamento per comunicare lo stato ai lettori di schermo.</li>",
       "tip": "Il blocco del pulsante sul DOM gestito dalla direttiva e l'aggiornamento visivo gestito dal signal operano in modo indipendente e complementare"
@@ -221,17 +238,17 @@
     }
   },
   "flowLock": {
-    "heading": "Bloccare i form Angular durante richieste HTTP concatenate",
-    "intro": "Un <code class=\"font-mono text-sm\">requestId</code> può essere associato a più elementi UI e a successive chiamate HTTP per bloccarli e sbloccarli in modo coordinato. Il conteggio dei riferimenti in <code class=\"font-mono text-sm\">RequestLockService</code> garantisce che il blocco persista fino al termine di <em>tutte</em> le richieste del flusso. Per il caso con singolo elemento, consultare la sezione <a class=\"underline\" href=\"/directive-usage/\">Uso della direttiva</a>",
+    "heading": "Coordinare i pulsanti di un form tra richieste HTTP concatenate",
+    "intro": "Assegna lo stesso <code class=\"font-mono text-sm\">requestId</code> ai pulsanti correlati e alle chiamate <code class=\"font-mono text-sm\">HttpClient</code>. Un POST può avviare un GET successivo mentre il signal segnala il flusso in corso. La direttiva disabilita i pulsanti collegati fino al termine delle chiamate tracciate, con sblocco di sicurezza dopo 10 secondi. Per un solo pulsante, consulta gli <a class=\"underline\" href=\"/it/directive-usage/\">esempi di pulsanti Angular</a>.",
     "sharedFlow": {
-      "title": "Flow lock: requestId condiviso su una pagina",
+      "title": "Condividere un requestId tra pulsanti e richieste",
       "text": "Associare lo stesso ID all'azione principale, alle azioni secondarie e alle eventuali chiamate di aggiornamento per sincronizzarne lo stato disabilitato",
       "tip": "Mantenere l'ID nel componente (es. <code class=\"font-mono text-sm\">signal(crypto.randomUUID())</code>) e passarlo a ciascun <code class=\"font-mono text-sm\">[requestId]</code> e a <code class=\"font-mono text-sm\">createRequestLockContext(...)</code>. Rigenerare l'ID solo all'avvio di un nuovo flusso",
-      "bullets": "<li>Più istanze di <code class=\"font-mono text-sm\">ngxRequestLock</code> con lo stesso ID condividono un unico contatore di blocco.</li><li>Le chiamate HTTP successive che riutilizzano l'ID mantengono attivo il blocco fino alla loro conclusione.</li><li>Eventuali errori sulle chiamate liberano comunque il blocco tramite il blocco <code class=\"font-mono text-sm\">finalize</code> dell'interceptor.</li><li>È possibile applicare l'ID condiviso a contenitori o form per bloccare interi blocchi della pagina.</li>"
+      "bullets": "<li>Più istanze di <code class=\"font-mono text-sm\">ngxRequestLock</code> con lo stesso ID condividono un contatore delle richieste attive.</li><li>Le chiamate successive con lo stesso ID mantengono i pulsanti bloccati mentre sono in corso, salvo lo sblocco di sicurezza a 10 secondi.</li><li>L’interceptor decrementa il contatore dopo completamento, errore o annullamento.</li><li>Per un form o un pannello, collega <code class=\"font-mono text-sm\">isPending(id)</code> a uno stato visivo come <code class=\"font-mono text-sm\">aria-busy</code>; la direttiva disabilita solo i pulsanti.</li>"
     },
     "formRefresh": {
-      "title": "Form: richiesta POST seguita da ricarica dati GET",
-      "text": "Un unico <code class=\"font-mono text-sm\">requestId</code> condiviso tra invio del form e successivo recupero dei dati mantiene disabilitati sia il pulsante di submit che quello di ricarica fino al termine di entrambe le chiamate"
+      "title": "Esempio form: POST seguito da aggiornamento GET",
+      "text": "Associa lo stesso <code class=\"font-mono text-sm\">requestId</code> al POST e al GET successivo. I pulsanti Salva e Ricarica osservano un unico contatore delle richieste attive. Se una richiesta supera 10 secondi, lo sblocco di sicurezza della direttiva può riabilitare i pulsanti prima della fine del flusso."
     },
     "inFlight": {
       "title": "Stato visivo dell'intero flusso",
@@ -242,7 +259,7 @@
     "why": {
       "title": "Vantaggi principali",
       "intro": "Le tre primitive (<code class=\"font-mono text-sm\">ngxRequestLock</code>, <code class=\"font-mono text-sm\">requestId</code> e <code class=\"font-mono text-sm\">createRequestLockContext</code>) si adattano sia a singole azioni sia a flussi complessi con chiamate multiple:",
-      "bullets": "<li><strong>Granularità flessibile:</strong> lo stesso <code class=\"font-mono text-sm\">requestId</code> può bloccare un singolo pulsante, un gruppo di controlli o un intero pannello.</li><li><strong>Riduzione del codice boilerplate:</strong> elimina l'uso di flag <code class=\"font-mono text-sm\">loading</code> manuali e blocchi <code class=\"font-mono text-sm\">finalize</code> nei componenti.</li><li><strong>Gestione sicura degli errori:</strong> l'interceptor riabilita la UI tramite <code class=\"font-mono text-sm\">finalize</code> anche in presenza di eccezioni, errori HTTP 5xx o cancellazioni.</li><li><strong>Coordinamento automatico dei flussi:</strong> il conteggio dei riferimenti mantiene la UI bloccata fino alla conclusione dell'ultima richiesta correlata.</li><li><strong>Separazione degli stili:</strong> la libreria non include stili CSS predefiniti, consentendo la massima personalizzazione della resa visiva nell'applicazione.</li><li><strong>Integrazione nativa Angular:</strong> basato su <code class=\"font-mono text-sm\">HttpContext</code>, interceptor funzionali e signal, senza dipendenze da state manager esterni.</li>"
+      "bullets": "<li><strong>Pulsanti coordinati:</strong> un <code class=\"font-mono text-sm\">requestId</code> collega più pulsanti allo stesso contatore delle richieste attive.</li><li><strong>Meno flag manuali:</strong> il servizio espone un signal per le chiamate contrassegnate tramite <code class=\"font-mono text-sm\">HttpContext</code>.</li><li><strong>Errori e annullamenti:</strong> l’interceptor decrementa il contatore con <code class=\"font-mono text-sm\">finalize</code>.</li><li><strong>Limite di sicurezza:</strong> dopo 10 secondi la direttiva riabilita i pulsanti anche se una chiamata è ancora in corso; gestisci separatamente le operazioni più lunghe.</li><li><strong>Stato visivo personalizzabile:</strong> un componente può usare <code class=\"font-mono text-sm\">isPending(id)</code> per un pannello o uno spinner; la direttiva disabilita solo i pulsanti.</li>"
     }
   }
 }

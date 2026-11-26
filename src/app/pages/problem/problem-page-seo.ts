@@ -1,24 +1,22 @@
 import { RouteSeoData } from '../../core/services/seo-router-service';
 
 export const PROBLEM_PAGE_SEO: RouteSeoData = {
-  title: 'Prevent Duplicate HTTP Requests in Angular | ngx-request-lock',
+  title: 'Prevent duplicate HTTP requests in Angular | ngx-request-lock',
   description:
-    'Why unblocked UI elements cause duplicate HTTP requests, state divergence, and stale loading flags in Angular apps - and how ngx-request-lock fixes it.',
-  ogTitle:
-    'Problem Statement - UI & HTTP Lifecycle Coupling | ngx-request-lock',
+    'Prevent repeated clicks from sending duplicate Angular HTTP requests. Compare manual loading flags with a button lock tied to the request lifecycle.',
+  ogTitle: 'Prevent duplicate HTTP requests in Angular | ngx-request-lock',
   ogDescription:
-    'Learn why manual boolean flags fail when handling concurrent clicks and asynchronous HTTP flows in Angular applications.',
-  twitterTitle:
-    'Problem Statement - UI & HTTP Lifecycle Coupling | ngx-request-lock',
+    'See how repeated clicks cause duplicate requests and how a request-scoped lock keeps related Angular buttons in sync.',
+  twitterTitle: 'Prevent duplicate HTTP requests in Angular | ngx-request-lock',
   twitterDescription:
-    'Learn why manual boolean flags fail when handling concurrent clicks and asynchronous HTTP flows in Angular applications.',
+    'See how repeated clicks cause duplicate requests and how a request-scoped lock keeps related Angular buttons in sync.',
   structuredData: [
     {
       '@context': 'https://schema.org',
       '@type': 'TechArticle',
-      headline: 'Problem Statement - Angular UI & HTTP Lifecycle Coupling',
+      headline: 'Prevent duplicate HTTP requests in Angular',
       description:
-        'Why unblocked UI elements cause duplicate HTTP requests, state divergence, and stale loading flags in Angular apps - and how ngx-request-lock fixes it.',
+        'Prevent repeated clicks from sending duplicate Angular HTTP requests. Compare manual loading flags with a button lock tied to the request lifecycle.',
       url: 'https://ngx-request-lock-docs.netlify.app/problem/',
       author: {
         '@type': 'Person',

@@ -13,29 +13,28 @@ interface VariantStyle {
 
 const VARIANTS: Record<CalloutVariant, VariantStyle> = {
   info: {
-    container:
-      'border-sky-400 bg-sky-50/80 text-sky-950 dark:border-sky-500 dark:bg-sky-950/40 dark:text-sky-100',
+    container: 'bg-sky-100 text-sky-950 dark:bg-sky-950 dark:text-sky-100',
     title: 'text-sky-900 dark:text-sky-200',
     iconClass: 'text-sky-600 dark:text-sky-400',
     labelKey: 'callout.info',
   },
   note: {
     container:
-      'border-slate-400 bg-slate-50 text-slate-900 dark:border-slate-600 dark:bg-slate-900/60 dark:text-slate-100',
+      'bg-slate-200 text-slate-950 dark:bg-slate-800 dark:text-slate-100',
     title: 'text-slate-800 dark:text-slate-200',
     iconClass: 'text-slate-600 dark:text-slate-400',
     labelKey: 'callout.note',
   },
   tip: {
     container:
-      'border-emerald-400 bg-emerald-50/80 text-emerald-950 dark:border-emerald-500 dark:bg-emerald-950/40 dark:text-emerald-100',
+      'bg-emerald-100 text-emerald-950 dark:bg-emerald-950 dark:text-emerald-100',
     title: 'text-emerald-900 dark:text-emerald-200',
     iconClass: 'text-emerald-600 dark:text-emerald-400',
     labelKey: 'callout.tip',
   },
   warning: {
     container:
-      'border-amber-400 bg-amber-50/80 text-amber-950 dark:border-amber-500 dark:bg-amber-950/40 dark:text-amber-100',
+      'bg-amber-100 text-amber-950 dark:bg-amber-950 dark:text-amber-100',
     title: 'text-amber-900 dark:text-amber-200',
     iconClass: 'text-amber-600 dark:text-amber-400',
     labelKey: 'callout.warning',
@@ -48,7 +47,7 @@ const VARIANTS: Record<CalloutVariant, VariantStyle> = {
   template: `
     <aside
       role="note"
-      class="my-6 rounded-xl border-l-4 p-4 text-sm shadow-xs transition-all"
+      class="my-7 rounded-xl p-5 text-sm leading-relaxed"
       [class]="style().container"
     >
       <div class="flex items-start gap-3">
@@ -121,10 +120,7 @@ const VARIANTS: Record<CalloutVariant, VariantStyle> = {
           }
         </div>
         <div class="min-w-0 flex-1">
-          <p
-            class="mb-1 text-xs font-bold uppercase tracking-wider"
-            [class]="style().title"
-          >
+          <p class="mb-1 text-sm font-semibold" [class]="style().title">
             {{ title() ?? (style().labelKey | transloco) }}
           </p>
           <div class="prose-sm leading-relaxed">

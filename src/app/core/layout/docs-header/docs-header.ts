@@ -7,9 +7,7 @@ import { LanguageService } from '../../i18n/language.service';
   selector: 'ngx-docs-header',
   imports: [RouterLink, TranslocoPipe],
   template: `
-    <header
-      class="sticky top-0 z-30 border-b border-slate-300 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 dark:border-slate-700 dark:bg-slate-950/95 dark:supports-[backdrop-filter]:bg-slate-950/80"
-    >
+    <header class="sticky top-0 z-30 bg-white dark:bg-slate-900">
       <div
         class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-6"
       >
@@ -51,7 +49,7 @@ import { LanguageService } from '../../i18n/language.service';
           </button>
 
           <a
-            routerLink="/"
+            [routerLink]="language.path('/')"
             class="flex items-center gap-3 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-sky-400 dark:focus-visible:ring-offset-slate-950"
           >
             <!--
@@ -101,7 +99,7 @@ import { LanguageService } from '../../i18n/language.service';
 
             <span class="flex flex-col">
               <span
-                class="font-mono text-sm font-semibold text-slate-900 dark:text-slate-50"
+                class="text-sm font-semibold text-slate-900 dark:text-slate-50"
               >
                 {{ 'header.title' | transloco }}
               </span>
@@ -117,7 +115,7 @@ import { LanguageService } from '../../i18n/language.service';
         <div class="flex items-center gap-2">
           <button
             type="button"
-            class="rounded-md border border-slate-400 bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-slate-800 transition hover:border-sky-600 hover:text-sky-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-400 dark:hover:text-sky-300 dark:focus-visible:ring-sky-400 dark:focus-visible:ring-offset-slate-950 hover:cursor-pointer"
+            class="rounded-md border border-slate-400 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 transition-colors hover:border-sky-600 hover:text-sky-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-sky-400 dark:hover:text-sky-300 dark:focus-visible:ring-sky-400 dark:focus-visible:ring-offset-slate-950 hover:cursor-pointer"
             [attr.aria-label]="'header.languageSwitch' | transloco"
             (click)="language.toggle()"
           >

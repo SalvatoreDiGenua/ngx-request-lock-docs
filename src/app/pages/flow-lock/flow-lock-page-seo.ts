@@ -1,22 +1,22 @@
 import { RouteSeoData } from '../../core/services/seo-router-service';
 
 export const FLOW_LOCK_PAGE_SEO: RouteSeoData = {
-  title: 'Lock Angular Forms Across HTTP Flows | ngx-request-lock',
+  title: 'Lock Angular forms across HTTP requests | ngx-request-lock',
   description:
-    'Flow lock patterns in ngx-request-lock: shared requestId across multiple buttons and chained HTTP calls, with reference-counted unlocking.',
-  ogTitle: 'Flow Lock Pattern Examples - ngx-request-lock',
+    'Share one requestId across Angular form buttons and related POST and GET calls. See how reference counting tracks pending requests in a UI flow.',
+  ogTitle: 'Lock Angular forms across HTTP requests | ngx-request-lock',
   ogDescription:
-    'Explore complex multi-button coordination and chained HTTP request flows with reference-counted locking in Angular.',
-  twitterTitle: 'Flow Lock Pattern Examples - ngx-request-lock',
+    'Share one requestId across Angular buttons and POST and GET calls, with a pending-request signal for the flow.',
+  twitterTitle: 'Lock Angular forms across HTTP requests | ngx-request-lock',
   twitterDescription:
-    'Explore complex multi-button coordination and chained HTTP request flows with reference-counted locking in Angular.',
+    'Share one requestId across Angular buttons and POST and GET calls, with a pending-request signal for the flow.',
   structuredData: [
     {
       '@context': 'https://schema.org',
       '@type': 'TechArticle',
-      headline: 'Flow Lock Examples - ngx-request-lock',
+      headline: 'Coordinate Angular form buttons across chained HTTP requests',
       description:
-        'Flow lock patterns in ngx-request-lock: shared requestId across multiple buttons and chained HTTP calls, with reference-counted unlocking.',
+        'Share one requestId across Angular form buttons and related POST and GET calls. See how reference counting tracks pending requests in a UI flow.',
       url: 'https://ngx-request-lock-docs.netlify.app/flow-lock/',
       author: {
         '@type': 'Person',

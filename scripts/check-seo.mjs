@@ -85,11 +85,32 @@ for (const { loc } of urls) {
     continue;
   }
   const html = readFileSync(file, 'utf8');
+  const language = path.startsWith('/it/') ? 'it' : 'en';
+  check(
+    new RegExp(`<html[^>]*lang="${language}"`).test(html),
+    `html language is ${language}`,
+  );
+  const englishPath = path.replace(/^\/it(?=\/|$)/, '') || '/';
+  for (const [lang, expected] of [
+    ['en', `${ORIGIN}${englishPath}`],
+    ['it', `${ORIGIN}/it${englishPath}`],
+    ['x-default', `${ORIGIN}${englishPath}`],
+  ]) {
+    const alternate = html.match(
+      new RegExp(`<link[^>]*rel="alternate"[^>]*hreflang="${lang}"[^>]*>`),
+    )?.[0];
+    check(
+      attr(alternate ?? '', /<link[^>]*>/, 'href') === expected,
+      `${lang} alternate points to ${expected}`,
+    );
+  }
 
   const internalLinks = new Set(
     [...html.matchAll(/<a\b[^>]*\shref="([^"]+)"[^>]*>/g)]
       .map(([, href]) => new URL(decode(href), loc))
-      .filter((url) => url.origin === ORIGIN && !/\.[a-z0-9]+$/i.test(url.pathname))
+      .filter(
+        (url) => url.origin === ORIGIN && !/\.[a-z0-9]+$/i.test(url.pathname),
+      )
       .map((url) => url.origin + url.pathname),
   );
   const nonCanonicalLinks = [...internalLinks].filter((url) => !locs.has(url));

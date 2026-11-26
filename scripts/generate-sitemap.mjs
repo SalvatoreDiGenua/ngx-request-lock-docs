@@ -26,16 +26,19 @@ import { fileURLToPath } from 'node:url';
 const ORIGIN = 'https://ngx-request-lock-docs.netlify.app';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const NAV_FILE = 'src/app/core/layout/nav-items.ts';
-const I18N_FILE = 'public/i18n/en.json';
 const OUT_FILE = resolve(ROOT, 'public/sitemap.xml');
 const dryRun = process.argv.includes('--dry-run');
 
 const git = (...args) =>
-  execFileSync('git', args, {
-    cwd: ROOT,
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'ignore'],
-  }).trim();
+  execFileSync(
+    'git',
+    ['-c', `safe.directory=${ROOT.replaceAll('\\', '/')}`, ...args],
+    {
+      cwd: ROOT,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    },
+  ).trim();
 
 const skip = (reason) => {
   console.warn(`[sitemap] ${reason} - keeping the committed sitemap.xml.`);
@@ -78,14 +81,14 @@ const readJsonAt = (sha, path) => {
   }
 };
 
-/** Date of the newest commit that changed `key` inside en.json. */
-const lastI18nSectionDate = (key) => {
-  const log = git('log', '--format=%H %cs', '--', I18N_FILE);
+/** Date of the newest commit that changed a translated page section. */
+const lastI18nSectionDate = (key, file) => {
+  const log = git('log', '--format=%H %cs', '--', file);
   if (!log) return null;
   for (const line of log.split('\n')) {
     const [sha, date] = line.split(' ');
-    const after = readJsonAt(sha, I18N_FILE);
-    const before = readJsonAt(`${sha}^`, I18N_FILE);
+    const after = readJsonAt(sha, file);
+    const before = readJsonAt(`${sha}^`, file);
     if (!after) continue;
     if (!before || JSON.stringify(after[key]) !== JSON.stringify(before[key])) {
       return date;
@@ -96,22 +99,29 @@ const lastI18nSectionDate = (key) => {
 
 const newest = (...dates) => dates.filter(Boolean).sort().at(-1) ?? null;
 
-const entries = routes.map((route) => {
+const entries = routes.flatMap((route) => {
   const dir = `src/app/pages/${pageDir(route)}`;
-  const lastmod = newest(
-    existsSync(resolve(ROOT, dir)) ? lastCommitDate(dir) : null,
-    lastI18nSectionDate(i18nKey(route)),
-  );
-  return { loc: `${ORIGIN}${canonicalPath(route)}`, lastmod };
+  return ['en', 'it'].map((language) => {
+    const path = canonicalPath(route);
+    const localized = language === 'it' ? `/it${path}` : path;
+    const lastmod = newest(
+      existsSync(resolve(ROOT, dir)) ? lastCommitDate(dir) : null,
+      lastI18nSectionDate(i18nKey(route), `public/i18n/${language}.json`),
+    );
+    return { loc: `${ORIGIN}${localized}`, lastmod, path };
+  });
 });
 
 // ---- output ---------------------------------------------------------------
 const xml = [
   '<?xml version="1.0" encoding="UTF-8"?>',
-  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-  ...entries.flatMap(({ loc, lastmod }) => [
+  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+  ...entries.flatMap(({ loc, lastmod, path }) => [
     '  <url>',
     `    <loc>${loc}</loc>`,
+    `    <xhtml:link rel="alternate" hreflang="en" href="${ORIGIN}${path}" />`,
+    `    <xhtml:link rel="alternate" hreflang="it" href="${ORIGIN}/it${path}" />`,
+    `    <xhtml:link rel="alternate" hreflang="x-default" href="${ORIGIN}${path}" />`,
     ...(lastmod ? [`    <lastmod>${lastmod}</lastmod>`] : []),
     '  </url>',
   ]),

@@ -1,27 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://ngx-request-lock-docs.netlify.app/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ngx-request-lock-docs.netlify.app/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://ngx-request-lock-docs.netlify.app/it/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ngx-request-lock-docs.netlify.app/" />
+    <lastmod>2026-11-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ngx-request-lock-docs.netlify.app/it/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ngx-request-lock-docs.netlify.app/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://ngx-request-lock-docs.netlify.app/it/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ngx-request-lock-docs.netlify.app/" />
+    <lastmod>2026-11-20</lastmod>
   </url>
   <url>
     <loc>https://ngx-request-lock-docs.netlify.app/problem/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ngx-request-lock-docs.netlify.app/problem/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://ngx-request-lock-docs.netlify.app/it/problem/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ngx-request-lock-docs.netlify.app/problem/" />
+    <lastmod>2026-11-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ngx-request-lock-docs.netlify.app/it/problem/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ngx-request-lock-docs.netlify.app/problem/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://ngx-request-lock-docs.netlify.app/it/problem/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ngx-request-lock-docs.netlify.app/problem/" />
+    <lastmod>2026-11-20</lastmod>
   </url>
   <url>
     <loc>https://ngx-request-lock-docs.netlify.app/architecture/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ngx-request-lock-docs.netlify.app/architecture/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://ngx-request-lock-docs.netlify.app/it/architecture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ngx-request-lock-docs.netlify.app/architecture/" />
+    <lastmod>2026-11-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ngx-request-lock-docs.netlify.app/it/architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ngx-request-lock-docs.netlify.app/architecture/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://ngx-request-lock-docs.netlify.app/it/architecture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ngx-request-lock-docs.netlify.app/architecture/" />
+    <lastmod>2026-11-20</lastmod>
   </url>
   <url>
     <loc>https://ngx-request-lock-docs.netlify.app/installation/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ngx-request-lock-docs.netlify.app/installation/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://ngx-request-lock-docs.netlify.app/it/installation/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ngx-request-lock-docs.netlify.app/installation/" />
+    <lastmod>2026-09-23</lastmod>
+  </url>
+  <url>
+    <loc>https://ngx-request-lock-docs.netlify.app/it/installation/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ngx-request-lock-docs.netlify.app/installation/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://ngx-request-lock-docs.netlify.app/it/installation/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ngx-request-lock-docs.netlify.app/installation/" />
     <lastmod>2026-09-23</lastmod>
   </url>
   <url>
     <loc>https://ngx-request-lock-docs.netlify.app/directive-usage/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ngx-request-lock-docs.netlify.app/directive-usage/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://ngx-request-lock-docs.netlify.app/it/directive-usage/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ngx-request-lock-docs.netlify.app/directive-usage/" />
+    <lastmod>2026-11-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ngx-request-lock-docs.netlify.app/it/directive-usage/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ngx-request-lock-docs.netlify.app/directive-usage/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://ngx-request-lock-docs.netlify.app/it/directive-usage/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ngx-request-lock-docs.netlify.app/directive-usage/" />
+    <lastmod>2026-11-20</lastmod>
   </url>
   <url>
     <loc>https://ngx-request-lock-docs.netlify.app/flow-lock/</loc>
-    <lastmod>2026-09-23</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ngx-request-lock-docs.netlify.app/flow-lock/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://ngx-request-lock-docs.netlify.app/it/flow-lock/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ngx-request-lock-docs.netlify.app/flow-lock/" />
+    <lastmod>2026-11-20</lastmod>
+  </url>
+  <url>
+    <loc>https://ngx-request-lock-docs.netlify.app/it/flow-lock/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ngx-request-lock-docs.netlify.app/flow-lock/" />
+    <xhtml:link rel="alternate" hreflang="it" href="https://ngx-request-lock-docs.netlify.app/it/flow-lock/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ngx-request-lock-docs.netlify.app/flow-lock/" />
+    <lastmod>2026-11-20</lastmod>
   </url>
 </urlset>

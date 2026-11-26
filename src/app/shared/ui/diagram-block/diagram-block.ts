@@ -1,73 +1,68 @@
 import { Component, input } from '@angular/core';
+import { TranslocoPipe } from '@jsverse/transloco';
 
-/**
- * Non-code visual block for architecture and flow diagrams.
- *
- * This component intentionally avoids the code-snippet treatment: no syntax
- * highlighting, no copy button, and no `language` chrome. It renders a
- * monospaced, preformatted block optimized for Unicode / ASCII flow diagrams
- * (box-drawing characters, arrows, etc.), and exposes an accessible caption
- * and figure title.
- *
- * The block is fully SSR-safe (pure static markup) and reuses the docs app's
- * light/dark surface tokens so it stays consistent with surrounding content.
- *
- * Usage:
- *   <ngx-diagram-block
- *     [content]="diagram"
- *     title="Data flow"
- *     ariaLabel="Request lock data flow diagram"
- *   />
- */
+export interface DiagramStage {
+  readonly id: string;
+  readonly titleKey: string;
+  readonly code: string;
+  readonly descriptionKey: string;
+}
+
+/** A semantic, responsive sequence for a technical request flow. */
 @Component({
   selector: 'ngx-diagram-block',
+  imports: [TranslocoPipe],
   template: `
     <figure
-      class="my-6 overflow-hidden rounded-lg border border-slate-300 bg-slate-50 text-slate-900 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+      class="request-flow my-8 rounded-xl p-6 sm:p-8"
+      [attr.aria-label]="ariaLabel()"
     >
-      @if (title(); as t) {
-        <figcaption
-          class="border-b border-slate-200 bg-slate-100 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200"
-        >
-          {{ t }}
+      <ol class="request-flow-stages">
+        @for (stage of stages(); track stage.id; let index = $index) {
+          <li class="request-flow-stage">
+            <span class="request-flow-number" aria-hidden="true">{{
+              index + 1
+            }}</span>
+            <h3 class="mb-3 text-lg font-semibold leading-snug">
+              {{ stage.titleKey | transloco }}
+            </h3>
+            <code
+              class="request-flow-code block font-mono font-medium"
+              [textContent]="stage.code"
+            ></code>
+            <p class="request-flow-description mt-4 text-base leading-relaxed">
+              {{ stage.descriptionKey | transloco }}
+            </p>
+            @if (!$last) {
+              <svg
+                aria-hidden="true"
+                class="request-flow-connector"
+                viewBox="0 0 40 20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M1 10h36m-6-6 6 6-6 6"
+                />
+              </svg>
+            }
+          </li>
+        }
+      </ol>
+
+      @if (caption(); as text) {
+        <figcaption class="request-flow-caption mt-8 text-base leading-relaxed">
+          {{ text }}
         </figcaption>
-      }
-
-      <div
-        role="img"
-        [attr.aria-label]="ariaLabel() ?? title() ?? 'Architecture diagram'"
-        tabindex="0"
-        class="overflow-x-auto px-4 py-4 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sky-700 dark:focus-visible:outline-sky-400"
-      >
-        <pre
-          class="whitespace-pre font-mono text-sm leading-6 text-slate-800 dark:text-slate-200"
-          >{{ content() }}</pre>
-      </div>
-
-      @if (caption(); as c) {
-        <p
-          class="border-t border-slate-200 bg-slate-100/60 px-4 py-2 text-xs text-slate-700 dark:border-slate-800 dark:bg-slate-950/40 dark:text-slate-300"
-        >
-          {{ c }}
-        </p>
       }
     </figure>
   `,
 })
 export class DiagramBlockComponent {
-  /** Raw text of the diagram (Unicode / ASCII flow). Preformatted. */
-  public readonly content = input.required<string>();
-
-  /** Optional short title shown above the diagram (e.g. "Data flow"). */
-  public readonly title = input<string | null>(null);
-
-  /** Optional caption shown below the diagram. */
+  public readonly stages = input.required<readonly DiagramStage[]>();
   public readonly caption = input<string | null>(null);
-
-  /**
-   * Accessible label announced by screen readers. Falls back to `title()`,
-   * then to a generic label. Diagrams are conveyed as images because
-   * assistive tech would otherwise read the box-drawing characters.
-   */
   public readonly ariaLabel = input<string | null>(null);
 }

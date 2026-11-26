@@ -1,22 +1,22 @@
 import { RouteSeoData } from '../../core/services/seo-router-service';
 
 export const INSTALLATION_PAGE_SEO: RouteSeoData = {
-  title: 'Install and Set Up ngx-request-lock in Angular',
+  title: 'Install ngx-request-lock in Angular 22+ | Setup guide',
   description:
-    'Install ngx-request-lock in an Angular app: package setup, provideRequestLock() registration, HTTP context wiring, and directive placement.',
-  ogTitle: 'Installation & Setup Guide - ngx-request-lock',
+    'Install ngx-request-lock for Angular 22+. Register provideRequestLock, attach HttpContext to an HTTP call, and disable a button with ngxRequestLock.',
+  ogTitle: 'Install ngx-request-lock in Angular 22+ | Setup guide',
   ogDescription:
-    'Step-by-step guide to installing ngx-request-lock via npm/yarn/pnpm and configuring providers in Angular standalone applications.',
-  twitterTitle: 'Installation & Setup Guide - ngx-request-lock',
+    'Install the package, register its functional interceptor and connect a button to an Angular HttpClient request.',
+  twitterTitle: 'Install ngx-request-lock in Angular 22+ | Setup guide',
   twitterDescription:
-    'Step-by-step guide to installing ngx-request-lock via npm/yarn/pnpm and configuring providers in Angular standalone applications.',
+    'Install the package, register its functional interceptor and connect a button to an Angular HttpClient request.',
   structuredData: [
     {
       '@context': 'https://schema.org',
       '@type': 'TechArticle',
-      headline: 'Installation & Setup - ngx-request-lock',
+      headline: 'Install ngx-request-lock in Angular 22+',
       description:
-        'Install ngx-request-lock in an Angular app: package setup, provideRequestLock() registration, HTTP context wiring, and directive placement.',
+        'Install ngx-request-lock for Angular 22+. Register provideRequestLock, attach HttpContext to an HTTP call, and disable a button with ngxRequestLock.',
       url: 'https://ngx-request-lock-docs.netlify.app/installation/',
       author: {
         '@type': 'Person',

@@ -1,4 +1,5 @@
-/* Global styles for the ngx-request-lock docs app. */
+/* Hallmark · refinement · technical reading surface · keep existing identity */
+/* Critique: code and diagrams carry the visual weight; navigation stays quiet. */
 
 @import 'tailwindcss';
 
@@ -24,15 +25,31 @@
  * Values reference Tailwind v4's built-in slate/sky/emerald/amber ramps.
  */
 @theme {
+  --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: /* taste-skill-ignore: font token for literal code */
+    'Cascadia Code', 'SFMono-Regular', Consolas, monospace; /* taste-skill-ignore: font token is used only in code examples */
+
   /* Surfaces */
-  --color-surface: #ffffff; /* white */
-  --color-surface-muted: #f8fafc; /* slate-50 */
-  --color-surface-raised: #ffffff;
-  --color-surface-inverse: #0f172a; /* slate-900 */
+  --color-page: #f9fbfd;
+  --color-flow-canvas: #102a43;
+  --color-flow-ink: #f4f9ff;
+  --color-flow-copy: #dce8f5;
+  --color-flow-accent: #80ddf5;
+  --color-flow-code: #1b3d59;
+  --color-inline-code-bg: #e0ebf3;
+  --color-inline-code-fg: #123d59;
+  --color-brand-stage: #e8f2f8;
+  --color-code-canvas: #0b1322;
+  --color-code-line-number: #94a3b8;
+  --color-code-line-hover: #16243b;
+  --color-surface: #fbfdff;
+  --color-surface-muted: #f3f8fc;
+  --color-surface-raised: #f7fbff;
+  --color-surface-inverse: #102033;
   --color-surface-code: #020617; /* slate-950 */
 
   /* Foreground text */
-  --color-fg: #0f172a; /* slate-900  -- ~18.7:1 on white */
+  --color-fg: #102033;
   --color-fg-muted: #334155; /* slate-700  -- ~10.4:1 on white */
   --color-fg-subtle: #475569; /* slate-600  --  ~7.2:1 on white */
   --color-fg-inverse: #f1f5f9; /* slate-100 */
@@ -41,7 +58,7 @@
   /* Borders */
   --color-border: #cbd5e1; /* slate-300 -- ~1.6:1 decorative */
   --color-border-strong: #94a3b8; /* slate-400 -- ~2.85:1 (still soft) */
-  --color-border-inverse: #1e293b; /* slate-800 */
+  --color-border-inverse: #253b50;
 
   /* Brand (sky) */
   --color-brand: #0284c7; /* sky-600  -- primary action */
@@ -65,13 +82,16 @@
   html {
     color-scheme: light dark;
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   body {
-    background-color: var(--color-surface);
+    background-color: var(--color-page);
     color: var(--color-fg);
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
   }
 
   :where(.dark) body,
@@ -80,21 +100,38 @@
     color: var(--color-fg-inverse);
   }
 
+  main article > p,
+  main article > ol {
+    max-width: 72ch;
+  }
+
+  main article {
+    line-height: 1.6;
+  }
+
+  main article > h1 {
+    max-width: 32ch;
+    line-height: 1.12;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+    min-width: 0;
+  }
+
   /* Custom text selection */
   ::selection {
-    background-color: #bae6fd; /* sky-200 */
-    color: #0369a1; /* sky-700 */
+    background-color: var(--color-brand-surface);
+    color: var(--color-brand-fg);
   }
 
   .dark ::selection {
-    background-color: #0369a1; /* sky-700 */
-    color: #f0f9ff; /* sky-50 */
+    background-color: var(--color-brand-surface-inverse);
+    color: var(--color-fg-inverse);
   }
 
   /* Inline code inherits foreground so it never becomes invisible. */
   :where(code):not(pre code) {
-    background-color: var(--color-surface-muted);
-    color: var(--color-fg);
+    background-color: var(--color-inline-code-bg);
+    color: var(--color-inline-code-fg);
     padding: 0.15em 0.4em;
     border-radius: 0.375rem;
     font-size: 0.875em;
@@ -102,7 +139,7 @@
   }
 
   .dark :where(code):not(pre code) {
-    background-color: #1e293b; /* slate-800 */
+    background-color: var(--color-border-inverse);
     color: var(--color-fg-inverse);
   }
 
@@ -120,11 +157,115 @@
     background: transparent;
   }
   pre::-webkit-scrollbar-thumb {
-    background: #334155;
+    background: var(--color-fg-muted);
     border-radius: 3px;
   }
   pre::-webkit-scrollbar-thumb:hover {
-    background: #475569;
+    background: var(--color-fg-subtle);
+  }
+}
+
+@layer components {
+  .request-flow {
+    background: var(--color-flow-canvas);
+    color: var(--color-flow-ink);
+  }
+
+  .request-flow-stages {
+    display: grid;
+    gap: 3.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .request-flow-stage {
+    position: relative;
+    min-width: 0;
+  }
+
+  .request-flow-number {
+    display: inline-grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    background: var(--color-flow-accent);
+    color: var(--color-flow-canvas);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .request-flow .request-flow-code {
+    background: var(--color-flow-code);
+    color: var(--color-flow-accent);
+    padding: 0.625rem 0.5rem;
+    font-size: 0.8125rem;
+    border-radius: 0.375rem;
+    overflow-wrap: anywhere;
+  }
+
+  .request-flow-description,
+  .request-flow-caption {
+    color: var(--color-flow-copy);
+  }
+
+  .request-flow-caption {
+    max-width: 72ch;
+    padding-top: 1.5rem;
+  }
+
+  .request-flow-connector {
+    position: absolute;
+    bottom: -2.5rem;
+    left: -0.25rem;
+    width: 2.5rem;
+    height: 1.25rem;
+    rotate: 90deg;
+    color: var(--color-flow-accent);
+  }
+
+  @media (min-width: 1280px) {
+    .request-flow-stages {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 2.75rem;
+    }
+
+    .request-flow-connector {
+      top: 0.375rem;
+      right: -2.625rem;
+      bottom: auto;
+      left: auto;
+      rotate: 0deg;
+    }
+  }
+
+  .docs-home-hero {
+    padding: 0;
+  }
+
+  .docs-home-hero h1 {
+    max-width: 30ch;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  .docs-home-example {
+    max-width: 59rem;
+    margin-top: 2rem;
+  }
+
+  .docs-home-index {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 2rem;
+  }
+
+  @media (max-width: 720px) {
+    .docs-home-index {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 }
 

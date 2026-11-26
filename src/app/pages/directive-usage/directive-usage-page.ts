@@ -330,7 +330,9 @@ const CUSTOM_STYLE_CODE = `/* consumer styles */
   ],
   template: `
     <article *transloco="let t" class="max-w-none">
-      <h1 class="mb-4 text-3xl font-bold text-slate-900 dark:text-slate-100">
+      <h1
+        class="mb-4 text-3xl font-semibold text-slate-900 dark:text-slate-100"
+      >
         {{ title() }}
       </h1>
 
